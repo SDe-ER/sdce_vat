@@ -11,7 +11,17 @@ from sdce_vat.engine import boxes
 from sdce_vat.engine.config import VatConfig
 from sdce_vat.engine.model import Treatment
 from sdce_vat.engine.run import compute
-from sdce_vat.tests.site_base import COMPANY, CUSTOMER, DATE, FROM, ITEM, SUPPLIER, TO, VatSiteTestCase
+from sdce_vat.tests.site_base import (
+	COMPANY,
+	CUSTOMER,
+	DATE,
+	FROM,
+	ITEM,
+	SUPPLIER,
+	TO,
+	VatSiteTestCase,
+	make_other_company_tax_account,
+)
 
 
 class TestEngineOnSite(VatSiteTestCase):
@@ -73,8 +83,8 @@ class TestEngineOnSite(VatSiteTestCase):
 			user.insert(ignore_permissions=True)
 			user.add_roles("Accounts User")
 		other = frappe.get_all("Company", filters={"name": ["!=", COMPANY]}, pluck="name", limit=1)
-		if not other:
-			self.skipTest("needs a second company")
+		if not other:  # a fresh site has only the test company
+			other = [frappe.db.get_value("Account", make_other_company_tax_account(), "company")]
 		frappe.get_doc(
 			{"doctype": "User Permission", "user": email, "allow": "Company", "for_value": other[0]}
 		).insert(ignore_permissions=True)

@@ -203,8 +203,8 @@ class TestVatReturn(VatSiteTestCase):
 
 	def test_user_of_another_company_is_denied(self):
 		other = frappe.get_all("Company", filters={"name": ["!=", COMPANY]}, pluck="name", limit=1)
-		if not other:
-			self.skipTest("needs a second company")
+		if not other:  # a fresh site has only the test company
+			other = [frappe.db.get_value("Account", make_other_company_tax_account(), "company")]
 		email = make_user("vat-other-company@example.com", VAT_PREPARER)
 		frappe.get_doc(
 			{"doctype": "User Permission", "user": email, "allow": "Company", "for_value": other[0]}
