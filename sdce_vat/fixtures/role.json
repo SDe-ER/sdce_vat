@@ -31,5 +31,16 @@
   "is_custom": 0,
   "home_page": null,
   "restrict_to_domain": null
+ },
+ {
+  "doctype": "Role",
+  "name": "VAT Rule Maintainer",
+  "role_name": "VAT Rule Maintainer",
+  "desk_access": 1,
+  "two_factor_auth": 0,
+  "disabled": 0,
+  "is_custom": 0,
+  "home_page": null,
+  "restrict_to_domain": null
  }
 ]

@@ -33,5 +33,33 @@
   "workflow_state_name": "VAT Cancelled",
   "style": "Danger",
   "icon": null
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Rule Draft",
+  "workflow_state_name": "Rule Draft",
+  "style": "Primary",
+  "icon": null
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Rule Verified",
+  "workflow_state_name": "Rule Verified",
+  "style": "Warning",
+  "icon": null
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Rule Published",
+  "workflow_state_name": "Rule Published",
+  "style": "Success",
+  "icon": null
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Rule Cancelled",
+  "workflow_state_name": "Rule Cancelled",
+  "style": "Danger",
+  "icon": null
  }
 ]

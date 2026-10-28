@@ -1,0 +1,85 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 22:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "ref_id",
+  "source_type",
+  "title",
+  "url",
+  "section",
+  "publication_date",
+  "effective_date",
+  "accessed_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "ref_id",
+   "fieldtype": "Data",
+   "label": "Reference ID",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "source_type",
+   "fieldtype": "Select",
+   "label": "Source Type",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2,
+   "options": "Law\nImplementing Regulation\nGuideline\nDecision\nReturn Form\nOther"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "url",
+   "fieldtype": "Data",
+   "label": "URL",
+   "options": "URL",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Data",
+   "label": "Section",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "publication_date",
+   "fieldtype": "Date",
+   "label": "Publication Date"
+  },
+  {
+   "fieldname": "effective_date",
+   "fieldtype": "Date",
+   "label": "Effective Date"
+  },
+  {
+   "fieldname": "accessed_on",
+   "fieldtype": "Date",
+   "label": "Accessed On"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-28 22:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Rule Reference",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
