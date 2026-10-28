@@ -1,0 +1,31 @@
+name: Tax rule source
+description: Report a new or changed ZATCA rule, guideline or form version.
+labels: [tax-rule]
+body:
+  - type: markdown
+    attributes:
+      value: Official sources only. A rule is never applied until an organization verifies and publishes it.
+  - type: input
+    id: url
+    attributes:
+      label: Official source URL
+    validations:
+      required: true
+  - type: input
+    id: section
+    attributes:
+      label: Section / article
+    validations:
+      required: true
+  - type: input
+    id: dates
+    attributes:
+      label: Publication date and effective date
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What changes in the VAT return
+    validations:
+      required: true
