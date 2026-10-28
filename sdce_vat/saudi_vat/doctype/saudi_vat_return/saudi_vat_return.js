@@ -4,9 +4,15 @@
 
 frappe.ui.form.on("Saudi VAT Return", {
 	refresh(frm) {
-		if (frm.doc.docstatus === 0 && !frm.is_new() && (frm.doc.workflow_state || "VAT Draft") === "VAT Draft") {
+		if (
+			frm.doc.docstatus === 0 &&
+			!frm.is_new() &&
+			(frm.doc.workflow_state || "VAT Draft") === "VAT Draft"
+		) {
 			frm.add_custom_button(__("Calculate"), () =>
-				frm.call({ doc: frm.doc, method: "calculate", freeze: true }).then(() => frm.reload_doc())
+				frm
+					.call({ doc: frm.doc, method: "calculate", freeze: true })
+					.then(() => frm.reload_doc())
 			);
 		}
 		if (!frm.is_new() && frm.doc.calculation_hash) {
@@ -30,14 +36,16 @@ frappe.ui.form.on("Saudi VAT Return", {
 			frm.add_custom_button(
 				__("Verify Snapshot"),
 				() =>
-					frm.call({ doc: frm.doc, method: "verify_snapshot", type: "GET" }).then((r) => {
-						const result = r.message || {};
-						frappe.msgprint(
-							result.file_ok && result.tables_ok
-								? __("The snapshot matches the approved values.")
-								: __("The snapshot does not match the approved values.")
-						);
-					}),
+					frm
+						.call({ doc: frm.doc, method: "verify_snapshot", type: "GET" })
+						.then((r) => {
+							const result = r.message || {};
+							frappe.msgprint(
+								result.file_ok && result.tables_ok
+									? __("The snapshot matches the approved values.")
+									: __("The snapshot does not match the approved values.")
+							);
+						}),
 				__("Checks")
 			);
 		}

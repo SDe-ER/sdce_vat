@@ -19,8 +19,30 @@ CUSTOMER = "_Test VAT Customer"
 ITEM = "_Test VAT Item"
 
 
-def _first(doctype, **filters):
-	return frappe.get_all(doctype, filters=filters, pluck="name", limit=1)[0]
+def _first_or_make(doctype, filters=None, **values):
+	"""An existing record, or a new synthetic one on a fresh site where the setup wizard never ran."""
+	found = frappe.get_all(doctype, filters=filters or {}, pluck="name", limit=1)
+	if found:
+		return found[0]
+	return frappe.get_doc({"doctype": doctype, **values}).insert(ignore_permissions=True).name
+
+
+def _ensure_masters():
+	"""Masters that ERPNext creates in the setup wizard, not on install (CI uses a fresh site)."""
+	if not frappe.db.exists("Warehouse Type", "Transit"):
+		frappe.get_doc({"doctype": "Warehouse Type", "name": "Transit"}).insert(ignore_permissions=True)
+	year = DATE[:4]
+	if not frappe.db.exists(
+		"Fiscal Year", {"year_start_date": ("<=", DATE), "year_end_date": (">=", DATE), "disabled": 0}
+	):
+		frappe.get_doc(
+			{
+				"doctype": "Fiscal Year",
+				"year": f"_Test VAT {year}",
+				"year_start_date": f"{year}-01-01",
+				"year_end_date": f"{year}-12-31",
+			}
+		).insert(ignore_permissions=True)
 
 
 class VatSiteTestCase(IntegrationTestCase):
@@ -29,6 +51,7 @@ class VatSiteTestCase(IntegrationTestCase):
 	@classmethod
 	def setUpClass(cls):
 		super().setUpClass()
+		_ensure_masters()
 		if not frappe.db.exists("Company", COMPANY):
 			frappe.get_doc(
 				{
@@ -51,7 +74,11 @@ class VatSiteTestCase(IntegrationTestCase):
 				{
 					"doctype": "Supplier",
 					"supplier_name": SUPPLIER,
-					"supplier_group": _first("Supplier Group", is_group=0),
+					"supplier_group": _first_or_make(
+						"Supplier Group",
+						{"is_group": 0},
+						supplier_group_name="_Test VAT Supplier Group",
+					),
 					"tax_id": "300000000000003",
 				}
 			).insert(ignore_permissions=True)
@@ -60,8 +87,12 @@ class VatSiteTestCase(IntegrationTestCase):
 				{
 					"doctype": "Customer",
 					"customer_name": CUSTOMER,
-					"customer_group": _first("Customer Group", is_group=0),
-					"territory": _first("Territory"),
+					"customer_group": _first_or_make(
+						"Customer Group",
+						{"is_group": 0},
+						customer_group_name="_Test VAT Customer Group",
+					),
+					"territory": _first_or_make("Territory", territory_name="_Test VAT Territory"),
 				}
 			).insert(ignore_permissions=True)
 		if not frappe.db.exists("Item", ITEM):
@@ -70,8 +101,12 @@ class VatSiteTestCase(IntegrationTestCase):
 					"doctype": "Item",
 					"item_code": ITEM,
 					"item_name": ITEM,
-					"item_group": _first("Item Group", is_group=0),
-					"stock_uom": _first("UOM"),
+					"item_group": _first_or_make(
+						"Item Group",
+						{"is_group": 0},
+						item_group_name="_Test VAT Item Group",
+					),
+					"stock_uom": _first_or_make("UOM", uom_name="_Test VAT Unit"),
 					"is_stock_item": 0,
 				}
 			).insert(ignore_permissions=True)
