@@ -44,7 +44,7 @@ class TestRuleKeys(unittest.TestCase):
 	def test_closed_key_list(self):
 		for key in (
 			"standard_rate",
-			"treatment_box:zero_rated",
+			"treatment_box:zero_rated_sale",
 			"recoverability:fuel",
 			"tax_date_basis:sales",
 		):
@@ -56,6 +56,7 @@ class TestRuleKeys(unittest.TestCase):
 			"standard_rate ",
 			"treatment_box:",
 			"treatment_box:Zero Rated",
+			"treatment_box:zero_rated",
 			"other:x",
 			"x:y:z",
 		):
@@ -293,8 +294,11 @@ class TestRuleSet(VatSiteTestCase):
 		frappe.db.set_value("Saudi VAT Rule", doc.rules[0].name, "value", "5")  # tampering below the ORM
 		self.assertFalse(frappe.get_doc("Saudi VAT Rule Set", doc.name).content_is_intact())
 
-	def test_unreferenced_set_can_be_cancelled(self):
-		doc = self._step(self._published(), APPROVER, "Cancel Rule Set")
+	def test_unreferenced_set_can_be_cancelled_through_the_workflow(self):
+		doc = self._published()
+		frappe.set_user(APPROVER)
+		self.assertRaises(frappe.PermissionError, frappe.get_doc("Saudi VAT Rule Set", doc.name).cancel)
+		doc = self._step(doc, APPROVER, "Cancel Rule Set")
 		self.assertEqual((doc.docstatus, doc.workflow_state), (2, "Rule Cancelled"))
 
 	def test_same_start_or_overlapping_dates_are_refused(self):
@@ -372,6 +376,28 @@ class TestRuleSet(VatSiteTestCase):
 				self.assertRaises(
 					frappe.ValidationError, self._draft, version=2, version_type="Corrective", **values
 				)
+
+	def test_corrective_stops_where_the_next_version_starts(self):
+		base = self._published()  # open end: applies until the next normal version
+		self._published(version=2, start="2028-01-01")
+		for version, end in ((3, None), (4, "2028-06-30")):
+			with self.subTest(end=end):
+				doc = self._verified(
+					version=version,
+					end=end,
+					version_type="Corrective",
+					supersedes=base.name,
+					correction_basis="REF-1",
+				)
+				self.assertRaises(frappe.ValidationError, self._step, doc, APPROVER, "Publish Rule Set")
+		inside = self._published(
+			version=5,
+			end="2027-12-31",
+			version_type="Corrective",
+			supersedes=base.name,
+			correction_basis="REF-1",
+		)
+		self.assertEqual(inside.docstatus, 1)
 
 	def test_correction_basis_must_be_a_complete_reference(self):
 		base = self._published()

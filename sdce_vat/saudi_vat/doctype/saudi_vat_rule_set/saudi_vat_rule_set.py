@@ -25,6 +25,7 @@ from sdce_vat.constants import (
 	WHOLE_NUMBER_RULE_KEYS,
 )
 from sdce_vat.engine import boxes
+from sdce_vat.engine.model import Treatment
 
 STATE_DRAFT = "Rule Draft"
 STATE_VERIFIED = "Rule Verified"
@@ -79,6 +80,7 @@ RULE_STAMP_FIELDS = ("verified_by", "verified_on")
 CODE_PATTERN = re.compile(r"^[A-Z0-9][A-Z0-9_-]{0,59}$")
 REF_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,59}$")
 KEY_NAME_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_]{0,59}$")
+TREATMENTS = frozenset(t.value for t in Treatment)
 
 
 def _text(value) -> str:
@@ -94,7 +96,9 @@ def is_valid_rule_key(key: str) -> bool:
 	if key in RULE_KEYS:
 		return True
 	prefix, sep, name = (key or "").partition(":")
-	return bool(sep) and prefix in RULE_KEY_PREFIXES and bool(KEY_NAME_PATTERN.match(name))
+	if not sep or prefix not in RULE_KEY_PREFIXES or not KEY_NAME_PATTERN.match(name):
+		return False
+	return prefix != "treatment_box" or name in TREATMENTS
 
 
 class SaudiVATRuleSet(Document):
@@ -138,6 +142,8 @@ class SaudiVATRuleSet(Document):
 		frappe.throw(_("A published rule set cannot be changed; publish a new version instead"))
 
 	def before_cancel(self):
+		if self.workflow_state != STATE_CANCELLED:
+			frappe.throw(_("A rule set is cancelled only through its workflow"), frappe.PermissionError)
 		corrected_by = frappe.db.get_value(
 			"Saudi VAT Rule Set", {"supersedes": self.name, "docstatus": 1}, "name"
 		)
@@ -154,12 +160,9 @@ class SaudiVATRuleSet(Document):
 			)
 
 	# ---- integrity ----------------------------------------------------------------------------------------
-	def content(self) -> dict:
-		"""Canonical content of the rule set (the basis of `content_hash`); stamps are not part of it."""
-		return self.content_of(self)
-
 	@staticmethod
 	def content_of(doc) -> dict:
+		"""Canonical content of a rule set (the basis of `content_hash`); stamps are not part of it."""
 		header = []
 		for field in HEADER_FIELDS:
 			value = doc.get(field)
@@ -336,11 +339,16 @@ class SaudiVATRuleSet(Document):
 
 	# ---- publication checks ---------------------------------------------------------------------------------
 	def _published_versions(self) -> list:
-		return frappe.get_all(
+		"""Other published sets of this code. The locking read on every set of the code makes two publications
+		of the same code wait for each other, so each sees the other's result."""
+		rows = frappe.db.get_values(
 			"Saudi VAT Rule Set",
-			filters={"rule_set_code": self.rule_set_code, "docstatus": 1, "name": ["!=", self.name]},
-			fields=["name", "version", "version_type", "effective_from", "effective_to", "supersedes"],
+			{"rule_set_code": self.rule_set_code},
+			["name", "docstatus", "version", "version_type", "effective_from", "effective_to", "supersedes"],
+			as_dict=True,
+			for_update=True,
 		)
+		return [r for r in rows if r.docstatus == 1 and r.name != self.name]
 
 	def _check_version_order(self, published):
 		highest = max((p.version for p in published), default=0)
@@ -377,21 +385,14 @@ class SaudiVATRuleSet(Document):
 			frappe.throw(_("Rule set {0} already has a published correction").format(target.name))
 		if getdate(self.effective_from) < getdate(target.effective_from):
 			frappe.throw(_("A corrective version cannot start before the rule set it supersedes"))
-		if target.effective_to and (
-			not self.effective_to or getdate(self.effective_to) > getdate(target.effective_to)
-		):
+		target_end = _last_day(target.effective_from, target.effective_to, published)
+		if target_end and (not self.effective_to or getdate(self.effective_to) > target_end):
 			frappe.throw(_("A corrective version cannot end after the rule set it supersedes"))
 
 	def _end_date(self, published=None):
-		"""Last day this set applies: its Effective To, or the day before the next normal version starts."""
-		if self.effective_to:
-			return getdate(self.effective_to)
 		if published is None:
 			published = self._published_versions()
-		start = getdate(self.effective_from)
-		later = [getdate(p.effective_from) for p in published if p.version_type == NORMAL]
-		later = [d for d in later if d > start]
-		return add_days(min(later), -1) if later else None
+		return _last_day(self.effective_from, self.effective_to, published)
 
 	@staticmethod
 	def _approved_return_in(start, end):
@@ -399,6 +400,16 @@ class SaudiVATRuleSet(Document):
 		if end:
 			filters["from_date"] = ["<=", getdate(end)]
 		return frappe.db.get_value("Saudi VAT Return", filters, "name")
+
+
+def _last_day(start, end, published):
+	"""Last day a set applies: its Effective To, or the day before the next normal version starts (None = open)."""
+	if end:
+		return getdate(end)
+	start = getdate(start)
+	later = [getdate(p.effective_from) for p in published if p.version_type == NORMAL]
+	later = [d for d in later if d > start]
+	return add_days(min(later), -1) if later else None
 
 
 def _check_value(row, key):
