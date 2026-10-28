@@ -152,11 +152,17 @@ class SaudiVATRuleSet(Document):
 				_("Rule set {0} is corrected by the published rule set {1}").format(self.name, corrected_by)
 			)
 		approved = self._approved_return_in(self.effective_from, self._end_date())
-		if approved:
+		if approved and _can_read_return(approved):
 			frappe.throw(
 				_(
 					"Rule set {0} covers the period of the approved VAT return {1}; it cannot be cancelled"
 				).format(self.name, approved)
+			)
+		if approved:
+			frappe.throw(
+				_("Rule set {0} covers the period of an approved VAT return; it cannot be cancelled").format(
+					self.name
+				)
 			)
 
 	# ---- integrity ----------------------------------------------------------------------------------------
@@ -367,12 +373,19 @@ class SaudiVATRuleSet(Document):
 			if earlier.effective_to and getdate(earlier.effective_to) >= later_start:
 				frappe.throw(_("The effective dates overlap with rule set {0}").format(other.name))
 		approved = self._approved_return_in(self.effective_from, self._end_date(published))
-		if approved:
+		if approved and _can_read_return(approved):
 			frappe.throw(
 				_(
 					"The approved VAT return {0} falls in the effective period; a normal version cannot change "
 					"it. Use a corrective version with a documented basis."
 				).format(approved)
+			)
+		if approved:
+			frappe.throw(
+				_(
+					"An approved VAT return falls in the effective period; a normal version cannot change it. "
+					"Use a corrective version with a documented basis."
+				)
 			)
 
 	def _check_correction(self):
@@ -381,8 +394,14 @@ class SaudiVATRuleSet(Document):
 		target = next((p for p in published if p.name == self.supersedes), None)
 		if not target:
 			frappe.throw(_("A corrective version can supersede only a published rule set with the same code"))
-		if any(p.supersedes == target.name for p in published):
-			frappe.throw(_("Rule set {0} already has a published correction").format(target.name))
+		correction = next((p.name for p in published if p.supersedes == target.name), None)
+		if correction:
+			# corrections form one chain: the next correction supersedes the latest one, never a second branch
+			frappe.throw(
+				_("Rule set {0} is already corrected by {1}; a further correction must supersede {1}").format(
+					target.name, correction
+				)
+			)
 		if getdate(self.effective_from) < getdate(target.effective_from):
 			frappe.throw(_("A corrective version cannot start before the rule set it supersedes"))
 		target_end = _last_day(target.effective_from, target.effective_to, published)
@@ -400,6 +419,11 @@ class SaudiVATRuleSet(Document):
 		if end:
 			filters["from_date"] = ["<=", getdate(end)]
 		return frappe.db.get_value("Saudi VAT Return", filters, "name")
+
+
+def _can_read_return(name) -> bool:
+	"""Rule sets are national; an approved return of a company the user cannot read is not named."""
+	return frappe.has_permission("Saudi VAT Return", "read", doc=name)
 
 
 def _last_day(start, end, published):
@@ -453,5 +477,6 @@ def refuse_standalone_save():
 def _require_role(*roles):
 	if not set(roles) & set(frappe.get_roles()):
 		frappe.throw(
-			_("This step needs one of the roles: {0}").format(", ".join(roles)), frappe.PermissionError
+			_("This step needs one of the roles: {0}").format(", ".join(_(r) for r in roles)),
+			frappe.PermissionError,
 		)

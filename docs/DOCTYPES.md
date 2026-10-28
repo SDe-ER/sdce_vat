@@ -49,8 +49,29 @@ the standard amend (`amended_from`).
   cover the same day (same start refused; an explicit Effective To may not reach the next start; an open end
   stops the day before the next normal version starts) and never cover the period of an approved VAT return.
   A Corrective version supersedes one published set of the same code, stays inside its dates, cites a complete
-  correction basis, and may cover approved periods; one published correction per set. Publishing never changes
-  an approved return, filing or snapshot.
+  correction basis, and may cover approved periods. Corrections form one chain: each published set has at most
+  one published correction, so a further correction supersedes the latest one (v1 ← v2 ← v3). The chain has no
+  branch and no loop, because a correction can only supersede a set that was published before it and has a
+  lower version. Publishing never changes an approved return, filing or snapshot.
+- Rows of a rule set cannot be saved on their own (`PUT /api/resource/<child>/<name>`, `frappe.client.save` with a
+  row); no role has delete, import, amend or rename on rule sets.
+
+### Rule sets in a multi-company site
+- Rule sets are national tax rules and have no company field: one published set applies to every company of the
+  site. That is why the three duties are separate users and why a normal version is refused when an approved
+  return of **any** company falls in its dates. A refusal names that return only when the user may read it.
+- Give the rule roles (VAT Rule Maintainer, and VAT Reviewer / VAT Approver used for rule sets) only to people
+  trusted for all companies. Company User Permissions do not restrict rule sets.
+- The duty checks use the user's roles and user id in the controller, not only DocPerms, so an extra DocPerm
+  does not let a user skip a step. A System Manager can still change roles, DocPerms or server scripts; that is
+  the site administration trust boundary and is outside what an app can enforce.
+
+### Concurrent publication
+Publication takes a `SELECT … FOR UPDATE` on every set of the same code (indexed `rule_set_code`) inside the
+request transaction; Frappe has already locked the set's own row. Two publications of one code at the same
+moment therefore cannot both commit: on QA (MariaDB, two processes, one forced 3-second overlap) one published
+and the other was rolled back by the database (`QueryDeadlockError`, "Record has changed since last read");
+its retry was refused by the publication checks. The user sees an error and retries; nothing is half-written.
 
 ## Server-side rules (Saudi VAT Return)
 - Company read permission required; overlapping periods of the same company are refused.

@@ -14,7 +14,14 @@ from sdce_vat.saudi_vat.doctype.saudi_vat_rule_set.saudi_vat_rule_set import (
 	SaudiVATRuleSet,
 	is_valid_rule_key,
 )
-from sdce_vat.tests.site_base import COMPANY, FROM, TO, VatSiteTestCase, make_user
+from sdce_vat.tests.site_base import (
+	COMPANY,
+	FROM,
+	TO,
+	VatSiteTestCase,
+	make_other_company_tax_account,
+	make_user,
+)
 
 MAINTAINER = "vat-rule-maintainer@example.com"
 MAINTAINER_2 = "vat-rule-maintainer-2@example.com"
@@ -25,6 +32,9 @@ MAINTAINER_APPROVER = "vat-rule-maintainer-approver@example.com"
 REVIEWER_APPROVER = "vat-rule-reviewer-approver@example.com"
 RETURN_PREPARER = "vat-rule-return-preparer@example.com"
 NO_ROLE = "vat-rule-no-role@example.com"
+SYSTEM_MANAGER = "vat-rule-system-manager@example.com"
+APPROVER_OTHER_COMPANY = "vat-rule-approver-other@example.com"
+OTHER_COMPANY = "_Test VAT Other Co"
 DENIED = (frappe.ValidationError, frappe.PermissionError)
 CODE = "TEST-KSA-VAT"
 # Synthetic reference: the URL and section are placeholders, not a real legal source.
@@ -79,6 +89,17 @@ class TestRuleSet(VatSiteTestCase):
 		make_user(REVIEWER_APPROVER, VAT_REVIEWER, VAT_APPROVER)
 		make_user(RETURN_PREPARER, VAT_PREPARER)
 		make_user(NO_ROLE)
+		make_user(SYSTEM_MANAGER, "System Manager")
+		make_user(APPROVER_OTHER_COMPANY, VAT_APPROVER)
+		make_other_company_tax_account(OTHER_COMPANY)
+		frappe.get_doc(
+			{
+				"doctype": "User Permission",
+				"user": APPROVER_OTHER_COMPANY,
+				"allow": "Company",
+				"for_value": OTHER_COMPANY,
+			}
+		).insert(ignore_permissions=True)
 
 	def setUp(self):
 		frappe.db.savepoint("rule_set_test")
@@ -399,6 +420,19 @@ class TestRuleSet(VatSiteTestCase):
 		)
 		self.assertEqual(inside.docstatus, 1)
 
+	def test_corrections_form_one_chain(self):
+		corrective = {"version_type": "Corrective", "correction_basis": "REF-1"}
+		base = self._published()
+		first = self._published(version=2, supersedes=base.name, **corrective)
+		branch = self._verified(version=3, supersedes=base.name, **corrective)
+		self.assertRaises(frappe.ValidationError, self._step, branch, APPROVER, "Publish Rule Set")
+		second = self._published(version=4, supersedes=first.name, **corrective)
+		self.assertEqual((second.supersedes, first.supersedes), (first.name, base.name))
+		self.assertRaises(frappe.ValidationError, self._step, first, APPROVER, "Cancel Rule Set")
+		self._step(second, APPROVER, "Cancel Rule Set")  # the latest correction is not referenced
+		again = self._published(version=5, supersedes=first.name, **corrective)
+		self.assertEqual(again.docstatus, 1)
+
 	def test_correction_basis_must_be_a_complete_reference(self):
 		base = self._published()
 		basis = {**REFERENCE, "ref_id": "REF-2", "accessed_on": None}
@@ -422,6 +456,55 @@ class TestRuleSet(VatSiteTestCase):
 		self.assertTrue(frappe.has_permission("Saudi VAT Rule Set", "read", doc=doc.name))
 		self.assertFalse(frappe.has_permission("Saudi VAT Rule Set", "write", doc=doc.name))
 		self.assertRaises(frappe.PermissionError, self._draft, user=RETURN_PREPARER, version=3)
+
+	def test_other_api_paths_are_refused(self):
+		doc = self._draft()
+		# insert straight as submitted, by a user with create and submit permission
+		frappe.set_user(MAINTAINER_APPROVER)
+		submitted = {
+			"doctype": "Saudi VAT Rule Set",
+			"rule_set_code": CODE,
+			"version": 2,
+			"effective_from": "2028-01-01",
+			"docstatus": 1,
+			"workflow_state": "Rule Published",
+			"references": [dict(REFERENCE)],
+			"rules": [
+				{
+					"rule_key": "standard_rate",
+					"value": "15",
+					"reference": "REF-1",
+					"verification_status": "Verified",
+				}
+			],
+		}
+		self.assertRaises(frappe.PermissionError, frappe.client.insert, submitted)
+		self.assertFalse(frappe.db.exists("Saudi VAT Rule Set", f"{CODE}-2"))
+		for user in (MAINTAINER, REVIEWER, APPROVER, SYSTEM_MANAGER):
+			with self.subTest(user=user):
+				frappe.set_user(user)
+				self.assertFalse(frappe.has_permission("Saudi VAT Rule Set", "import"))
+				self.assertFalse(frappe.has_permission("Saudi VAT Rule Set", "delete", doc=doc.name))
+				self.assertRaises(DENIED, frappe.delete_doc, "Saudi VAT Rule Set", doc.name)
+				self.assertRaises(DENIED, frappe.rename_doc, "Saudi VAT Rule Set", doc.name, f"{CODE}-99")
+		frappe.set_user(SYSTEM_MANAGER)
+		self.assertFalse(frappe.has_permission("Saudi VAT Rule Set", "write", doc=doc.name))
+		self.assertRaises(frappe.PermissionError, self._draft, user=SYSTEM_MANAGER, version=3)
+		self.assertTrue(frappe.db.exists("Saudi VAT Rule Set", doc.name))
+
+	def test_return_of_another_company_is_not_named(self):
+		base = self._published(start="2026-01-01")
+		approved = self._approved_return()
+		normal = self._verified(version=2, start="2026-08-01")
+		frappe.set_user(APPROVER_OTHER_COMPANY)
+		self.assertFalse(frappe.has_permission("Saudi VAT Return", "read", doc=approved.name))
+		with self.assertRaises(frappe.ValidationError) as refused:
+			apply_workflow(frappe.get_doc("Saudi VAT Rule Set", normal.name), "Publish Rule Set")
+		self.assertNotIn(approved.name, str(refused.exception))
+		with self.assertRaises(frappe.ValidationError) as refused:
+			apply_workflow(frappe.get_doc("Saudi VAT Rule Set", base.name), "Cancel Rule Set")
+		self.assertNotIn(approved.name, str(refused.exception))
+		frappe.clear_messages()
 
 	def test_reviewer_cannot_change_content(self):
 		doc = self._draft()
