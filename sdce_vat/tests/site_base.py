@@ -31,6 +31,11 @@ def _ensure_masters():
 	"""Masters that ERPNext creates in the setup wizard, not on install (CI uses a fresh site)."""
 	if not frappe.db.exists("Warehouse Type", "Transit"):
 		frappe.get_doc({"doctype": "Warehouse Type", "name": "Transit"}).insert(ignore_permissions=True)
+	for party_type, account_type in (("Supplier", "Payable"), ("Customer", "Receivable")):
+		if not frappe.db.exists("Party Type", party_type):
+			frappe.get_doc(
+				{"doctype": "Party Type", "party_type": party_type, "account_type": account_type}
+			).insert(ignore_permissions=True)
 	year = DATE[:4]
 	if not frappe.db.exists(
 		"Fiscal Year", {"year_start_date": ("<=", DATE), "year_end_date": (">=", DATE), "disabled": 0}
