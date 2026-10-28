@@ -1,0 +1,35 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include real company names, VAT numbers, invoices, amounts, account codes, credentials or screenshots
+        with real data. Use synthetic examples only.
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: sdce_vat, Frappe, ERPNext, and ksa_compliance / HRMS if installed.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce (synthetic data)
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This report contains no real taxpayer or financial data.
+          required: true
