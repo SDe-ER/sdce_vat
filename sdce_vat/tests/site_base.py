@@ -236,3 +236,33 @@ def make_user(email, *roles):
 	user = frappe.get_doc("User", email)
 	user.add_roles("Accounts User", *roles)
 	return email
+
+
+def make_other_company_tax_account(company="_Test VAT Other Co", abbr="_TVO"):
+	"""A second synthetic company with one Tax account, for cross-company checks."""
+	if not frappe.db.exists("Company", company):
+		frappe.get_doc(
+			{
+				"doctype": "Company",
+				"company_name": company,
+				"abbr": abbr,
+				"country": "Saudi Arabia",
+				"default_currency": "SAR",
+				"create_chart_of_accounts_based_on": "Standard Template",
+				"chart_of_accounts": "Standard",
+			}
+		).insert(ignore_permissions=True)
+	account = f"VAT Input - {abbr}"
+	if not frappe.db.exists("Account", account):
+		frappe.get_doc(
+			{
+				"doctype": "Account",
+				"account_name": "VAT Input",
+				"parent_account": frappe.db.get_value(
+					"Account", {"company": company, "account_name": "Duties and Taxes"}
+				),
+				"company": company,
+				"account_type": "Tax",
+			}
+		).insert(ignore_permissions=True)
+	return account

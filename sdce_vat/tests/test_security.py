@@ -87,6 +87,7 @@ class TestSecurity(VatSiteTestCase):
 				"posting_date": DATE,
 				"set_posting_time": 1,
 				"supplier": SUPPLIER,
+				"currency": "SAR",
 				"bill_no": "B-ONLY",
 				"bill_date": DATE,
 				"items": [{"item_code": ITEM, "qty": 1, "rate": 700}],

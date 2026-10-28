@@ -7,7 +7,17 @@ import frappe
 from frappe.model.workflow import apply_workflow
 
 from sdce_vat.constants import VAT_APPROVER, VAT_PREPARER, VAT_REVIEWER
-from sdce_vat.tests.site_base import COMPANY, DATE, FROM, ITEM, SUPPLIER, TO, VatSiteTestCase, make_user
+from sdce_vat.tests.site_base import (
+	COMPANY,
+	DATE,
+	FROM,
+	ITEM,
+	SUPPLIER,
+	TO,
+	VatSiteTestCase,
+	make_other_company_tax_account,
+	make_user,
+)
 
 PREPARER = "vat-preparer@example.com"
 REVIEWER = "vat-reviewer@example.com"
@@ -58,6 +68,8 @@ class TestVatReturn(VatSiteTestCase):
 	# ---- settings -------------------------------------------------------------------------------------
 	def test_settings_refuse_foreign_and_non_tax_accounts(self):
 		other = frappe.db.get_value("Account", {"company": ["!=", COMPANY], "account_type": "Tax"})
+		if not other:  # a fresh site has only the test company: add a second one with a Tax account
+			other = make_other_company_tax_account()
 		settings = frappe.get_doc("Saudi VAT Settings", COMPANY)
 		settings.append("accounts", {"account": other, "family": "Input", "rate": 15})
 		self.assertRaises(frappe.ValidationError, settings.save, ignore_permissions=True)
