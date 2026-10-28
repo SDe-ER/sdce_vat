@@ -1,0 +1,135 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "original_return",
+  "company",
+  "original_filing",
+  "kind",
+  "target_return",
+  "reason",
+  "lines",
+  "total_vat_effect",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "original_return",
+   "fieldtype": "Link",
+   "label": "Original Return",
+   "options": "Saudi VAT Return",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "fetch_from": "original_return.company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_filing",
+   "fieldtype": "Link",
+   "label": "Original Filing",
+   "options": "Saudi VAT Filing"
+  },
+  {
+   "fieldname": "kind",
+   "fieldtype": "Select",
+   "label": "Kind",
+   "options": "Correction in a Later Return\nSelf-Amendment",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "target_return",
+   "fieldtype": "Link",
+   "label": "Later Return",
+   "options": "Saudi VAT Return",
+   "depends_on": "eval:doc.kind=='Correction in a Later Return'"
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Text",
+   "label": "Reason",
+   "reqd": 1
+  },
+  {
+   "fieldname": "lines",
+   "fieldtype": "Table",
+   "label": "Lines",
+   "options": "Saudi VAT Amendment Line",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_vat_effect",
+   "fieldtype": "Currency",
+   "label": "Total VAT Effect",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Saudi VAT Amendment",
+   "no_copy": 1,
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-28 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Amendment",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "VAT Preparer",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "VAT Reviewer",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "VAT Approver",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "Auditor",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:VATA-{#####}",
+ "naming_rule": "Expression",
+ "is_submittable": 1,
+ "track_changes": 1
+}

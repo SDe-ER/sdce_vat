@@ -1,0 +1,35 @@
+[
+ {
+  "doctype": "Role",
+  "name": "VAT Preparer",
+  "role_name": "VAT Preparer",
+  "desk_access": 1,
+  "two_factor_auth": 0,
+  "disabled": 0,
+  "is_custom": 0,
+  "home_page": null,
+  "restrict_to_domain": null
+ },
+ {
+  "doctype": "Role",
+  "name": "VAT Reviewer",
+  "role_name": "VAT Reviewer",
+  "desk_access": 1,
+  "two_factor_auth": 0,
+  "disabled": 0,
+  "is_custom": 0,
+  "home_page": null,
+  "restrict_to_domain": null
+ },
+ {
+  "doctype": "Role",
+  "name": "VAT Approver",
+  "role_name": "VAT Approver",
+  "desk_access": 1,
+  "two_factor_auth": 0,
+  "disabled": 0,
+  "is_custom": 0,
+  "home_page": null,
+  "restrict_to_domain": null
+ }
+]

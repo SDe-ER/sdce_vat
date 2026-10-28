@@ -1,0 +1,330 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "company_abbr",
+  "tax_id",
+  "column_break_period",
+  "from_date",
+  "to_date",
+  "corrections",
+  "credit_carried",
+  "summary_section",
+  "net_vat",
+  "gl_reconciled",
+  "review_count",
+  "warning_count",
+  "column_break_calc",
+  "engine_version",
+  "calculated_on",
+  "calculated_by",
+  "calculation_hash",
+  "fields_section",
+  "lines",
+  "sources_section",
+  "sources",
+  "proof",
+  "approval_section",
+  "prepared_by",
+  "prepared_on",
+  "reviewed_by",
+  "reviewed_on",
+  "column_break_approval",
+  "approved_by",
+  "approved_on",
+  "snapshot_hash",
+  "snapshot_file",
+  "workflow_state",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "company_abbr",
+   "fieldtype": "Data",
+   "label": "Company Abbreviation",
+   "fetch_from": "company.abbr",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_id",
+   "fieldtype": "Data",
+   "label": "Company VAT Number",
+   "fetch_from": "company.tax_id",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_period",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "corrections",
+   "fieldtype": "Currency",
+   "label": "Corrections from Previous Periods (VAT)",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "credit_carried",
+   "fieldtype": "Currency",
+   "label": "VAT Credit from Previous Periods",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "summary_section",
+   "fieldtype": "Section Break",
+   "label": "Summary"
+  },
+  {
+   "fieldname": "net_vat",
+   "fieldtype": "Currency",
+   "label": "Net VAT",
+   "options": "Company:company:default_currency",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "gl_reconciled",
+   "fieldtype": "Check",
+   "label": "Reconciled with General Ledger",
+   "read_only": 1
+  },
+  {
+   "fieldname": "review_count",
+   "fieldtype": "Int",
+   "label": "Sources Needing Review",
+   "read_only": 1
+  },
+  {
+   "fieldname": "warning_count",
+   "fieldtype": "Int",
+   "label": "Sources with Warnings",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_calc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "engine_version",
+   "fieldtype": "Data",
+   "label": "Engine Version",
+   "read_only": 1
+  },
+  {
+   "fieldname": "calculated_on",
+   "fieldtype": "Datetime",
+   "label": "Calculated On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "calculated_by",
+   "fieldtype": "Link",
+   "label": "Calculated By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "calculation_hash",
+   "fieldtype": "Data",
+   "label": "Calculation Hash",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fields_section",
+   "fieldtype": "Section Break",
+   "label": "Return Fields"
+  },
+  {
+   "fieldname": "lines",
+   "fieldtype": "Table",
+   "label": "Return Fields",
+   "options": "Saudi VAT Return Line",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sources_section",
+   "fieldtype": "Section Break",
+   "label": "Sources",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "sources",
+   "fieldtype": "Table",
+   "label": "Sources",
+   "options": "Saudi VAT Return Source",
+   "read_only": 1
+  },
+  {
+   "fieldname": "proof",
+   "fieldtype": "Table",
+   "label": "General Ledger Proof",
+   "options": "Saudi VAT Return Proof",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approval_section",
+   "fieldtype": "Section Break",
+   "label": "Approval",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "prepared_by",
+   "fieldtype": "Link",
+   "label": "Prepared By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "prepared_on",
+   "fieldtype": "Datetime",
+   "label": "Prepared On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_by",
+   "fieldtype": "Link",
+   "label": "Reviewed By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_on",
+   "fieldtype": "Datetime",
+   "label": "Reviewed On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_approval",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_on",
+   "fieldtype": "Datetime",
+   "label": "Approved On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "snapshot_hash",
+   "fieldtype": "Data",
+   "label": "Snapshot SHA-256",
+   "read_only": 1
+  },
+  {
+   "fieldname": "snapshot_file",
+   "fieldtype": "Attach",
+   "label": "Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "label": "Workflow State",
+   "options": "Workflow State",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Saudi VAT Return",
+   "no_copy": 1,
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-28 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Return",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "VAT Preparer",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "VAT Reviewer",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "VAT Approver",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "Auditor",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:VATR-{company_abbr}-{#####}",
+ "naming_rule": "Expression",
+ "is_submittable": 1,
+ "track_changes": 1,
+ "title_field": "company"
+}

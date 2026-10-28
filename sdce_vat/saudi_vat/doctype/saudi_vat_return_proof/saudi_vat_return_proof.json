@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "account",
+  "side",
+  "gl_vat",
+  "lines_vat",
+  "difference"
+ ],
+ "fields": [
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "label": "VAT Account",
+   "options": "Account",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "side",
+   "fieldtype": "Data",
+   "label": "Side",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "gl_vat",
+   "fieldtype": "Currency",
+   "label": "General Ledger",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lines_vat",
+   "fieldtype": "Currency",
+   "label": "Sources",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "difference",
+   "fieldtype": "Currency",
+   "label": "Difference",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-28 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Return Proof",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 0
+}

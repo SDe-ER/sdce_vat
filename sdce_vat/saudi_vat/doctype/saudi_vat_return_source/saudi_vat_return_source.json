@@ -1,0 +1,155 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "box_id",
+  "treatment",
+  "reason",
+  "needs_review",
+  "column",
+  "voucher_type",
+  "voucher_no",
+  "posting_date",
+  "party_type",
+  "party",
+  "party_tax_id",
+  "bill_no",
+  "vat_account",
+  "base",
+  "vat",
+  "warnings",
+  "source_rows"
+ ],
+ "fields": [
+  {
+   "fieldname": "box_id",
+   "fieldtype": "Data",
+   "label": "Field",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "treatment",
+   "fieldtype": "Select",
+   "label": "Treatment",
+   "options": "standard_rated_sale\ngovernment_bears\nzero_rated_sale\nexport\nexempt_sale\ninput_deductible\ninput_not_deductible\nimport_customs\nimport_reverse_charge\nzero_rated_purchase\nexempt_purchase\nout_of_scope\nneeds_review",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Reason",
+   "read_only": 1
+  },
+  {
+   "fieldname": "needs_review",
+   "fieldtype": "Check",
+   "label": "Needs Review",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column",
+   "fieldtype": "Data",
+   "label": "Column",
+   "read_only": 1
+  },
+  {
+   "fieldname": "voucher_type",
+   "fieldtype": "Link",
+   "label": "Voucher Type",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "voucher_no",
+   "fieldtype": "Dynamic Link",
+   "label": "Voucher",
+   "options": "voucher_type",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "party_type",
+   "fieldtype": "Link",
+   "label": "Party Type",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "label": "Party",
+   "options": "party_type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "party_tax_id",
+   "fieldtype": "Data",
+   "label": "Party VAT Number",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bill_no",
+   "fieldtype": "Data",
+   "label": "Invoice No.",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vat_account",
+   "fieldtype": "Link",
+   "label": "VAT Account",
+   "options": "Account",
+   "read_only": 1
+  },
+  {
+   "fieldname": "base",
+   "fieldtype": "Currency",
+   "label": "Base",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vat",
+   "fieldtype": "Currency",
+   "label": "VAT",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "warnings",
+   "fieldtype": "Small Text",
+   "label": "Warnings",
+   "read_only": 1
+  },
+  {
+   "fieldname": "source_rows",
+   "fieldtype": "Small Text",
+   "label": "Source Rows",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-28 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Return Source",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 0
+}

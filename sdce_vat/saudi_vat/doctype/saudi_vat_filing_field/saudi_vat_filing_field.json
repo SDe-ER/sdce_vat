@@ -1,0 +1,108 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "box_id",
+  "box_no",
+  "label",
+  "approved_amount",
+  "approved_adjustment",
+  "approved_vat",
+  "filed_amount",
+  "filed_adjustment",
+  "filed_vat",
+  "difference",
+  "reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "box_id",
+   "fieldtype": "Data",
+   "label": "Field",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "box_no",
+   "fieldtype": "Int",
+   "label": "No.",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_amount",
+   "fieldtype": "Currency",
+   "label": "Approved Amount",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_adjustment",
+   "fieldtype": "Currency",
+   "label": "Approved Adjustment",
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_vat",
+   "fieldtype": "Currency",
+   "label": "Approved VAT",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "filed_amount",
+   "fieldtype": "Currency",
+   "label": "Filed Amount",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "filed_adjustment",
+   "fieldtype": "Currency",
+   "label": "Filed Adjustment",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "filed_vat",
+   "fieldtype": "Currency",
+   "label": "Filed VAT",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "difference",
+   "fieldtype": "Currency",
+   "label": "Difference",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Small Text",
+   "label": "Reason for Difference",
+   "in_list_view": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-28 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Filing Field",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 0
+}
