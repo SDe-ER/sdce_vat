@@ -23,3 +23,6 @@ See [Roadmap](docs/ROADMAP.md), [Architecture](docs/ARCHITECTURE.md), and [Secur
 
 ## Existing work
 Earlier local `sdce_vat` phases remain preserved separately as reference material. This repository starts fresh; nothing is imported until code review, licensing review, and data-leak checks pass.
+
+## National scope and prerequisites
+This project is intended for Saudi organizations using ERPNext, not a single taxpayer. Review [Installation and adoption requirements](docs/INSTALLATION_REQUIREMENTS.md), [ZATCA traceability](docs/ZATCA_REQUIREMENTS.md), [Compatibility matrix](docs/COMPATIBILITY_MATRIX.md), and [Release gates](docs/RELEASE_CRITERIA.md) before deploying. **No ZATCA certification or automatic submission is claimed.**
