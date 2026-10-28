@@ -265,15 +265,34 @@ required_apps = ["erpnext"]
 
 # Fixtures
 # --------
-# The three separate VAT roles (keep in step with sdce_vat.constants.VAT_ROLES)
-# and the approval workflow of the Saudi VAT Return.
+# The separate VAT roles (keep in step with sdce_vat.constants.VAT_ROLES), the approval workflow of the Saudi
+# VAT Return and the approval workflow of the Saudi VAT Rule Set.
 
 fixtures = [
 	{
 		"dt": "Role",
-		"filters": [["name", "in", ["VAT Preparer", "VAT Reviewer", "VAT Approver"]]],
+		"filters": [["name", "in", ["VAT Preparer", "VAT Reviewer", "VAT Approver", "VAT Rule Maintainer"]]],
 	},
-	{"dt": "Workflow State", "filters": [["name", "like", "VAT %"]]},
+	{
+		"dt": "Workflow State",
+		"filters": [
+			[
+				"name",
+				"in",
+				[
+					"VAT Draft",
+					"VAT Prepared",
+					"VAT Reviewed",
+					"VAT Approved",
+					"VAT Cancelled",
+					"Rule Draft",
+					"Rule Verified",
+					"Rule Published",
+					"Rule Cancelled",
+				],
+			]
+		],
+	},
 	{
 		"dt": "Workflow Action Master",
 		"filters": [
@@ -287,9 +306,16 @@ fixtures = [
 					"Reject VAT Return",
 					"Approve VAT Return",
 					"Cancel VAT Return",
+					"Verify Rule Set",
+					"Return Rule Set to Draft",
+					"Publish Rule Set",
+					"Cancel Rule Set",
 				],
 			]
 		],
 	},
-	{"dt": "Workflow", "filters": [["name", "=", "Saudi VAT Return Approval"]]},
+	{
+		"dt": "Workflow",
+		"filters": [["name", "in", ["Saudi VAT Return Approval", "Saudi VAT Rule Set Approval"]]],
+	},
 ]

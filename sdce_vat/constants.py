@@ -7,4 +7,23 @@ MODULE = "Saudi VAT"
 VAT_PREPARER = "VAT Preparer"
 VAT_REVIEWER = "VAT Reviewer"
 VAT_APPROVER = "VAT Approver"
-VAT_ROLES = (VAT_PREPARER, VAT_REVIEWER, VAT_APPROVER)
+# Tax rule sets: a maintainer prepares, a second person verifies, an approver publishes (three different users).
+VAT_RULE_MAINTAINER = "VAT Rule Maintainer"
+VAT_ROLES = (VAT_PREPARER, VAT_REVIEWER, VAT_APPROVER, VAT_RULE_MAINTAINER)
+
+# Closed list of rule keys. A key is either one of RULE_KEYS or `<prefix>:<name>` with a prefix of RULE_KEY_PREFIXES.
+RULE_KEYS = (
+	"standard_rate",
+	"non_recoverable_placement",
+	"credit_note_period",
+	"rounding",
+	"late_claim_limit_years",
+	"late_claim_limit_basis",
+	"unpaid_adjust_months",
+	"unpaid_adjust_start",
+	"unpaid_financing_exception",
+	"correction_rules",
+)
+RULE_KEY_PREFIXES = ("treatment_box", "recoverability", "tax_date_basis")
+DECIMAL_RULE_KEYS = ("standard_rate",)
+WHOLE_NUMBER_RULE_KEYS = ("late_claim_limit_years", "unpaid_adjust_months")

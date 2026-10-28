@@ -101,5 +101,110 @@
     "condition": null
    }
   ]
+ },
+ {
+  "doctype": "Workflow",
+  "name": "Saudi VAT Rule Set Approval",
+  "workflow_name": "Saudi VAT Rule Set Approval",
+  "document_type": "Saudi VAT Rule Set",
+  "is_active": 1,
+  "override_status": 0,
+  "send_email_alert": 0,
+  "workflow_state_field": "workflow_state",
+  "states": [
+   {
+    "doctype": "Workflow Document State",
+    "state": "Rule Draft",
+    "doc_status": "0",
+    "allow_edit": "VAT Rule Maintainer",
+    "is_optional_state": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "Rule Verified",
+    "doc_status": "0",
+    "allow_edit": "VAT Approver",
+    "is_optional_state": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "Rule Published",
+    "doc_status": "1",
+    "allow_edit": "VAT Approver",
+    "is_optional_state": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "Rule Cancelled",
+    "doc_status": "2",
+    "allow_edit": "VAT Approver",
+    "is_optional_state": 0
+   }
+  ],
+  "transitions": [
+   {
+    "doctype": "Workflow Transition",
+    "state": "Rule Draft",
+    "action": "Verify Rule Set",
+    "next_state": "Rule Verified",
+    "allowed": "VAT Reviewer",
+    "allow_self_approval": 0,
+    "condition": null
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Rule Draft",
+    "action": "Verify Rule Set",
+    "next_state": "Rule Verified",
+    "allowed": "VAT Rule Maintainer",
+    "allow_self_approval": 0,
+    "condition": null
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Rule Verified",
+    "action": "Return Rule Set to Draft",
+    "next_state": "Rule Draft",
+    "allowed": "VAT Rule Maintainer",
+    "allow_self_approval": 1,
+    "condition": null
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Rule Verified",
+    "action": "Return Rule Set to Draft",
+    "next_state": "Rule Draft",
+    "allowed": "VAT Reviewer",
+    "allow_self_approval": 1,
+    "condition": null
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Rule Verified",
+    "action": "Return Rule Set to Draft",
+    "next_state": "Rule Draft",
+    "allowed": "VAT Approver",
+    "allow_self_approval": 1,
+    "condition": null
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Rule Verified",
+    "action": "Publish Rule Set",
+    "next_state": "Rule Published",
+    "allowed": "VAT Approver",
+    "allow_self_approval": 0,
+    "condition": null
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "Rule Published",
+    "action": "Cancel Rule Set",
+    "next_state": "Rule Cancelled",
+    "allowed": "VAT Approver",
+    "allow_self_approval": 1,
+    "condition": null
+   }
+  ]
  }
 ]

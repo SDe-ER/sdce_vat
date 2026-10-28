@@ -28,5 +28,25 @@
   "doctype": "Workflow Action Master",
   "name": "Cancel VAT Return",
   "workflow_action_name": "Cancel VAT Return"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Verify Rule Set",
+  "workflow_action_name": "Verify Rule Set"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Return Rule Set to Draft",
+  "workflow_action_name": "Return Rule Set to Draft"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Publish Rule Set",
+  "workflow_action_name": "Publish Rule Set"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Cancel Rule Set",
+  "workflow_action_name": "Cancel Rule Set"
  }
 ]
