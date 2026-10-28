@@ -1,0 +1,184 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "vat_return",
+  "company",
+  "from_date",
+  "to_date",
+  "column_break_filing",
+  "filed_on",
+  "zatca_reference",
+  "acknowledgement",
+  "payment_section",
+  "payment_due_date",
+  "payment_amount",
+  "payment_voucher_type",
+  "payment_voucher",
+  "fields_section",
+  "fields",
+  "filed_by",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "vat_return",
+   "fieldtype": "Link",
+   "label": "VAT Return",
+   "options": "Saudi VAT Return",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "fetch_from": "vat_return.company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "fetch_from": "vat_return.from_date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "fetch_from": "vat_return.to_date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_filing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "filed_on",
+   "fieldtype": "Date",
+   "label": "Filed On",
+   "reqd": 1
+  },
+  {
+   "fieldname": "zatca_reference",
+   "fieldtype": "Data",
+   "label": "ZATCA Reference",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "acknowledgement",
+   "fieldtype": "Attach",
+   "label": "Acknowledgement"
+  },
+  {
+   "fieldname": "payment_section",
+   "fieldtype": "Section Break",
+   "label": "Payment"
+  },
+  {
+   "fieldname": "payment_due_date",
+   "fieldtype": "Date",
+   "label": "Payment Due Date"
+  },
+  {
+   "fieldname": "payment_amount",
+   "fieldtype": "Currency",
+   "label": "Payment Amount",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "payment_voucher_type",
+   "fieldtype": "Link",
+   "label": "Payment Voucher Type",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "payment_voucher",
+   "fieldtype": "Dynamic Link",
+   "label": "Payment Voucher",
+   "options": "payment_voucher_type"
+  },
+  {
+   "fieldname": "fields_section",
+   "fieldtype": "Section Break",
+   "label": "Approved vs Filed"
+  },
+  {
+   "fieldname": "fields",
+   "fieldtype": "Table",
+   "label": "Fields",
+   "options": "Saudi VAT Filing Field"
+  },
+  {
+   "fieldname": "filed_by",
+   "fieldtype": "Link",
+   "label": "Filed By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Saudi VAT Filing",
+   "no_copy": 1,
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-28 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Filing",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "VAT Reviewer",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "VAT Approver",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "VAT Preparer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "Auditor",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:VATF-{#####}",
+ "naming_rule": "Expression",
+ "is_submittable": 1,
+ "track_changes": 1
+}

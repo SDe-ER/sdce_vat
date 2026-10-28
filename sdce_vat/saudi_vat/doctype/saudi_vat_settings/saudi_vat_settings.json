@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "tax_id",
+  "accounts",
+  "category_rules",
+  "decisions_section",
+  "non_deductible_placement",
+  "include_expense_claims",
+  "tolerance"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tax_id",
+   "fieldtype": "Data",
+   "label": "Company VAT Number",
+   "fetch_from": "company.tax_id",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accounts",
+   "fieldtype": "Table",
+   "label": "VAT Accounts",
+   "options": "Saudi VAT Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "category_rules",
+   "fieldtype": "Table",
+   "label": "Category Rules",
+   "options": "Saudi VAT Category Rule"
+  },
+  {
+   "fieldname": "decisions_section",
+   "fieldtype": "Section Break",
+   "label": "Placement Rules"
+  },
+  {
+   "fieldname": "non_deductible_placement",
+   "fieldtype": "Select",
+   "label": "Non-deductible input VAT placement",
+   "options": "\nExclude\nBox 7 Without VAT",
+   "description": "Leave empty until your organization has a verified rule: such lines stay under review and block approval."
+  },
+  {
+   "fieldname": "include_expense_claims",
+   "fieldtype": "Check",
+   "label": "Include Expense Claims",
+   "default": "1"
+  },
+  {
+   "fieldname": "tolerance",
+   "fieldtype": "Currency",
+   "label": "Rate Tolerance per Line",
+   "default": "0.01",
+   "options": "Company:company:default_currency"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-28 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "VAT Preparer",
+   "read": 1,
+   "permlevel": 0
+  },
+  {
+   "role": "VAT Reviewer",
+   "read": 1,
+   "permlevel": 0
+  },
+  {
+   "role": "VAT Approver",
+   "read": 1,
+   "permlevel": 0
+  },
+  {
+   "role": "Auditor",
+   "read": 1,
+   "permlevel": 0
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "field:company",
+ "naming_rule": "By fieldname",
+ "track_changes": 1
+}

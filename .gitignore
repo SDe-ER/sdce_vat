@@ -25,3 +25,9 @@ QA-Evidence/
 *.xls
 *.csv
 .DS_Store
+node_modules/
+dist/
+*.egg-info/
+.vscode/
+.idea/
+*.swp

@@ -1,0 +1,32 @@
+[
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Prepare VAT Return",
+  "workflow_action_name": "Prepare VAT Return"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Return to Preparer",
+  "workflow_action_name": "Return to Preparer"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Review VAT Return",
+  "workflow_action_name": "Review VAT Return"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Reject VAT Return",
+  "workflow_action_name": "Reject VAT Return"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Approve VAT Return",
+  "workflow_action_name": "Approve VAT Return"
+ },
+ {
+  "doctype": "Workflow Action Master",
+  "name": "Cancel VAT Return",
+  "workflow_action_name": "Cancel VAT Return"
+ }
+]

@@ -1,0 +1,105 @@
+[
+ {
+  "doctype": "Workflow",
+  "name": "Saudi VAT Return Approval",
+  "workflow_name": "Saudi VAT Return Approval",
+  "document_type": "Saudi VAT Return",
+  "is_active": 1,
+  "override_status": 0,
+  "send_email_alert": 0,
+  "workflow_state_field": "workflow_state",
+  "states": [
+   {
+    "doctype": "Workflow Document State",
+    "state": "VAT Draft",
+    "doc_status": "0",
+    "allow_edit": "VAT Preparer",
+    "is_optional_state": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "VAT Prepared",
+    "doc_status": "0",
+    "allow_edit": "VAT Reviewer",
+    "is_optional_state": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "VAT Reviewed",
+    "doc_status": "0",
+    "allow_edit": "VAT Approver",
+    "is_optional_state": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "VAT Approved",
+    "doc_status": "1",
+    "allow_edit": "VAT Approver",
+    "is_optional_state": 0
+   },
+   {
+    "doctype": "Workflow Document State",
+    "state": "VAT Cancelled",
+    "doc_status": "2",
+    "allow_edit": "VAT Approver",
+    "is_optional_state": 0
+   }
+  ],
+  "transitions": [
+   {
+    "doctype": "Workflow Transition",
+    "state": "VAT Draft",
+    "action": "Prepare VAT Return",
+    "next_state": "VAT Prepared",
+    "allowed": "VAT Preparer",
+    "allow_self_approval": 1,
+    "condition": "doc.calculation_hash"
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "VAT Prepared",
+    "action": "Return to Preparer",
+    "next_state": "VAT Draft",
+    "allowed": "VAT Reviewer",
+    "allow_self_approval": 1,
+    "condition": null
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "VAT Prepared",
+    "action": "Review VAT Return",
+    "next_state": "VAT Reviewed",
+    "allowed": "VAT Reviewer",
+    "allow_self_approval": 0,
+    "condition": "doc.review_count == 0 and doc.gl_reconciled"
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "VAT Reviewed",
+    "action": "Reject VAT Return",
+    "next_state": "VAT Draft",
+    "allowed": "VAT Approver",
+    "allow_self_approval": 1,
+    "condition": null
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "VAT Reviewed",
+    "action": "Approve VAT Return",
+    "next_state": "VAT Approved",
+    "allowed": "VAT Approver",
+    "allow_self_approval": 0,
+    "condition": "doc.review_count == 0 and doc.gl_reconciled"
+   },
+   {
+    "doctype": "Workflow Transition",
+    "state": "VAT Approved",
+    "action": "Cancel VAT Return",
+    "next_state": "VAT Cancelled",
+    "allowed": "VAT Approver",
+    "allow_self_approval": 1,
+    "condition": null
+   }
+  ]
+ }
+]

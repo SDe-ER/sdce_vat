@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "creation": "2026-10-28 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "box_id",
+  "box_no",
+  "label",
+  "amount",
+  "adjustment",
+  "vat",
+  "line_count"
+ ],
+ "fields": [
+  {
+   "fieldname": "box_id",
+   "fieldtype": "Select",
+   "label": "Field",
+   "options": "S01\nS02\nS03\nS04\nS05\nS06\nP07\nP08\nP09\nP10\nP11\nP12\nT13\nT14\nT15\nT16",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "box_no",
+   "fieldtype": "Int",
+   "label": "No.",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "adjustment",
+   "fieldtype": "Currency",
+   "label": "Adjustment",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vat",
+   "fieldtype": "Currency",
+   "label": "VAT",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "line_count",
+   "fieldtype": "Int",
+   "label": "Sources",
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-28 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Return Line",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 0
+}

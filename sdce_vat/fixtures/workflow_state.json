@@ -1,0 +1,37 @@
+[
+ {
+  "doctype": "Workflow State",
+  "name": "VAT Draft",
+  "workflow_state_name": "VAT Draft",
+  "style": "Primary",
+  "icon": null
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "VAT Prepared",
+  "workflow_state_name": "VAT Prepared",
+  "style": "Info",
+  "icon": null
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "VAT Reviewed",
+  "workflow_state_name": "VAT Reviewed",
+  "style": "Warning",
+  "icon": null
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "VAT Approved",
+  "workflow_state_name": "VAT Approved",
+  "style": "Success",
+  "icon": null
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "VAT Cancelled",
+  "workflow_state_name": "VAT Cancelled",
+  "style": "Danger",
+  "icon": null
+ }
+]
