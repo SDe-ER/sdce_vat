@@ -32,6 +32,7 @@ def invoice_lines(
 		voucher_no=doc["name"],
 		side=side,
 		posting_date=str(doc["posting_date"]),
+		invoice_date=_iso(doc["posting_date"] if side == Side.SALES else doc.get("bill_date")),
 		company=doc["company"],
 		party_type="Customer" if side == Side.SALES else "Supplier",
 		party=doc.get(party_field),
@@ -102,6 +103,7 @@ def journal_lines(je: dict, accounts: list[dict], config: VatConfig, party_tax_i
 				voucher_no=je["name"],
 				side=side,
 				posting_date=str(je["posting_date"]),
+				invoice_date=_iso(je.get("bill_date")),
 				company=je["company"],
 				vat_account=account,
 				base=q2(base),
@@ -142,3 +144,7 @@ def expense_claim_lines(claim: dict, taxes: list[dict], config: VatConfig) -> li
 		)
 		for account in sorted(vat)
 	]
+
+
+def _iso(value) -> str | None:
+	return str(value) if value else None

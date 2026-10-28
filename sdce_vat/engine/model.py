@@ -59,6 +59,12 @@ class SourceLine:
 	item_tax_templates: tuple[str, ...] = ()
 	zatca_categories: tuple[str, ...] = ()  # ksa_compliance categories when that app is installed
 	source_rows: tuple[str, ...] = ()  # child row names that produced the line (traceability)
+	# dates are kept apart: posting (ledger), invoice (SI posting / PI and JE bill date), tax (from the rule set)
+	invoice_date: str | None = None
+	tax_date: str | None = None
+	tax_date_basis: str | None = None
+	rule_set: str | None = None  # the published rule set used for this line
+	rule_issue: str = ""  # why no rule set could be used; the line is not placed and needs review
 	# filled by classification
 	treatment: Treatment | None = None
 	reason: str = ""
@@ -72,8 +78,12 @@ class SourceLine:
 
 	@property
 	def needs_review(self) -> bool:
-		# unclassified, or not deductible while no placement rule is set
-		return self.treatment == Treatment.NEEDS_REVIEW or self.reason == "pending_placement_rule"
+		# unclassified, no usable rule, or not deductible while no placement rule is set
+		return (
+			self.treatment == Treatment.NEEDS_REVIEW
+			or bool(self.rule_issue)
+			or self.reason == "pending_placement_rule"
+		)
 
 	def as_dict(self) -> dict:
 		data = asdict(self)
@@ -138,6 +148,7 @@ class VatResult:
 	lines: list[SourceLine]
 	boxes: dict[str, BoxTotal]
 	proof: list[AccountProof]
+	rule_sets: dict = field(default_factory=dict)  # name -> RuleSet used by at least one line
 
 	@property
 	def review_lines(self) -> list[SourceLine]:
@@ -162,5 +173,6 @@ class VatResult:
 			"is_reconciled": self.is_reconciled,
 			"review_count": len(self.review_lines),
 			"warning_count": len(self.warning_lines),
+			"rule_sets": {name: rs.content_hash for name, rs in self.rule_sets.items()},
 			"lines": [line.as_dict() for line in self.lines],
 		}

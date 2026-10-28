@@ -1,0 +1,390 @@
+{
+ "boxes": {
+  "P07": {
+   "adjustment": "-150.00",
+   "amount": "800.00",
+   "box": "P07",
+   "line_count": 6,
+   "vat": "107.50"
+  },
+  "P08": {
+   "adjustment": "0.00",
+   "amount": "0.00",
+   "box": "P08",
+   "line_count": 0,
+   "vat": "0.00"
+  },
+  "P09": {
+   "adjustment": "0.00",
+   "amount": "400.00",
+   "box": "P09",
+   "line_count": 1,
+   "vat": "60.00"
+  },
+  "P10": {
+   "adjustment": "0.00",
+   "amount": "90.00",
+   "box": "P10",
+   "line_count": 1,
+   "vat": "0.00"
+  },
+  "P11": {
+   "adjustment": "0.00",
+   "amount": "0.00",
+   "box": "P11",
+   "line_count": 0,
+   "vat": "0.00"
+  },
+  "P12": {
+   "adjustment": "-150.00",
+   "amount": "1290.00",
+   "box": "P12",
+   "line_count": 0,
+   "vat": "167.50"
+  },
+  "S01": {
+   "adjustment": "-190.00",
+   "amount": "1000.00",
+   "box": "S01",
+   "line_count": 3,
+   "vat": "121.50"
+  },
+  "S02": {
+   "adjustment": "0.00",
+   "amount": "120.00",
+   "box": "S02",
+   "line_count": 1,
+   "vat": "0.00"
+  },
+  "S03": {
+   "adjustment": "0.00",
+   "amount": "500.00",
+   "box": "S03",
+   "line_count": 1,
+   "vat": "0.00"
+  },
+  "S04": {
+   "adjustment": "0.00",
+   "amount": "300.00",
+   "box": "S04",
+   "line_count": 1,
+   "vat": "0.00"
+  },
+  "S05": {
+   "adjustment": "0.00",
+   "amount": "50.00",
+   "box": "S05",
+   "line_count": 1,
+   "vat": "0.00"
+  },
+  "S06": {
+   "adjustment": "-190.00",
+   "amount": "1970.00",
+   "box": "S06",
+   "line_count": 0,
+   "vat": "121.50"
+  },
+  "T13": {
+   "adjustment": "0.00",
+   "amount": "0.00",
+   "box": "T13",
+   "line_count": 0,
+   "vat": "-46.00"
+  },
+  "T14": {
+   "adjustment": "0.00",
+   "amount": "0.00",
+   "box": "T14",
+   "line_count": 0,
+   "vat": "0.00"
+  },
+  "T15": {
+   "adjustment": "0.00",
+   "amount": "0.00",
+   "box": "T15",
+   "line_count": 0,
+   "vat": "0.00"
+  },
+  "T16": {
+   "adjustment": "0.00",
+   "amount": "0.00",
+   "box": "T16",
+   "line_count": 0,
+   "vat": "-46.00"
+  }
+ },
+ "lines": [
+  [
+   "Journal Entry",
+   "JE-99",
+   "VAT Out - P",
+   "needs_review",
+   "unmatched_gl",
+   "",
+   "",
+   [],
+   "0.00",
+   "5.00"
+  ],
+  [
+   "Journal Entry",
+   "JE-1",
+   "VAT In - P",
+   "input_deductible",
+   "input_account",
+   "P07",
+   "amount",
+   [
+    "journal_entry_claim_needs_document_review"
+   ],
+   "400.00",
+   "60.00"
+  ],
+  [
+   "Journal Entry",
+   "JE-2",
+   "VAT In - P",
+   "input_deductible",
+   "input_account",
+   "P07",
+   "adjustment",
+   [
+    "journal_entry_claim_needs_document_review"
+   ],
+   "-100.00",
+   "-15.00"
+  ],
+  [
+   "Purchase Invoice",
+   "PI-1",
+   "VAT In - P",
+   "input_deductible",
+   "input_account",
+   "P07",
+   "amount",
+   [
+    "gl_difference",
+    "possible_duplicate"
+   ],
+   "100.00",
+   "15.00"
+  ],
+  [
+   "Purchase Invoice",
+   "PI-2",
+   "VAT In - P",
+   "input_deductible",
+   "input_account",
+   "P07",
+   "adjustment",
+   [],
+   "-50.00",
+   "-7.50"
+  ],
+  [
+   "Purchase Invoice",
+   "PI-3",
+   "VAT RCM - P",
+   "import_reverse_charge",
+   "reverse_charge_account",
+   "P09",
+   "amount",
+   [],
+   "400.00",
+   "60.00"
+  ],
+  [
+   "Purchase Invoice",
+   "PI-4",
+   "",
+   "out_of_scope",
+   "category",
+   "",
+   "",
+   [],
+   "70.00",
+   "0.00"
+  ],
+  [
+   "Purchase Invoice",
+   "PI-5",
+   "",
+   "input_not_deductible",
+   "pending_placement_rule",
+   "",
+   "",
+   [],
+   "80.00",
+   "0.00"
+  ],
+  [
+   "Purchase Invoice",
+   "PI-6",
+   "",
+   "zero_rated_purchase",
+   "category",
+   "P10",
+   "amount",
+   [],
+   "90.00",
+   "0.00"
+  ],
+  [
+   "Purchase Invoice",
+   "PI-7",
+   "VAT In - P",
+   "input_deductible",
+   "input_account",
+   "P07",
+   "amount",
+   [
+    "rate_mismatch"
+   ],
+   "200.00",
+   "40.00"
+  ],
+  [
+   "Purchase Invoice",
+   "PI-8",
+   "VAT In - P",
+   "input_deductible",
+   "input_account",
+   "P07",
+   "amount",
+   [
+    "possible_duplicate",
+    "supplier_vat_number_missing_or_invalid"
+   ],
+   "100.00",
+   "15.00"
+  ],
+  [
+   "Sales Invoice",
+   "SI-1",
+   "VAT Out - P",
+   "standard_rated_sale",
+   "output_account",
+   "S01",
+   "amount",
+   [],
+   "1000.00",
+   "150.00"
+  ],
+  [
+   "Sales Invoice",
+   "SI-2",
+   "VAT Out - P",
+   "standard_rated_sale",
+   "output_account",
+   "S01",
+   "adjustment",
+   [],
+   "-200.00",
+   "-30.00"
+  ],
+  [
+   "Sales Invoice",
+   "SI-3",
+   "VAT 0 - P",
+   "zero_rated_sale",
+   "category",
+   "S03",
+   "amount",
+   [],
+   "500.00",
+   "0.00"
+  ],
+  [
+   "Sales Invoice",
+   "SI-4",
+   "",
+   "export",
+   "category",
+   "S04",
+   "amount",
+   [],
+   "300.00",
+   "0.00"
+  ],
+  [
+   "Sales Invoice",
+   "SI-5",
+   "",
+   "exempt_sale",
+   "category",
+   "S05",
+   "amount",
+   [],
+   "50.00",
+   "0.00"
+  ],
+  [
+   "Sales Invoice",
+   "SI-6",
+   "",
+   "needs_review",
+   "zero_vat_unclassified",
+   "",
+   "",
+   [],
+   "60.00",
+   "0.00"
+  ],
+  [
+   "Sales Invoice",
+   "SI-7",
+   "VAT Out - P",
+   "standard_rated_sale",
+   "output_account",
+   "S01",
+   "adjustment",
+   [],
+   "10.00",
+   "1.50"
+  ],
+  [
+   "Sales Invoice",
+   "SI-8",
+   "",
+   "government_bears",
+   "category",
+   "S02",
+   "amount",
+   [],
+   "120.00",
+   "0.00"
+  ]
+ ],
+ "proof": [
+  {
+   "account": "VAT 0 - P",
+   "difference": "0.00",
+   "gl_vat": "0.00",
+   "lines_vat": "0.00",
+   "side": "sales"
+  },
+  {
+   "account": "VAT In - P",
+   "difference": "1.00",
+   "gl_vat": "108.50",
+   "lines_vat": "107.50",
+   "side": "purchases"
+  },
+  {
+   "account": "VAT Out - P",
+   "difference": "0.00",
+   "gl_vat": "126.50",
+   "lines_vat": "126.50",
+   "side": "sales"
+  },
+  {
+   "account": "VAT RCM - P",
+   "difference": "0.00",
+   "gl_vat": "60.00",
+   "lines_vat": "60.00",
+   "side": "purchases"
+  }
+ ],
+ "review_count": 3,
+ "warning_count": 5
+}

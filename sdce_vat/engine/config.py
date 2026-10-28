@@ -42,6 +42,8 @@ class VatConfig:
 	journal_base_rule: JournalBaseRule = JournalBaseRule.NON_VAT_LINES
 	tolerance: Decimal = CENT
 	include_expense_claims: bool = True
+	# code of the published Saudi VAT Rule Sets this company follows (rules are national, not per company)
+	rule_set_code: str | None = None
 
 	@property
 	def vat_accounts(self) -> dict[str, Decimal]:

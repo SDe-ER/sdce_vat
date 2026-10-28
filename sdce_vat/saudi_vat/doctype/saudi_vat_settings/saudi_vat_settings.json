@@ -6,6 +6,7 @@
  "field_order": [
   "company",
   "tax_id",
+  "rule_set_code",
   "accounts",
   "category_rules",
   "decisions_section",
@@ -29,6 +30,11 @@
    "label": "Company VAT Number",
    "fetch_from": "company.tax_id",
    "read_only": 1
+  },
+  {
+   "fieldname": "rule_set_code",
+   "fieldtype": "Data",
+   "label": "Rule Set Code"
   },
   {
    "fieldname": "accounts",

@@ -198,6 +198,17 @@ class TestSecurity(VatSiteTestCase):
 		)
 		self.assertRaises(frappe.PermissionError, other.insert)
 
+	def test_rule_sets_are_shared_while_returns_stay_per_company(self):
+		frappe.db.set_value("Saudi VAT Settings", COMPANY_B, "rule_set_code", "TEST-PARITY")
+		a = self._new_return(PREPARER, COMPANY)
+		b = self._new_return(PREPARER_B, COMPANY_B)
+		self.assertEqual([r.rule_set for r in a.rule_sets], [r.rule_set for r in b.rule_sets])
+		self.assertEqual({s.voucher_no for s in b.sources}, {self.pi_b})
+		self.assertFalse(frappe.get_meta("Saudi VAT Rule Set").has_field("company"))
+		frappe.set_user(PREPARER_B)
+		self.assertTrue(frappe.has_permission("Saudi VAT Rule Set", "read", doc=b.rule_sets[0].rule_set))
+		self.assertFalse(frappe.has_permission("Saudi VAT Return", "read", doc=a.name))
+
 	def test_settings_of_one_company_reject_accounts_of_another(self):
 		settings = frappe.get_doc("Saudi VAT Settings", COMPANY_B)
 		settings.append("accounts", {"account": self.vat_in, "family": "Input", "rate": 15})

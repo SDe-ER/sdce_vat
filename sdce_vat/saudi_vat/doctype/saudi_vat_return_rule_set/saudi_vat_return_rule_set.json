@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "creation": "2026-10-29 01:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "rule_set",
+  "version",
+  "content_hash",
+  "line_count",
+  "first_tax_date",
+  "last_tax_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "rule_set",
+   "fieldtype": "Link",
+   "label": "Rule Set",
+   "options": "Saudi VAT Rule Set",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "version",
+   "fieldtype": "Int",
+   "label": "Version",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "content_hash",
+   "fieldtype": "Data",
+   "label": "Content Hash",
+   "read_only": 1
+  },
+  {
+   "fieldname": "line_count",
+   "fieldtype": "Int",
+   "label": "Lines",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "first_tax_date",
+   "fieldtype": "Date",
+   "label": "First Tax Date",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_tax_date",
+   "fieldtype": "Date",
+   "label": "Last Tax Date",
+   "in_list_view": 1,
+   "read_only": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-29 01:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Saudi VAT",
+ "name": "Saudi VAT Return Rule Set",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 0
+}

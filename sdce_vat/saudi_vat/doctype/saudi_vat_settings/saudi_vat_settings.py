@@ -48,6 +48,7 @@ class SaudiVATSettings(Document):
 			non_deductible_placement=NON_DEDUCTIBLE_PLACEMENT.get(self.non_deductible_placement or ""),
 			tolerance=D(self.tolerance or "0.01"),
 			include_expense_claims=bool(self.include_expense_claims),
+			rule_set_code=self.rule_set_code or None,
 		)
 		for row in self.accounts:
 			# the rate is stored as a float field; str() keeps the typed value (15 -> "15.0")

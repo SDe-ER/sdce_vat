@@ -9,6 +9,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 
 from sdce_vat.engine.config import VatConfig
+from sdce_vat.tests.rule_fixtures import PARITY_CODE, PARITY_RULES
 
 COMPANY = "_Test VAT Co"
 ABBR = "_TSV"
@@ -152,7 +153,9 @@ class VatSiteTestCase(IntegrationTestCase):
 			company=COMPANY,
 			output_accounts={cls.vat_out: Decimal("15")},
 			input_accounts={cls.vat_in: Decimal("15")},
+			rule_set_code=PARITY_CODE,
 		)
+		make_parity_rule_set()
 
 	@classmethod
 	def _account(cls, name, parent):
@@ -222,6 +225,7 @@ class VatSiteTestCase(IntegrationTestCase):
 					{"account": cls.vat_out, "family": "Output", "rate": 15},
 					{"account": cls.vat_in, "family": "Input", "rate": 15},
 				],
+				"rule_set_code": PARITY_CODE,
 				**values,
 			}
 		)
@@ -236,6 +240,61 @@ def make_user(email, *roles):
 	user = frappe.get_doc("User", email)
 	user.add_roles("Accounts User", *roles)
 	return email
+
+
+PARITY_REFERENCE = {
+	"ref_id": "TEST-REF",
+	"source_type": "Other",
+	"title": "Synthetic rules equivalent to engine 0.1.0",
+	"url": "https://example.com/synthetic-rules",
+	"section": "1",
+	"publication_date": "2020-01-01",
+	"accessed_on": "2026-10-29",
+}
+
+
+def publish_rule_set(code, version, start, end=None, rules=None, **values):
+	"""Prepare, verify and publish a synthetic rule set with three different test users."""
+	from frappe.model.workflow import apply_workflow
+
+	maintainer = make_user("vat-test-rule-maintainer@example.com", "VAT Rule Maintainer")
+	reviewer = make_user("vat-test-rule-reviewer@example.com", "VAT Reviewer")
+	approver = make_user("vat-test-rule-approver@example.com", "VAT Approver")
+	rules = PARITY_RULES if rules is None else rules
+	user = frappe.session.user
+	try:
+		frappe.set_user(maintainer)
+		doc = frappe.get_doc(
+			{
+				"doctype": "Saudi VAT Rule Set",
+				"rule_set_code": code,
+				"version": version,
+				"effective_from": start,
+				"effective_to": end,
+				"references": [dict(PARITY_REFERENCE)],
+				"rules": [
+					{
+						"rule_key": key,
+						"value": value or "-",
+						"reference": "TEST-REF",
+						"verification_status": "Not applicable" if value is None else "Verified",
+					}
+					for key, value in rules.items()
+				],
+				**values,
+			}
+		).insert()
+		frappe.set_user(reviewer)
+		apply_workflow(frappe.get_doc("Saudi VAT Rule Set", doc.name), "Verify Rule Set")
+		frappe.set_user(approver)
+		return apply_workflow(frappe.get_doc("Saudi VAT Rule Set", doc.name), "Publish Rule Set")
+	finally:
+		frappe.set_user(user)
+
+
+def make_parity_rule_set():
+	if not frappe.db.exists("Saudi VAT Rule Set", f"{PARITY_CODE}-1"):
+		publish_rule_set(PARITY_CODE, 1, "2020-01-01")
 
 
 def make_other_company_tax_account(company="_Test VAT Other Co", abbr="_TVO"):

@@ -23,8 +23,9 @@ from sdce_vat.engine.model import (
 	VatResult,
 )
 from sdce_vat.engine.money import ZERO, q2, total
+from sdce_vat.engine.rules import RuleBook, resolve
 
-ENGINE_VERSION = "0.1.0"
+ENGINE_VERSION = "0.2.0"
 
 
 def calculate(
@@ -33,14 +34,22 @@ def calculate(
 	to_date: str,
 	lines: list[SourceLine],
 	gl_rows: list[GLRow],
+	*,
+	rule_book: RuleBook,
 	corrections=ZERO,
 	credit_carried=ZERO,
 ) -> VatResult:
 	config.validate()
 	_assert_unique(lines)
+	used = {}
 	for line in lines:
 		line.base, line.vat = q2(line.base), q2(line.vat)
-		classify(line, config)
+		rule_set = resolve(line, rule_book, from_date, to_date)
+		classify(line, config, rule_set)
+		if rule_set and not line.rule_issue:
+			used[rule_set.name] = rule_set
+		else:
+			line.rule_set = None
 	lines = lines + _unmatched_gl_lines(lines, gl_rows, config)
 	_flag_gl_differences(lines, gl_rows, config)
 	_flag_possible_duplicates(lines)
@@ -55,6 +64,7 @@ def calculate(
 		lines=lines,
 		boxes=_box_totals(lines, q2(corrections), q2(credit_carried)),
 		proof=_proof(lines, gl_rows, config),
+		rule_sets=dict(sorted(used.items())),
 	)
 	_assert_boxes_match_lines(result)
 	return result

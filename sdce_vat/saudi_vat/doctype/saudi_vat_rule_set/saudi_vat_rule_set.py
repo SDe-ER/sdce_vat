@@ -26,6 +26,7 @@ from sdce_vat.constants import (
 )
 from sdce_vat.engine import boxes
 from sdce_vat.engine.model import Treatment
+from sdce_vat.engine.rules import TAX_DATE_BASES, Rule, RuleBook, RuleSet
 
 STATE_DRAFT = "Rule Draft"
 STATE_VERIFIED = "Rule Verified"
@@ -436,8 +437,46 @@ def _last_day(start, end, published):
 	return add_days(min(later), -1) if later else None
 
 
+def load_rule_book(code: str | None) -> RuleBook:
+	"""The published sets of one code for the engine. Drafts, verified-only and cancelled sets are never used; a
+	set whose stored content no longer has its published hash stops the calculation."""
+	if not code:
+		return RuleBook(None, [])
+	sets = []
+	names = frappe.get_all(
+		"Saudi VAT Rule Set", filters={"rule_set_code": code, "docstatus": 1}, pluck="name"
+	)
+	for name in names:
+		doc = frappe.get_doc("Saudi VAT Rule Set", name)
+		if not doc.content_is_intact():
+			frappe.throw(_("Rule set {0} no longer matches its published content hash").format(name))
+		sets.append(
+			RuleSet(
+				name=doc.name,
+				code=doc.rule_set_code,
+				version=doc.version,
+				version_type=doc.version_type,
+				effective_from=str(getdate(doc.effective_from)),
+				effective_to=str(getdate(doc.effective_to)) if doc.effective_to else None,
+				content_hash=doc.content_hash,
+				rules={r.rule_key: Rule(r.rule_key, r.value, r.verification_status) for r in doc.rules},
+				supersedes=doc.supersedes,
+			)
+		)
+	return RuleBook(code, sets)
+
+
 def _check_value(row, key):
 	value = row.value or ""
+	if row.verification_status == "Verified":
+		if key.startswith("treatment_box:") and value not in boxes.LINE_BOXES:
+			frappe.throw(
+				_("Row {0}: {1} must name a return field, for example S01 or P07").format(row.idx, key)
+			)
+		if key.startswith("tax_date_basis:") and value not in TAX_DATE_BASES:
+			frappe.throw(
+				_("Row {0}: {1} must be one of: {2}").format(row.idx, key, ", ".join(TAX_DATE_BASES))
+			)
 	if key in DECIMAL_RULE_KEYS:
 		try:
 			number = Decimal(value)

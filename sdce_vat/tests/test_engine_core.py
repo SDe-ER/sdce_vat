@@ -13,6 +13,7 @@ from sdce_vat.engine.core import calculate
 from sdce_vat.engine.model import Column, GLRow, Side, SourceLine, Treatment
 from sdce_vat.engine.money import D, q2, total
 from sdce_vat.engine.rows import invoice_lines, journal_lines
+from sdce_vat.tests.rule_fixtures import parity_book
 
 OUT, INP, RCM, ZERO_ACC = "VAT Out - T", "VAT In - T", "VAT RCM - T", "VAT 0 - T"
 SUPPLIER_VAT = "300000000000003"
@@ -62,6 +63,8 @@ def gl(no, account, amount, vt="Purchase Invoice"):
 def run(lines, gl_rows=None, cfg=None, **kw):
 	if gl_rows is None:
 		gl_rows = [gl(x.voucher_no, x.vat_account, x.vat, x.voucher_type) for x in lines if x.vat_account]
+	# rules equivalent to engine 0.1.0 (sdce_vat/tests/rule_fixtures.py): every expectation below is unchanged
+	kw.setdefault("rule_book", parity_book())
 	return calculate(cfg or config(), "2026-07-01", "2026-09-30", lines, gl_rows, **kw)
 
 
