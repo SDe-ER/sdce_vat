@@ -9,8 +9,11 @@ This file lists what the imported code does, how it maps to the requirements in
 
 ## What is implemented
 - Frappe v16 app `sdce_vat`, module **Saudi VAT**, `required_apps = ["erpnext"]`.
-- Roles **VAT Preparer**, **VAT Reviewer**, **VAT Approver** and the workflow **Saudi VAT Return Approval**
-  (fixtures).
+- Roles **VAT Preparer**, **VAT Reviewer**, **VAT Approver**, **VAT Rule Maintainer** and the workflows
+  **Saudi VAT Return Approval** and **Saudi VAT Rule Set Approval** (fixtures).
+- Versioned tax rule sets (DocType Saudi VAT Rule Set, see [DOCTYPES](DOCTYPES.md)): references, closed rule keys,
+  Arabic and English field labels, three-user prepare / verify / publish, immutable and hashed after
+  publication, normal and corrective versions. The engine does not read rule sets yet.
 - Calculation engine (`sdce_vat/engine`, see [ENGINE](ENGINE.md)): Decimal arithmetic, stable field ids
   `S01`–`S06`, `P07`–`P12`, `T13`–`T16`, source lines from Sales/Purchase Invoices (returns, debit notes),
   Journal Entries and Expense Claims (only when HRMS is installed), GL reconciliation per VAT account,
@@ -25,6 +28,8 @@ This file lists what the imported code does, how it maps to the requirements in
 
 ## Tests
 - `sdce_vat/tests/test_engine_core.py`: pure engine tests (no database).
+- `sdce_vat/tests/test_rule_set.py`: rule-set separation of duties, immutability, overlap, corrective versions and
+  permissions (synthetic references only).
 - `sdce_vat/tests/test_engine_site.py`, `test_vat_return.py`, `test_security.py`, `test_app_setup.py`: site tests
   with synthetic companies (`_Test VAT Co`, `_Test VAT Co B`) and synthetic VAT numbers. All test data is rolled
   back.
@@ -36,7 +41,7 @@ This file lists what the imported code does, how it maps to the requirements in
 | Requirement | Current behaviour | Planned change |
 |---|---|---|
 | Never infer recoverability from a VAT posting (INST §3, Z-04) | VAT posted to a configured input account is treated as deductible (field 7), with warnings | Separate *claimed* input VAT from a recoverability status (Unverified / Recoverable / Non-recoverable) per line; unverified lines block approval when the company policy says so |
-| Versioned rule sets with source, dates and verification state (ZATCA release rule) | Only an engine version; the ±5,000 SAR correction limit and the field labels are constants | Rule-set DocType with ZATCA reference, publication and effective dates, reviewer and status; the snapshot stores the rule-set version |
+| Versioned rule sets with source, dates and verification state (ZATCA release rule) | Rule sets can be prepared, verified and published (#4); the engine still uses its constants, the ±5,000 SAR correction limit is still a constant | Engine and return read the published rule set by tax date; the snapshot stores the rule sets used; impact report and "correction available" flag for corrective versions; baseline rule file (all Pending) |
 | VAT registration profile and period calendar (Z-01, Z-02) | VAT number from Company; free period dates with an overlap check | Profile per company: VAT number check, filing frequency, first period, period validation |
 | Onboarding wizard and preflight (INST §4) | Not built | Setup wizard and a read-only readiness check; the first return is blocked while a check fails |
 | Mixed-use / partial exemption (INST §3) | Not supported | Versioned apportionment rule per company and period, manual until verified |

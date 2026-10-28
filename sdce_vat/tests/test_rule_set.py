@@ -127,6 +127,12 @@ class TestRuleSet(VatSiteTestCase):
 		doc = frappe.get_doc("Saudi VAT Rule Set", doc.name)
 		return apply_workflow(doc, action)
 
+	def _edited(self, doc, user):
+		frappe.set_user(user)
+		doc = frappe.get_doc("Saudi VAT Rule Set", doc.name)
+		doc.rules[0].notes = f"checked by {user}"
+		return doc.save()
+
 	def _verified(self, verifier=REVIEWER, **values):
 		return self._step(self._draft(**values), verifier, "Verify Rule Set")
 
@@ -171,26 +177,25 @@ class TestRuleSet(VatSiteTestCase):
 		self.assertRaises(DENIED, self._step, doc, MAINTAINER, "Verify Rule Set")
 
 	def test_every_editor_is_excluded_from_verification(self):
-		doc = self._draft()
-		frappe.set_user(MAINTAINER_2)
-		doc = frappe.get_doc("Saudi VAT Rule Set", doc.name)
-		doc.rules[0].notes = "checked against the synthetic source"
-		doc.save()
+		doc = self._edited(self._draft(), MAINTAINER_2)
 		self.assertEqual(doc.contributors.split("\n"), [MAINTAINER, MAINTAINER_2])
-		self.assertRaises(DENIED, self._step, doc, MAINTAINER_2, "Verify Rule Set")
+		self.assertRaises(frappe.PermissionError, self._step, doc, MAINTAINER_2, "Verify Rule Set")
 		self.assertEqual(self._step(doc, REVIEWER, "Verify Rule Set").verified_by, REVIEWER)
 
 	def test_preparer_or_verifier_cannot_publish(self):
 		doc = self._verified(verifier=REVIEWER_APPROVER)
-		self.assertRaises(DENIED, self._step, doc, REVIEWER_APPROVER, "Publish Rule Set")
-		doc = self._verified(user=MAINTAINER_APPROVER, version=2, start="2028-01-01")
-		self.assertRaises(DENIED, self._step, doc, MAINTAINER_APPROVER, "Publish Rule Set")
+		self.assertRaises(frappe.PermissionError, self._step, doc, REVIEWER_APPROVER, "Publish Rule Set")
+		# the editor is not the owner, so the app check (not Frappe's self-approval check) refuses it
+		doc = self._edited(self._draft(version=2, start="2028-01-01"), MAINTAINER_APPROVER)
+		doc = self._step(doc, REVIEWER, "Verify Rule Set")
+		self.assertRaises(frappe.PermissionError, self._step, doc, MAINTAINER_APPROVER, "Publish Rule Set")
 
 	def test_one_user_with_all_roles_cannot_complete_the_cycle(self):
-		doc = self._draft(user=ALL_ROLES)
-		self.assertRaises(DENIED, self._step, doc, ALL_ROLES, "Verify Rule Set")
+		self.assertRaises(DENIED, self._step, self._draft(user=ALL_ROLES), ALL_ROLES, "Verify Rule Set")
+		doc = self._edited(self._draft(version=2, start="2028-01-01"), ALL_ROLES)
+		self.assertRaises(frappe.PermissionError, self._step, doc, ALL_ROLES, "Verify Rule Set")
 		doc = self._step(doc, REVIEWER, "Verify Rule Set")
-		self.assertRaises(DENIED, self._step, doc, ALL_ROLES, "Publish Rule Set")
+		self.assertRaises(frappe.PermissionError, self._step, doc, ALL_ROLES, "Publish Rule Set")
 
 	def test_direct_submit_or_state_change_is_refused(self):
 		doc = self._draft()
