@@ -256,6 +256,7 @@ class SaudiVATReturn(Document):
 				r.voucher_type,
 				r.voucher_no,
 				r.vat_account or "",
+				str(r.invoice_date or ""),
 				str(r.tax_date or ""),
 				r.tax_date_basis or "",
 				r.rule_set or "",
@@ -264,6 +265,17 @@ class SaudiVATReturn(Document):
 			for r in self.sources
 		)
 		payload["rule_sets"] = sorted([r.rule_set, r.content_hash] for r in self.rule_sets)
+		# the shown details of each rule set row are covered too, so no stored column can be edited unnoticed
+		payload["rule_set_rows"] = sorted(
+			[
+				r.rule_set,
+				int(r.version or 0),
+				int(r.line_count or 0),
+				str(r.first_tax_date),
+				str(r.last_tax_date),
+			]
+			for r in self.rule_sets
+		)
 		return payload
 
 	def _legacy_payload(self) -> dict:

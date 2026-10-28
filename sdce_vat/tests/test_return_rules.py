@@ -213,6 +213,19 @@ class TestReturnRules(VatSiteTestCase):
 		self.assertEqual((approved.calculation_hash, approved.snapshot_hash, approved.net_vat), before)
 		self.assertEqual([r.rule_set for r in approved.rule_sets], [PARITY_SET])
 
+	def test_changed_rule_set_rows_block_approval(self):
+		doc = self._reviewed()
+		frappe.set_user("Administrator")
+		frappe.db.set_value("Saudi VAT Return Rule Set", doc.rule_sets[0].name, "line_count", 99)
+		self.assertRaisesRegex(
+			frappe.ValidationError,
+			"changed after calculation",
+			self._step,
+			doc,
+			APPROVER,
+			"Approve VAT Return",
+		)
+
 	def test_tampered_rule_set_stops_the_calculation(self):
 		frappe.set_user("Administrator")
 		row = frappe.get_doc("Saudi VAT Rule Set", PARITY_SET).rules[0].name
