@@ -11,7 +11,7 @@ from frappe.model.workflow import apply_workflow
 
 from sdce_vat.constants import VAT_APPROVER, VAT_PREPARER, VAT_REVIEWER
 from sdce_vat.engine.run import compute
-from sdce_vat.saudi_vat.doctype.saudi_vat_rule_set.saudi_vat_rule_set import SaudiVATRuleSet
+from sdce_vat.saudi_vat.doctype.saudi_vat_rule_set.saudi_vat_rule_set import SaudiVATRuleSet, load_rule_book
 from sdce_vat.tests.rule_fixtures import PARITY_CODE
 from sdce_vat.tests.site_base import (
 	COMPANY,
@@ -173,6 +173,11 @@ class TestReturnRules(VatSiteTestCase):
 		self.assertEqual(sum(r.line_count for r in doc.rule_sets), len(doc.sources))
 		self.assertEqual(next(s.rule_set for s in doc.sources if s.voucher_no == august.name), "TEST-SPLIT-2")
 		self.assertEqual(doc.review_count, 0)
+		frappe.set_user("Administrator")
+		later = load_rule_book(
+			"TEST-SPLIT", "2026-10-01", "2026-12-31"
+		)  # only sets that can cover the period
+		self.assertEqual(sorted(later.sets), ["TEST-SPLIT-2"])
 
 	# ---- rule changes ---------------------------------------------------------------------------------
 	def test_rule_change_after_calculation_blocks_approval(self):
@@ -219,6 +224,13 @@ class TestReturnRules(VatSiteTestCase):
 		frappe.set_user(NO_ROLE)
 		self.assertFalse(frappe.has_permission("Saudi VAT Rule Set", "read"))
 		self.assertRaisesRegex(frappe.PermissionError, "rule sets", compute, self.config, FROM, TO)
+
+	def test_return_of_an_older_engine_must_be_recalculated(self):
+		doc = self._reviewed()
+		frappe.db.set_value("Saudi VAT Return", doc.name, "engine_version", "0.1.0", update_modified=False)
+		self.assertRaisesRegex(
+			frappe.ValidationError, "recalculate it", self._step, doc, APPROVER, "Approve VAT Return"
+		)
 
 	def test_returns_of_engine_0_1_0_keep_their_payload(self):
 		doc = self._calculated()

@@ -121,7 +121,7 @@ def _box(line: SourceLine, config: VatConfig, rule_set: RuleSet | None) -> str |
 		return None
 	if rule.status == NOT_APPLICABLE:
 		return None  # the treatment has no return field (e.g. out of scope)
-	allowed = boxes.SALES_LINE_BOXES if treatment in SALES_TREATMENTS else boxes.PURCHASE_LINE_BOXES
+	allowed = boxes.SALES_LINE_BOXES if line.side == Side.SALES else boxes.PURCHASE_LINE_BOXES
 	if rule.status != VERIFIED or rule.value not in allowed:
 		line.rule_issue = f"rule_invalid:{key}" if rule.status == VERIFIED else f"rule_unverified:{key}"
 		return None

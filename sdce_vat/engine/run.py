@@ -31,7 +31,7 @@ def compute(
 	if not frappe.has_permission("Saudi VAT Rule Set", "read"):
 		frappe.throw(_("Not permitted to read the Saudi VAT rule sets"), frappe.PermissionError)
 	if rule_book is None:
-		rule_book = load_rule_book(config.rule_set_code)
+		rule_book = load_rule_book(config.rule_set_code, from_date, to_date)
 
 	writes_before = frappe.db.transaction_writes
 	result = calculate(

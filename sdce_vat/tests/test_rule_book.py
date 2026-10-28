@@ -124,6 +124,12 @@ class TestRuleResolution(UnitTestCase):
 					issue = "rule_unverified:tax_date_basis:sales_invoice"  # the first rule a line needs
 				self.assertIssue(line, issue)
 
+	def test_a_field_of_the_other_side_is_refused(self):
+		rules = {**f.PARITY_RULES, "treatment_box:out_of_scope": "S05"}
+		line = f._line("PI-9", "Purchase Invoice", Side.PURCHASES, None, "70", "0", tax_category="Outside")
+		run([line], RuleBook(f.PARITY_CODE, [f.rule_set(rules=rules)]))
+		self.assertIssue(line, "rule_invalid:treatment_box:out_of_scope")
+
 	def test_rate_that_differs_from_the_rule_is_flagged(self):
 		line = sale()
 		run([line], RuleBook(f.PARITY_CODE, [f.rule_set(rules={**f.PARITY_RULES, "standard_rate": "5"})]))

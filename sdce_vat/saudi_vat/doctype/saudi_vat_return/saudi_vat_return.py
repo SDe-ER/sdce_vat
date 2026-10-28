@@ -14,6 +14,7 @@ from frappe.utils import getdate, now_datetime
 
 from sdce_vat.constants import VAT_PREPARER, VAT_REVIEWER
 from sdce_vat.engine import boxes
+from sdce_vat.engine.core import ENGINE_VERSION
 from sdce_vat.engine.money import D, q2
 from sdce_vat.engine.run import compute
 from sdce_vat.saudi_vat.doctype.saudi_vat_rule_set.saudi_vat_rule_set import SaudiVATRuleSet
@@ -74,6 +75,12 @@ class SaudiVATReturn(Document):
 			frappe.throw(_("Only a reviewed VAT return can be approved"), frappe.PermissionError)
 		if not self.calculation_hash:
 			frappe.throw(_("Calculate the return before approval"))
+		if self.engine_version != ENGINE_VERSION:
+			frappe.throw(
+				_("The return was calculated by engine {0}; recalculate it with engine {1}").format(
+					self.engine_version, ENGINE_VERSION
+				)
+			)
 		if self.review_count:
 			frappe.throw(
 				_("{0} sources still need review; approval is blocked").format(self.review_count),

@@ -82,6 +82,12 @@ CODE_PATTERN = re.compile(r"^[A-Z0-9][A-Z0-9_-]{0,59}$")
 REF_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,59}$")
 KEY_NAME_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_]{0,59}$")
 TREATMENTS = frozenset(t.value for t in Treatment)
+# placement of these treatments is not a rule: non-deductible input follows Saudi VAT Settings, review lines are
+# never placed
+UNUSED_BOX_KEYS = (
+	f"treatment_box:{Treatment.INPUT_NOT_DEDUCTIBLE}",
+	f"treatment_box:{Treatment.NEEDS_REVIEW}",
+)
 
 
 def _text(value) -> str:
@@ -243,6 +249,12 @@ class SaudiVATRuleSet(Document):
 				frappe.throw(_("Row {0}: {1} is not a known rule key").format(row.idx, row.rule_key))
 			if key in keys:
 				frappe.throw(_("Row {0}: rule key {1} is listed twice").format(row.idx, key))
+			if key in UNUSED_BOX_KEYS:
+				frappe.throw(
+					_(
+						"Row {0}: {1} is not decided by a rule set (see Saudi VAT Settings and the review)"
+					).format(row.idx, key)
+				)
 			keys.add(key)
 			if row.reference not in ref_ids:
 				frappe.throw(
@@ -437,16 +449,20 @@ def _last_day(start, end, published):
 	return add_days(min(later), -1) if later else None
 
 
-def load_rule_book(code: str | None) -> RuleBook:
+def load_rule_book(code: str | None, from_date=None, to_date=None) -> RuleBook:
 	"""The published sets of one code for the engine. Drafts, verified-only and cancelled sets are never used; a
-	set whose stored content no longer has its published hash stops the calculation."""
+	set whose stored content no longer has its published hash stops the calculation. With a period, only sets
+	that can apply to a date inside it are read: a set starting after the period cannot cover it or end a set
+	inside it, and a set ending before it cannot cover it."""
 	if not code:
 		return RuleBook(None, [])
+	filters = [["rule_set_code", "=", code], ["docstatus", "=", 1]]
+	if to_date:
+		filters.append(["effective_from", "<=", to_date])
 	sets = []
-	names = frappe.get_all(
-		"Saudi VAT Rule Set", filters={"rule_set_code": code, "docstatus": 1}, pluck="name"
-	)
-	for name in names:
+	rows = frappe.get_all("Saudi VAT Rule Set", filters=filters, fields=["name", "effective_to"])
+	ended = [r.name for r in rows if from_date and r.effective_to and str(r.effective_to) < str(from_date)]
+	for name in (r.name for r in rows if r.name not in ended):
 		doc = frappe.get_doc("Saudi VAT Rule Set", name)
 		if not doc.content_is_intact():
 			frappe.throw(_("Rule set {0} no longer matches its published content hash").format(name))
