@@ -478,7 +478,7 @@ class TestRuleSet(VatSiteTestCase):
 				}
 			],
 		}
-		self.assertRaises(frappe.PermissionError, frappe.client.insert, submitted)
+		self.assertRaises(DENIED, frappe.client.insert, submitted)
 		self.assertFalse(frappe.db.exists("Saudi VAT Rule Set", f"{CODE}-2"))
 		for user in (MAINTAINER, REVIEWER, APPROVER, SYSTEM_MANAGER):
 			with self.subTest(user=user):
