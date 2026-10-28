@@ -13,7 +13,7 @@ Status: **draft requirements**, not certified compliance. Applies to a reusable 
 ## 2. Organizational prerequisites
 - Saudi legal entity with an applicable VAT registration; authorized staff must verify tax identity, registration information, filing frequency and periods.
 - An ERPNext Company record, base currency and fiscal settings, accounts/tax templates, posting/date conventions and historical migrations reviewed for completeness.
-- Tax account mapping and document tax classifications must be **configured and confirmed per company**. Never infer universal account codes such as 2310.
+- Tax account mapping and document tax classifications must be **configured and confirmed per company**. Never assume a fixed or universal account code.
 - Source accounting records must be accessible to authorized app roles. Anomalies, unclassified records and unresolved GL differences block approval, but not drafting or diagnostics.
 - Require designated preparer, reviewer and approver roles with server-side company isolation and a documented delegation policy.
 - No company-specific defaults, supplier lists, VAT numbers, logos, bank accounts or taxpayer details in the distributed app.

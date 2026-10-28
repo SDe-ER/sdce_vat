@@ -27,7 +27,7 @@ Do not treat an illustrative portal screenshot as a legally complete taxonomy or
 | Z-11 | E-invoicing integration | Separate integration; never claim FATOORA certification | Applicable ZATCA technical specifications |
 
 ## Filing workflow reference
-The ZATCA Arabic *VAT Return Filing User Guide* (uploaded copy reviewed) illustrates: choosing a return, taxpayer details, VAT sales and purchases, VAT summary, supporting attachments, optional notes, review/submission, and acknowledgment/download (pages 5–9). This guides usability, **not** a promise of portal equivalence or automated submission.
+The ZATCA Arabic *VAT Return Filing User Guide* (official guide) illustrates: choosing a return, taxpayer details, VAT sales and purchases, VAT summary, supporting attachments, optional notes, review/submission, and acknowledgment/download (pages 5–9). This guides usability, **not** a promise of portal equivalence or automated submission.
 
 ## Current references to verify
 - https://zatca.gov.sa/ar/RulesRegulations/Taxes/Pages/VATImplementingRegulations.aspx
