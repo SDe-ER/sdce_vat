@@ -443,6 +443,13 @@ def _require_complete_reference(reference, idx):
 	)
 
 
+def refuse_standalone_save():
+	"""Rows of a rule set change only through the rule set, where duties and stamps are checked. Frappe saves
+	a row on its own for `PUT /api/resource/<child>/<name>` and for `frappe.client.save` with a row; saving
+	the rule set itself does not run the row's `validate`."""
+	frappe.throw(_("Change the rows through the rule set"), frappe.PermissionError)
+
+
 def _require_role(*roles):
 	if not set(roles) & set(frappe.get_roles()):
 		frappe.throw(

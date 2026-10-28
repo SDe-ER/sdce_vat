@@ -430,6 +430,25 @@ class TestRuleSet(VatSiteTestCase):
 		doc.rules[0].value = "5"
 		self.assertRaises(frappe.PermissionError, doc.save)
 
+	def test_rows_cannot_be_saved_on_their_own(self):
+		doc = self._draft()
+		rows = (
+			("Saudi VAT Rule", doc.rules[0].name, "value", "5"),
+			("Saudi VAT Rule Reference", doc.references[0].name, "section", "Art. 9"),
+			("Saudi VAT Rule Field Label", doc.field_labels[0].name, "label_en", "x"),
+		)
+		for user in (REVIEWER, APPROVER, MAINTAINER):
+			for doctype, name, field, value in rows:
+				with self.subTest(user=user, doctype=doctype):
+					frappe.set_user(user)
+					row = frappe.get_doc(doctype, name)
+					row.set(field, value)
+					self.assertRaises(frappe.PermissionError, row.save)  # PUT /api/resource/<row> path
+					data = {**frappe.get_doc(doctype, name).as_dict(), field: value}
+					self.assertRaises(frappe.PermissionError, frappe.client.save, data)
+		frappe.set_user("Administrator")
+		self.assertEqual(frappe.db.get_value("Saudi VAT Rule", doc.rules[0].name, "value"), "15")
+
 	def test_rule_workflow_and_role_are_installed_once(self):
 		self.assertEqual(
 			frappe.get_all("Workflow", {"document_type": "Saudi VAT Rule Set", "is_active": 1}, pluck="name"),
