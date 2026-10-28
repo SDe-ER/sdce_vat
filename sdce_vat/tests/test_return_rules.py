@@ -135,7 +135,9 @@ class TestReturnRules(VatSiteTestCase):
 				self._step(doc, PREPARER, "Prepare VAT Return")
 				self.assertRaises(frappe.ValidationError, self._step, doc, REVIEWER, "Review VAT Return")
 				frappe.set_user("Administrator")
-				frappe.delete_doc("Saudi VAT Return", doc.name, force=True)  # the next case uses the same period
+				frappe.delete_doc(
+					"Saudi VAT Return", doc.name, force=True
+				)  # the next case uses the same period
 
 	def test_two_rule_sets_in_one_period(self):
 		publish_rule_set("TEST-SPLIT", 1, "2020-01-01", "2026-07-31")
@@ -180,7 +182,9 @@ class TestReturnRules(VatSiteTestCase):
 		drift = frappe.get_doc("Saudi VAT Return", doc.name).check_drift()
 		self.assertFalse(drift["unchanged"])
 		self.assertIn([PARITY_SET, doc.rule_sets[0].content_hash], drift["changed_rule_sets"])
-		self.assertRaises(frappe.ValidationError, self._step, doc, APPROVER, "Approve VAT Return")
+		self.assertRaisesRegex(
+			frappe.ValidationError, "rule sets changed", self._step, doc, APPROVER, "Approve VAT Return"
+		)
 		self.assertEqual(frappe.db.get_value("Saudi VAT Return", doc.name, "docstatus"), 0)
 
 	def test_snapshot_keeps_the_rules_and_stays_valid_after_a_correction(self):

@@ -92,6 +92,8 @@ class SaudiVATReturn(Document):
 		if _sha256(self._payload()) != self.calculation_hash:
 			frappe.throw(_("Stored values were changed after calculation; recalculate the return"))
 		live = self._live_payload()
+		if live.get("rule_sets") != self._payload().get("rule_sets"):
+			frappe.throw(_("The published rule sets changed since the calculation; recalculate the return"))
 		if _sha256(live) != self.calculation_hash:
 			frappe.throw(_("Documents in the period changed since the calculation; recalculate the return"))
 		self.approved_by, self.approved_on = approver, now_datetime()

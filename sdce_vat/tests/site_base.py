@@ -257,12 +257,13 @@ def publish_rule_set(code, version, start, end=None, rules=None, **values):
 	"""Prepare, verify and publish a synthetic rule set with three different test users."""
 	from frappe.model.workflow import apply_workflow
 
-	maintainer = make_user("vat-test-rule-maintainer@example.com", "VAT Rule Maintainer")
-	reviewer = make_user("vat-test-rule-reviewer@example.com", "VAT Reviewer")
-	approver = make_user("vat-test-rule-approver@example.com", "VAT Approver")
 	rules = PARITY_RULES if rules is None else rules
 	user = frappe.session.user
 	try:
+		frappe.set_user("Administrator")
+		maintainer = make_user("vat-test-rule-maintainer@example.com", "VAT Rule Maintainer")
+		reviewer = make_user("vat-test-rule-reviewer@example.com", "VAT Reviewer")
+		approver = make_user("vat-test-rule-approver@example.com", "VAT Approver")
 		frappe.set_user(maintainer)
 		doc = frappe.get_doc(
 			{
