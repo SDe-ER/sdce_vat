@@ -194,6 +194,13 @@ class VatSiteTestCase(IntegrationTestCase):
 			doc.bill_date = DATE
 		if doctype == "Sales Invoice":
 			doc.due_date = DATE
+			doc.selling_price_list = _first_or_make(
+				"Price List",
+				{"selling": 1, "enabled": 1, "currency": "SAR"},
+				price_list_name="_Test VAT Selling",
+				selling=1,
+				currency="SAR",
+			)
 		doc.insert(ignore_permissions=True)
 		doc.submit()
 		return doc
