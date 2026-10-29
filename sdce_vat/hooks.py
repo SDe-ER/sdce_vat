@@ -86,7 +86,7 @@ required_apps = ["erpnext"]
 # ------------
 
 # before_install = "sdce_vat.install.before_install"
-# after_install = "sdce_vat.install.after_install"
+after_install = "sdce_vat.install.after_install"
 
 # Uninstallation
 # ------------
