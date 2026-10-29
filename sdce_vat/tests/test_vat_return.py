@@ -260,6 +260,8 @@ class TestVatReturn(VatSiteTestCase):
 		self.assertRaises(frappe.ValidationError, filing.insert)
 
 	def test_amendment_limit_for_later_return(self):
+		# the parity rule set has no verified correction_limit, so a later-return correction is refused (IR Art. 63
+		# limit not verified); the limit itself is covered in test_amendment_rules.py
 		doc = self._approved()
 		frappe.set_user(PREPARER)
 		amendment = frappe.get_doc(
