@@ -10,6 +10,7 @@ import frappe
 from frappe import _
 
 from sdce_vat.engine import boxes
+from sdce_vat.engine.model import Column
 from sdce_vat.saudi_vat.vat_report import CUSTOM, field_lines, run
 
 
@@ -42,7 +43,7 @@ def row(line):
 		"party_tax_id": line.party_tax_id,
 		"bill_no": line.bill_no,
 		"vat_account": line.vat_account,
-		"column": str(line.column) if line.column else None,
+		"column": column_label(line.column),
 		"base": line.base,
 		"vat": line.vat,
 		"treatment": str(line.treatment) if line.treatment else None,
@@ -50,6 +51,12 @@ def row(line):
 		"issue": line.rule_issue or (line.reason if line.needs_review else None),
 		"warnings": ", ".join(line.warnings),
 	}
+
+
+def column_label(column: Column | None) -> str | None:
+	if not column:
+		return None
+	return _("Adjustment") if column == Column.ADJUSTMENT else _("Amount")
 
 
 def columns():
