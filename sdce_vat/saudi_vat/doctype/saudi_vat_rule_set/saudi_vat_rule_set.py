@@ -16,6 +16,7 @@ from frappe.model.document import Document
 from frappe.utils import add_days, getdate, now_datetime
 
 from sdce_vat.constants import (
+	AMOUNT_RULE_KEYS,
 	DECIMAL_RULE_KEYS,
 	RULE_KEY_PREFIXES,
 	RULE_KEYS,
@@ -526,6 +527,13 @@ def _check_value(row, key):
 			number = None
 		if number is None or not number.is_finite() or not Decimal(0) < number <= Decimal(100):
 			frappe.throw(_("Row {0}: {1} must be a number above 0 and up to 100").format(row.idx, key))
+	elif key in AMOUNT_RULE_KEYS:
+		try:
+			amount = Decimal(value)
+		except InvalidOperation:
+			amount = None
+		if amount is None or not amount.is_finite() or amount <= 0:
+			frappe.throw(_("Row {0}: {1} must be an amount above 0").format(row.idx, key))
 	elif key in WHOLE_NUMBER_RULE_KEYS and (not value.isdigit() or int(value) < 1):
 		frappe.throw(_("Row {0}: {1} must be a whole number of 1 or more").format(row.idx, key))
 

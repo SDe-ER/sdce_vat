@@ -23,7 +23,9 @@ RULE_KEYS = (
 	"unpaid_adjust_start",
 	"unpaid_financing_exception",
 	"correction_rules",
+	"correction_limit",
 )
 RULE_KEY_PREFIXES = ("treatment_box", "recoverability", "tax_date_basis")
 DECIMAL_RULE_KEYS = ("standard_rate",)
 WHOLE_NUMBER_RULE_KEYS = ("late_claim_limit_years", "unpaid_adjust_months")
+AMOUNT_RULE_KEYS = ("correction_limit",)  # amounts in SAR
