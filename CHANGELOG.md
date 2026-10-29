@@ -3,6 +3,13 @@
 ## [Unreleased]
 
 ### Added
+- Baseline rule file `sdce_vat/rules/ksa_vat_2026_1.json` (#17): official ZATCA references (Arabic Implementing
+  Regulations 10th edition, VAT Law, return guide, input tax guideline) for 27 rules and the 16 return field labels
+  in Arabic and English. "Import Baseline Rules" (VAT Rule Maintainer) creates a Draft rule set with every rule
+  Pending; importing again changes nothing; nothing is verified or published automatically. See
+  docs/BASELINE_RULES.md for the points a tax adviser must verify.
+  - Impact: no change to existing rule sets, returns or accounting data. Rollback: revert; an imported draft set
+    can be deleted by its maintainer.
 - Engine 0.2.0 reads published rule books (#6): box placement, standard rate and tax-date basis come from the
   published Saudi VAT Rule Set in force on each line's tax date; several rule sets in one period are supported;
   missing, unverified or conflicting rules, undetermined tax dates and rule transitions are rule issues that block
