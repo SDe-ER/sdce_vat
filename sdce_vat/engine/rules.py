@@ -14,6 +14,7 @@ A date resolves to the normal version that covers it, then along its chain of pu
 
 from dataclasses import dataclass, field
 from datetime import date, timedelta
+from operator import attrgetter
 
 VERIFIED = "Verified"
 NOT_APPLICABLE = "Not applicable"
@@ -56,7 +57,9 @@ class RuleBook:
 	def __init__(self, code: str | None, sets: list[RuleSet]):
 		self.code = code
 		self.sets = {s.name: s for s in sets}
-		self._normals = sorted((s for s in sets if s.version_type == NORMAL), key=lambda s: s.effective_from)
+		self._normals = sorted(
+			(s for s in sets if s.version_type == NORMAL), key=attrgetter("effective_from")
+		)
 
 	def for_date(self, day: str) -> tuple[RuleSet | None, str | None]:
 		if not self.code:
