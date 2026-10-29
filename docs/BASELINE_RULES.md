@@ -48,6 +48,34 @@ The English Implementing Regulations (8th edition, 09 Nov 2021, unofficial) do *
 
 The Implementing Regulations references have no publication or effective date, because the exact day of the 10th edition and the date the 2024 amendments came into force were not found. A rule can be verified only when its reference has a URL, a section, a date and an access date. **The verifier enters the confirmed date in the reference before verifying.**
 
+## Legal evidence matrix
+Status of each date and provision. A rule is used only after a qualified person verifies it and the set is published.
+
+### Confirmed from official texts
+| Provision | Evidence | Source |
+|---|---|---|
+| The 15 % rate applies from 1 Jul 2020 | IR Art. 79(10), added by resolution 2-3-20 of 09 Jun 2020 | ZATCA Implementing Regulations (Arabic 10th edition, English 8th edition) |
+| Art. 63(3) threshold changed from 5,000 to 15,000 by BoD decision 01-04-23 (26/11/1444H) | Published 1444-12-05 = 23 Jun 2023; "applied from the date of its publication" | Umm Al-Qura: https://www.uqn.gov.sa/details?p=23145 and https://www.uqn.gov.sa/details?p=23146 |
+| The 10th edition of the Implementing Regulations includes BoD 01-06-24 (19 Nov 2024) | Edition dated Shawwal 1446H / Apr 2025; footnotes give the resolution date | ZATCA Arabic Implementing Regulations PDF |
+
+### Candidates that need the official text
+| Point | Candidate | Evidence so far | Still needed |
+|---|---|---|---|
+| Entry into force of BoD 01-06-24 | 18 Apr 2025 (date of publication) | Umm Al-Qura issue 5082 of 18 Apr 2025, reported by professional alerts (KPMG, PwC, DLA Piper) | The official gazette text of issue 5082, matched provision by provision |
+| Exceptions to that date | Art. 47(3) from 1 Jan 2026; a 180-day grace for existing tax groups (Art. 10) | Same alerts | The same official text |
+
+### Needs tax interpretation (not decided by the app)
+- **Art. 63 threshold per period.** Candidates: 5,000 until 22 Jun 2023, then 15,000 from 23 Jun 2023, with the wording revised again by 01-06-24.
+  - Open: which date decides. It may be the period of the error, the date it is found, or the date of the correcting return.
+  - The return form label of field 14 ("± 5000") does not by itself override the newer regulation. The difference is recorded, not resolved.
+- **Transitional rules that depend on another date than the tax date:** Art. 79(10), the Art. 10 grace period and the Art. 40(10) start month.
+- **Art. 54(6)** timing, the **tax point** (GCC Agreement, Art. 23), and **fields 8 and 9**: see the points below.
+
+### Effect on the app today
+- No rule in this file is used: every rule is Pending and the set has no Effective From.
+- The amendment check still uses a constant limit of 5,000 (`saudi_vat_amendment.py`, Issue #5). It sends a correction of 5,000–15,000 to a self-amendment instead of a later return.
+- Filed or approved returns are never changed by a rule set.
+
 ## Rules (all Pending)
 | Rule key | Proposed value | Source | Effective | Notes |
 |---|---|---|---|---|
