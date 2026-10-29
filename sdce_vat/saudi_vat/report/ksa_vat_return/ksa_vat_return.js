@@ -1,6 +1,7 @@
 // Copyright (c) 2026, SDCE VAT Contributors
 // SPDX-License-Identifier: GPL-3.0-or-later
-// All figures come from the server; this file only defines the filters and the links to the details.
+// All figures come from the server; this file only defines the filters, the links to the details and the
+// Save Snapshot action.
 
 frappe.query_reports["KSA VAT Return"] = {
 	filters: sdce_vat_period_filters(),
@@ -28,6 +29,21 @@ frappe.query_reports["KSA VAT Return"] = {
 				return;
 			}
 			frappe.set_route("query-report", "KSA VAT Return Detail", sdce_vat_detail_filters(report, first));
+		});
+		report.page.add_inner_button(__("Save Snapshot"), () => {
+			frappe.confirm(
+				__(
+					"Save a copy of this return as a draft Saudi VAT Return? Saving is not approval and not filing."
+				),
+				() =>
+					frappe
+						.call({
+							method: "sdce_vat.saudi_vat.report.ksa_vat_return.ksa_vat_return.save_snapshot",
+							args: { filters: report.get_values() },
+							freeze: true,
+						})
+						.then((r) => r.message && frappe.set_route("Form", "Saudi VAT Return", r.message))
+			);
 		});
 	},
 };

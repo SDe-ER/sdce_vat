@@ -3,15 +3,16 @@
 
 """KSA VAT Return: the fields of the ZATCA return for one company and period, read from ERPNext documents.
 
-Generating the report writes nothing.
+Generating the report writes nothing. A saved copy is made only on request (`save_snapshot`).
 """
 
 import frappe
 from frappe import _
-from frappe.utils import escape_html
+from frappe.utils import escape_html, flt, getdate
 
+from sdce_vat.constants import VAT_PREPARER
 from sdce_vat.engine import boxes
-from sdce_vat.saudi_vat.vat_report import box_label, run
+from sdce_vat.saudi_vat.vat_report import ACCRUAL, box_label, period, run
 
 
 def execute(filters=None):
@@ -110,3 +111,68 @@ def message(result):
 	items = "".join(f"<li>{escape_html(note)}</li>" for note in notes)
 	return f"<div class='text-danger'><b>{escape_html(_('Not approvable'))}</b><ul>{items}</ul></div>"
 
+
+@frappe.whitelist(methods=["POST"])
+def save_snapshot(filters) -> str:
+	"""Save the report of the filters as the draft Saudi VAT Return of that period and calculate it.
+
+	A draft of exactly this period is recalculated; any other return touching the period is left alone and
+	the save is refused. Saving is not approval: review, approval and filing stay on the return's workflow.
+	"""
+	filters = frappe.parse_json(filters) if isinstance(filters, str) else filters
+	if not isinstance(filters, dict):
+		frappe.throw(_("Invalid filters"))
+	filters = frappe._dict(filters)
+	if VAT_PREPARER not in frappe.get_roles():
+		frappe.throw(_("Only a VAT Preparer can save a snapshot"), frappe.PermissionError)
+	if not isinstance(filters.get("company"), str) or not filters.company:
+		frappe.throw(_("Set a company"))
+	if (filters.get("tax_basis") or ACCRUAL) != ACCRUAL:
+		frappe.throw(_("Only the accrual basis is supported"))
+	if not frappe.has_permission("Company", "read", doc=filters.company):
+		frappe.throw(_("Not permitted for company {0}").format(filters.company), frappe.PermissionError)
+	start, end = period(filters)
+	inputs = {
+		"corrections": flt(filters.get("corrections")),
+		"credit_carried": flt(filters.get("credit_carried")),
+	}
+
+	others = frappe.get_all(
+		"Saudi VAT Return",
+		filters={
+			"company": filters.company,
+			"docstatus": ["<", 2],
+			"from_date": ["<=", end],
+			"to_date": [">=", start],
+		},
+		fields=["name", "from_date", "to_date", "docstatus"],
+	)
+	approved = [r.name for r in others if r.docstatus == 1]
+	if approved:
+		frappe.throw(
+			_(
+				"VAT return {0} is approved for this period; record a correction with a Saudi VAT Amendment instead"
+			).format(approved[0])
+		)
+	same = [r for r in others if (getdate(r.from_date), getdate(r.to_date)) == (start, end)]
+	if len(others) != len(same):
+		frappe.throw(_("VAT return {0} already covers part of this period").format(others[0].name))
+
+	if same:
+		doc = frappe.get_doc("Saudi VAT Return", same[0].name)
+		doc.check_permission("write")
+		if any(flt(doc.get(field)) != value for field, value in inputs.items()):
+			doc.update(inputs)
+			doc.save()
+	else:
+		doc = frappe.get_doc(
+			{
+				"doctype": "Saudi VAT Return",
+				"company": filters.company,
+				"from_date": start,
+				"to_date": end,
+				**inputs,
+			}
+		).insert()
+	doc.calculate()
+	return doc.name
