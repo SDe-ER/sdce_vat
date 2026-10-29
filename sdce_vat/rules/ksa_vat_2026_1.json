@@ -237,7 +237,7 @@
    "verification_status": "Pending",
    "description_en": "Date that decides the tax period of a sales invoice. The legal tax point is the earliest of the supply date, the tax invoice date and the payment date; the app can only use the document dates it has.",
    "description_ar": "التاريخ الذي يحدد الفترة الضريبية لـفاتورة المبيعات. تاريخ الاستحقاق النظامي هو أسبق تاريخ بين تاريخ التوريد وتاريخ الفاتورة الضريبية وتاريخ السداد، والتطبيق يستخدم تواريخ المستندات المتاحة فقط.",
-   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only."
+   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only: with invoice_date, a purchase invoice without a bill date has no tax date and goes to review."
   },
   {
    "rule_key": "tax_date_basis:purchase_invoice",
@@ -246,7 +246,7 @@
    "verification_status": "Pending",
    "description_en": "Date that decides the tax period of a purchase invoice. The legal tax point is the earliest of the supply date, the tax invoice date and the payment date; the app can only use the document dates it has.",
    "description_ar": "التاريخ الذي يحدد الفترة الضريبية لـفاتورة المشتريات. تاريخ الاستحقاق النظامي هو أسبق تاريخ بين تاريخ التوريد وتاريخ الفاتورة الضريبية وتاريخ السداد، والتطبيق يستخدم تواريخ المستندات المتاحة فقط.",
-   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only."
+   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only: with invoice_date, a purchase invoice without a bill date has no tax date and goes to review."
   },
   {
    "rule_key": "tax_date_basis:journal_entry",
@@ -255,7 +255,7 @@
    "verification_status": "Pending",
    "description_en": "Date that decides the tax period of a journal entry. The legal tax point is the earliest of the supply date, the tax invoice date and the payment date; the app can only use the document dates it has.",
    "description_ar": "التاريخ الذي يحدد الفترة الضريبية لـالقيد اليومي. تاريخ الاستحقاق النظامي هو أسبق تاريخ بين تاريخ التوريد وتاريخ الفاتورة الضريبية وتاريخ السداد، والتطبيق يستخدم تواريخ المستندات المتاحة فقط.",
-   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only."
+   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only: with invoice_date, a purchase invoice without a bill date has no tax date and goes to review."
   },
   {
    "rule_key": "tax_date_basis:expense_claim",
@@ -264,7 +264,7 @@
    "verification_status": "Pending",
    "description_en": "Date that decides the tax period of a expense claim. The legal tax point is the earliest of the supply date, the tax invoice date and the payment date; the app can only use the document dates it has.",
    "description_ar": "التاريخ الذي يحدد الفترة الضريبية لـمطالبة المصروفات. تاريخ الاستحقاق النظامي هو أسبق تاريخ بين تاريخ التوريد وتاريخ الفاتورة الضريبية وتاريخ السداد، والتطبيق يستخدم تواريخ المستندات المتاحة فقط.",
-   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only."
+   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only: with invoice_date, a purchase invoice without a bill date has no tax date and goes to review."
   },
   {
    "rule_key": "late_claim_limit_years",

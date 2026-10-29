@@ -38,13 +38,15 @@ The official Arabic texts are the legal reference. English texts are secondary (
 
 The English Implementing Regulations (8th edition, 09 Nov 2021, unofficial) do **not** contain the 2024 amendments.
 
+The Implementing Regulations references have no publication or effective date, because the exact day of the 10th edition and the date the 2024 amendments came into force were not found. A rule can be verified only when its reference has a URL, a section, a date and an access date. **The verifier enters the confirmed date in the reference before verifying.**
+
 ## Rules (all Pending)
 | Rule key | Proposed value | Source | Effective | Notes |
 |---|---|---|---|---|
 | `standard_rate` | 15 | Law Art. 2(2); IR Art. 79(10) | 1 Jul 2020 | Transitional rules until 30 Jun 2021. The rate is unreadable in the PDF text layer; it is readable in a layout extraction. |
 | `treatment_box:*` (10 treatments) | S01–S05, P07–P11 | Return guide; IR Art. 62(2) | Form of 2026 | Art. 62(2) has no separate item for exports or non-deductible input. Fields 8 and 9 come from the guide only. |
 | `treatment_box:out_of_scope` | `-` (no field) | IR Art. 62(2) | — | The verifier should set it to *Not applicable*. |
-| `tax_date_basis:sales_invoice` / `purchase_invoice` | `invoice_date` | Input tax guideline p.33 (cites the GCC Agreement, Art. 23) | — | The general tax point is the earliest of supply, invoice and payment. Supply date is Issue #7. |
+| `tax_date_basis:sales_invoice` / `purchase_invoice` | `invoice_date` (a purchase invoice without a bill date then needs review) | Input tax guideline p.33 (cites the GCC Agreement, Art. 23) | — | The general tax point is the earliest of supply, invoice and payment. Supply date is Issue #7. |
 | `tax_date_basis:journal_entry` / `expense_claim` | `posting_date` | same | — | Proposal only. |
 | `late_claim_limit_years` | 5 | IR Art. 49(7)–(8) | original text | Deferred claims: Issue #10. |
 | `late_claim_limit_basis` | end of the calendar year of supply | IR Art. 49(8) | original text | |

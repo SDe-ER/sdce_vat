@@ -140,6 +140,21 @@ class TestBaselineImport(IntegrationTestCase):
 			frappe.db.get_value("Saudi VAT Rule Set", name, "description_en"), "Edited by the maintainer"
 		)
 
+	def test_import_never_replaces_a_submitted_set(self):
+		name = self._import()
+		frappe.db.set_value(
+			"Saudi VAT Rule Set",
+			name,
+			{"docstatus": 1, "workflow_state": "Rule Published"},
+			update_modified=False,
+		)
+		frappe.db.set_value("Saudi VAT Rule", {"parent": name}, "verification_status", "Verified")
+		self.assertEqual(self._import(), name)
+		self.assertEqual(frappe.db.get_value("Saudi VAT Rule Set", name, "workflow_state"), "Rule Published")
+		self.assertEqual(
+			set(frappe.get_all("Saudi VAT Rule", {"parent": name}, pluck="verification_status")), {"Verified"}
+		)
+
 	def test_pending_rules_cannot_be_verified(self):
 		name = self._import()
 		frappe.set_user(REVIEWER)

@@ -81,7 +81,13 @@ def import_baseline(name: str) -> str:
 			alert=True,
 		)
 		return existing
-	return frappe.get_doc(as_rule_set(data)).insert().name
+	try:
+		return frappe.get_doc(as_rule_set(data)).insert().name
+	except frappe.DuplicateEntryError:
+		# a parallel import created the same set first; the failed insert wrote nothing, so return that set
+		return frappe.db.get_value(
+			"Saudi VAT Rule Set", {"rule_set_code": data.get("rule_set_code"), "version": data.get("version")}
+		)
 
 
 @frappe.whitelist(methods=["GET"])
