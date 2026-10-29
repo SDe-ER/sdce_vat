@@ -114,7 +114,10 @@ function sdce_vat_period_filters() {
 			fieldname: "month",
 			label: __("Month"),
 			fieldtype: "Select",
-			options: Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) })),
+			options: Array.from({ length: 12 }, (_, i) => ({
+				value: String(i + 1),
+				label: String(i + 1),
+			})),
 			default: String(today.getMonth() + 1),
 			depends_on: is("Monthly"),
 		},
