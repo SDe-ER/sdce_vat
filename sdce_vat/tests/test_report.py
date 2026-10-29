@@ -282,7 +282,8 @@ class TestVatReport(VatSiteTestCase):
 
 	def test_save_snapshot_refuses_filter_lists(self):
 		frappe.set_user(PREPARER)
-		self.assertRaises(frappe.ValidationError, ksa_vat_return.save_snapshot, [["company", "=", COMPANY]])
+		# Frappe checks the declared argument type before the function runs
+		self.assertRaises(TypeError, ksa_vat_return.save_snapshot, [["company", "=", COMPANY]])
 		self.assertRaises(
 			frappe.ValidationError, ksa_vat_return.save_snapshot, {**FILTERS, "company": ["!=", ""]}
 		)
