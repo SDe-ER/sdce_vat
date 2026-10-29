@@ -27,6 +27,7 @@
   "sources_section",
   "sources",
   "proof",
+  "rule_sets",
   "approval_section",
   "prepared_by",
   "prepared_on",
@@ -185,6 +186,13 @@
    "fieldtype": "Table",
    "label": "General Ledger Proof",
    "options": "Saudi VAT Return Proof",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rule_sets",
+   "fieldtype": "Table",
+   "label": "Rule Sets Used",
+   "options": "Saudi VAT Return Rule Set",
    "read_only": 1
   },
   {

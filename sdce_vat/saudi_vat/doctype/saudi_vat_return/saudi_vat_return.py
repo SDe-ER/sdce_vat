@@ -14,8 +14,10 @@ from frappe.utils import getdate, now_datetime
 
 from sdce_vat.constants import VAT_PREPARER, VAT_REVIEWER
 from sdce_vat.engine import boxes
+from sdce_vat.engine.core import ENGINE_VERSION
 from sdce_vat.engine.money import D, q2
 from sdce_vat.engine.run import compute
+from sdce_vat.saudi_vat.doctype.saudi_vat_rule_set.saudi_vat_rule_set import SaudiVATRuleSet
 from sdce_vat.saudi_vat.doctype.saudi_vat_settings.saudi_vat_settings import get_settings
 
 STATE_DRAFT = "VAT Draft"
@@ -34,7 +36,8 @@ CALCULATED_FIELDS = (
 )
 APPROVAL_FIELDS = ("prepared_by", "prepared_on", "reviewed_by", "reviewed_on", "approved_by", "approved_on")
 SNAPSHOT_FIELDS = ("snapshot_hash", "snapshot_file")
-CHILD_TABLES = ("lines", "sources", "proof")
+CHILD_TABLES = ("lines", "sources", "proof", "rule_sets")
+LEGACY_ENGINE = "0.1.0"  # returns calculated before rule books keep their original payload and snapshot
 
 
 def _money(value) -> str:
@@ -72,6 +75,12 @@ class SaudiVATReturn(Document):
 			frappe.throw(_("Only a reviewed VAT return can be approved"), frappe.PermissionError)
 		if not self.calculation_hash:
 			frappe.throw(_("Calculate the return before approval"))
+		if self.engine_version != ENGINE_VERSION:
+			frappe.throw(
+				_("The return was calculated by engine {0}; recalculate it with engine {1}").format(
+					self.engine_version, ENGINE_VERSION
+				)
+			)
 		if self.review_count:
 			frappe.throw(
 				_("{0} sources still need review; approval is blocked").format(self.review_count),
@@ -90,6 +99,8 @@ class SaudiVATReturn(Document):
 		if _sha256(self._payload()) != self.calculation_hash:
 			frappe.throw(_("Stored values were changed after calculation; recalculate the return"))
 		live = self._live_payload()
+		if live.get("rule_sets") != self._payload().get("rule_sets"):
+			frappe.throw(_("The published rule sets changed since the calculation; recalculate the return"))
 		if _sha256(live) != self.calculation_hash:
 			frappe.throw(_("Documents in the period changed since the calculation; recalculate the return"))
 		self.approved_by, self.approved_on = approver, now_datetime()
@@ -120,8 +131,16 @@ class SaudiVATReturn(Document):
 		"""Read-only: does a fresh calculation still give the stored values?"""
 		self.check_permission("read")
 		live = self._live_payload()
-		changed = sorted(_source_keys(live) ^ _source_keys(self._payload()))
-		return {"unchanged": _sha256(live) == self.calculation_hash, "changed_sources": changed}
+		stored = self._payload()
+		changed = sorted(_source_keys(live) ^ _source_keys(stored))
+		rule_sets = {tuple(r) for r in live.get("rule_sets", [])} ^ {
+			tuple(r) for r in stored.get("rule_sets", [])
+		}
+		return {
+			"unchanged": _sha256(live) == self.calculation_hash,
+			"changed_sources": changed,
+			"changed_rule_sets": sorted(list(r) for r in rule_sets),
+		}
 
 	@frappe.whitelist(methods=["GET"])
 	def verify_snapshot(self):
@@ -180,6 +199,11 @@ class SaudiVATReturn(Document):
 					"voucher_type": line.voucher_type,
 					"voucher_no": line.voucher_no,
 					"posting_date": line.posting_date or None,
+					"invoice_date": line.invoice_date,
+					"tax_date": line.tax_date,
+					"tax_date_basis": line.tax_date_basis,
+					"rule_set": line.rule_set,
+					"rule_issue": line.rule_issue or None,
 					"party_type": line.party_type,
 					"party": line.party,
 					"party_tax_id": line.party_tax_id,
@@ -202,6 +226,19 @@ class SaudiVATReturn(Document):
 					"difference": proof.difference,
 				},
 			)
+		for name, rule_set in result.rule_sets.items():
+			tax_dates = sorted(line.tax_date for line in result.lines if line.rule_set == name)
+			self.append(
+				"rule_sets",
+				{
+					"rule_set": name,
+					"version": rule_set.version,
+					"content_hash": rule_set.content_hash,
+					"line_count": len(tax_dates),
+					"first_tax_date": tax_dates[0],
+					"last_tax_date": tax_dates[-1],
+				},
+			)
 		self.net_vat = result.boxes[boxes.NET_VAT].vat
 		self.gl_reconciled = int(result.is_reconciled)
 		self.review_count = len(result.review_lines)
@@ -210,6 +247,38 @@ class SaudiVATReturn(Document):
 
 	def _payload(self) -> dict:
 		"""Canonical content of the calculation as stored in the tables (the basis of every hash)."""
+		payload = self._legacy_payload()
+		if self.engine_version == LEGACY_ENGINE:
+			return payload
+		# rule books: every source carries its tax date and rule set; the hash covers the (set, content hash) list
+		payload["source_rules"] = sorted(
+			[
+				r.voucher_type,
+				r.voucher_no,
+				r.vat_account or "",
+				str(r.invoice_date or ""),
+				str(r.tax_date or ""),
+				r.tax_date_basis or "",
+				r.rule_set or "",
+				r.rule_issue or "",
+			]
+			for r in self.sources
+		)
+		payload["rule_sets"] = sorted([r.rule_set, r.content_hash] for r in self.rule_sets)
+		# the shown details of each rule set row are covered too, so no stored column can be edited unnoticed
+		payload["rule_set_rows"] = sorted(
+			[
+				r.rule_set,
+				int(r.version or 0),
+				int(r.line_count or 0),
+				str(r.first_tax_date),
+				str(r.last_tax_date),
+			]
+			for r in self.rule_sets
+		)
+		return payload
+
+	def _legacy_payload(self) -> dict:
 		return {
 			"header": [
 				self.company,
@@ -247,7 +316,7 @@ class SaudiVATReturn(Document):
 
 	def _snapshot_payload(self) -> dict:
 		settings = get_settings(self.company)
-		return {
+		payload = {
 			"calculation": self._payload(),
 			"calculation_hash": self.calculation_hash,
 			"settings": {
@@ -266,6 +335,17 @@ class SaudiVATReturn(Document):
 				"approved_on": str(self.approved_on),
 			},
 		}
+		if self.engine_version != LEGACY_ENGINE:
+			# full copy of every rule set used: the approved return stays readable when rules change later
+			payload["rule_sets"] = [
+				{
+					"name": r.rule_set,
+					"content_hash": r.content_hash,
+					"content": SaudiVATRuleSet.content_of(frappe.get_doc("Saudi VAT Rule Set", r.rule_set)),
+				}
+				for r in sorted(self.rule_sets, key=lambda r: r.rule_set)
+			]
+		return payload
 
 	def _write_snapshot(self):
 		payload = self._snapshot_payload()

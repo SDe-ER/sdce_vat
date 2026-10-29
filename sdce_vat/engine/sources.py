@@ -95,7 +95,7 @@ def _invoices(doctype, config, from_date, to_date) -> list[SourceLine]:
 	if is_sales:
 		fields.append("is_debit_note")
 	else:
-		fields.append("bill_no")
+		fields += ["bill_no", "bill_date"]
 	docs = _submitted(doctype, config, from_date, to_date, fields)
 	names = [d.name for d in docs]
 	tax_doctype = "Sales Taxes and Charges" if is_sales else "Purchase Taxes and Charges"
@@ -159,7 +159,7 @@ def _journal_entries(config, from_date, to_date) -> list[SourceLine]:
 	docs = frappe.get_all(
 		"Journal Entry",
 		filters={"name": ["in", names]},
-		fields=["name", "posting_date", "company", "bill_no", "cheque_no"],
+		fields=["name", "posting_date", "company", "bill_no", "bill_date", "cheque_no"],
 		order_by="posting_date asc, name asc",
 	)
 	accounts = _children(

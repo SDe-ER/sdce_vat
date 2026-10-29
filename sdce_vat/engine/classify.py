@@ -7,8 +7,9 @@ Rule order for one line:
 1. The VAT account decides the family (output, input, reverse charge, customs).
 2. A line without VAT (or on a 0 % account) takes its treatment from its categories; no category, no treatment:
    it is NEEDS_REVIEW and never placed in a box.
-3. The treatment decides the box; returns, debit notes and negative journal corrections go to the
-   adjustment column.
+3. The published rule set of the line's tax date decides the box of the treatment (`treatment_box:<t>`; Not
+   applicable = no box). Returns, debit notes and negative journal corrections go to the adjustment column.
+   A missing, unverified or invalid rule is a rule issue: the line is not placed and needs review.
 4. Input VAT that is not deductible is placed only when a placement rule is configured in the settings.
 Warnings never move a line; they mark it for the reviewer.
 """
@@ -18,22 +19,10 @@ import re
 from sdce_vat.engine import boxes
 from sdce_vat.engine.config import NonDeductiblePlacement, VatConfig
 from sdce_vat.engine.model import Column, Side, SourceLine, Treatment
-from sdce_vat.engine.money import ZERO, q2
+from sdce_vat.engine.money import ZERO, D, q2
+from sdce_vat.engine.rules import NOT_APPLICABLE, VERIFIED, RuleSet, verified_value
 
 SAUDI_VAT_NUMBER = re.compile(r"3\d{13}3")
-
-TREATMENT_BOX = {
-	Treatment.STANDARD_RATED_SALE: boxes.SALES_STANDARD,
-	Treatment.GOVERNMENT_BEARS: boxes.SALES_GOVERNMENT_BEARS,
-	Treatment.ZERO_RATED_SALE: boxes.SALES_ZERO_RATED,
-	Treatment.EXPORT: boxes.SALES_EXPORTS,
-	Treatment.EXEMPT_SALE: boxes.SALES_EXEMPT,
-	Treatment.INPUT_DEDUCTIBLE: boxes.PURCHASES_STANDARD,
-	Treatment.IMPORT_CUSTOMS: boxes.PURCHASES_IMPORT_CUSTOMS,
-	Treatment.IMPORT_REVERSE_CHARGE: boxes.PURCHASES_IMPORT_REVERSE_CHARGE,
-	Treatment.ZERO_RATED_PURCHASE: boxes.PURCHASES_ZERO_RATED,
-	Treatment.EXEMPT_PURCHASE: boxes.PURCHASES_EXEMPT,
-}
 
 SALES_TREATMENTS = {
 	Treatment.STANDARD_RATED_SALE,
@@ -61,14 +50,15 @@ SIDE_EQUIVALENT = {
 }
 
 
-def classify(line: SourceLine, config: VatConfig) -> SourceLine:
+def classify(line: SourceLine, config: VatConfig, rule_set: RuleSet | None) -> SourceLine:
+	"""`rule_set` is the published set of the line's tax date, or None when `line.rule_issue` says why not."""
 	treatment, reason = _treatment(line, config)
 	line.treatment, line.reason = treatment, reason
-	line.box = _box(treatment, config)
+	line.box = _box(line, config, rule_set)
 	if treatment == Treatment.INPUT_NOT_DEDUCTIBLE and config.non_deductible_placement is None:
 		line.reason = "pending_placement_rule"
 	line.column = _column(line) if line.box else None
-	line.warnings = _warnings(line, config)
+	line.warnings = _warnings(line, config, rule_set)
 	return line
 
 
@@ -116,12 +106,26 @@ def _for_side(treatment: Treatment, side: Side, reason: str) -> tuple[Treatment,
 	return treatment, reason
 
 
-def _box(treatment: Treatment, config: VatConfig) -> str | None:
+def _box(line: SourceLine, config: VatConfig, rule_set: RuleSet | None) -> str | None:
+	treatment = line.treatment
+	if treatment == Treatment.NEEDS_REVIEW or line.rule_issue:
+		return None
 	if treatment == Treatment.INPUT_NOT_DEDUCTIBLE:
 		if config.non_deductible_placement == NonDeductiblePlacement.BOX_7_WITHOUT_VAT:
 			return boxes.PURCHASES_STANDARD
 		return None
-	return TREATMENT_BOX.get(treatment)
+	key = f"treatment_box:{treatment}"
+	rule = rule_set.rule(key)
+	if not rule:
+		line.rule_issue = f"rule_missing:{key}"
+		return None
+	if rule.status == NOT_APPLICABLE:
+		return None  # the treatment has no return field (e.g. out of scope)
+	allowed = boxes.SALES_LINE_BOXES if line.side == Side.SALES else boxes.PURCHASE_LINE_BOXES
+	if rule.status != VERIFIED or rule.value not in allowed:
+		line.rule_issue = f"rule_invalid:{key}" if rule.status == VERIFIED else f"rule_unverified:{key}"
+		return None
+	return rule.value
 
 
 def _column(line: SourceLine) -> Column:
@@ -132,9 +136,15 @@ def _column(line: SourceLine) -> Column:
 	return Column.AMOUNT
 
 
-def _warnings(line: SourceLine, config: VatConfig) -> list[str]:
+def _warnings(line: SourceLine, config: VatConfig, rule_set: RuleSet | None) -> list[str]:
 	warnings = []
 	rate = config.vat_accounts.get(line.vat_account) if line.vat_account else None
+	if rate and rule_set and not line.rule_issue:
+		standard, issue = verified_value(rule_set, "standard_rate")
+		if issue:
+			line.rule_issue, line.box, line.column = issue, None, None
+		elif _decimal(standard) != rate:
+			warnings.append("rate_differs_from_rule")
 	if rate and line.vat != ZERO:
 		if line.base == ZERO:
 			warnings.append("base_missing")
@@ -149,3 +159,10 @@ def _warnings(line: SourceLine, config: VatConfig) -> list[str]:
 		if line.voucher_type == "Journal Entry":
 			warnings.append("journal_entry_claim_needs_document_review")
 	return warnings
+
+
+def _decimal(value):
+	try:
+		return D(value)
+	except ArithmeticError:
+		return None

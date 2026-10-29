@@ -5,8 +5,8 @@ them. No DocType creates a ledger entry.
 
 | DocType | Kind | Purpose |
 |---|---|---|
-| Saudi VAT Settings | per company (name = company) | VAT accounts with family and rate (child Saudi VAT Account), category rules (child Saudi VAT Category Rule), non-deductible placement rule (empty = lines stay under review), Expense Claim switch, tolerance; `to_config()` builds the engine configuration |
-| Saudi VAT Return | submittable, Workflow | one company and period; `calculate()` stores the engine result: fields (child Saudi VAT Return Line, 16 rows), sources (child Saudi VAT Return Source), GL proof (child Saudi VAT Return Proof); approval freezes a snapshot |
+| Saudi VAT Settings | per company (name = company) | rule-set code of the published rule book, VAT accounts with family and rate (child Saudi VAT Account), category rules (child Saudi VAT Category Rule), non-deductible placement rule (empty = lines stay under review), Expense Claim switch, tolerance; `to_config()` builds the engine configuration |
+| Saudi VAT Return | submittable, Workflow | one company and period; `calculate()` stores the engine result: fields (child Saudi VAT Return Line, 16 rows), sources with tax date, basis, rule set and rule issue (child Saudi VAT Return Source), GL proof (child Saudi VAT Return Proof), rule sets used with version, content hash, line count and tax-date range (child Saudi VAT Return Rule Set); approval freezes a snapshot with a full copy of the rules |
 | Saudi VAT Filing | submittable | values actually filed on the ZATCA portal per field (child Saudi VAT Filing Field) next to the approved values; a reason is mandatory for every difference; one filing per return |
 | Saudi VAT Rule Set | submittable, Workflow, name `{rule_set_code}-{version}` | one dated, versioned set of tax rules: references (child Saudi VAT Rule Reference), rules from a closed key list (child Saudi VAT Rule), Arabic and English return field labels (child Saudi VAT Rule Field Label); `version_type` Normal or Corrective (`supersedes`, `correction_basis`); `content_hash`; not yet used by the engine |
 | Saudi VAT Amendment | submittable | later corrections linked to the original return: correction in a later return (VAT effect ≤ ± 5,000 SAR; rule reference still to be versioned, see IMPLEMENTATION_STATUS.md) or self-amendment; lines in child Saudi VAT Amendment Line |
@@ -83,7 +83,13 @@ its retry was refused by the publication checks. The user sees an error and retr
 - Approval (`before_submit`): only from VAT Reviewed (a direct submit is refused); no source under review;
   reconciled with GL; approver ≠ calculator, preparer and reviewer; stored tables still match `calculation_hash`;
   a fresh engine run still gives the same hash (documents unchanged). Then the snapshot is written.
-- `check_drift()` (GET) and `verify_snapshot()` (GET): read permission, no writes.
+- `check_drift()` (GET) and `verify_snapshot()` (GET): read permission, no writes. `check_drift()` also lists
+  changed rule sets (`changed_rule_sets`).
+- Rule books (engine 0.2.0): `calculation_hash` covers each source's tax date, basis, rule set and rule issue and
+  the (rule set, content hash) list. Approval re-runs the engine; a published correction or a new version after
+  the calculation changes that list and approval is refused ("rule sets changed"). The snapshot stores the full
+  canonical content of every rule set used, so the approved return stays verifiable after later corrections.
+  Returns calculated by engine 0.1.0 keep their original payload and snapshot.
 - Submitted returns are immutable (no allow-on-submit fields).
 
 ## Permissions

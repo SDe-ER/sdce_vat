@@ -3,6 +3,15 @@
 ## [Unreleased]
 
 ### Added
+- Engine 0.2.0 reads published rule books (#6): box placement, standard rate and tax-date basis come from the
+  published Saudi VAT Rule Set in force on each line's tax date; several rule sets in one period are supported;
+  missing, unverified or conflicting rules, undetermined tax dates and rule transitions are rule issues that block
+  approval (never guessed). Settings gain `rule_set_code`; the return stores the rule sets used, the tax date and
+  rule set of each source, a full rule copy in the snapshot, and refuses approval when the rules changed after the
+  calculation.
+  - Impact: a site must publish a rule set and set `rule_set_code` in Saudi VAT Settings before a return can be
+    approved; with a rule set equivalent to the old code the results are identical (parity test). Returns of
+    engine 0.1.0 keep their snapshot. Rollback: revert the change and migrate; new fields stay empty.
 - Versioned tax rule sets (#4): role VAT Rule Maintainer, workflow "Saudi VAT Rule Set Approval", DocTypes Saudi
   VAT Rule Set, Rule Reference, Rule and Rule Field Label. Three different users prepare, verify and publish
   (checked on the server by user id); published sets are hashed and cannot be changed; normal versions cannot

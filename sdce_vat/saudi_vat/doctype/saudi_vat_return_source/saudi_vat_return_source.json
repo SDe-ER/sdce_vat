@@ -12,6 +12,11 @@
   "voucher_type",
   "voucher_no",
   "posting_date",
+  "invoice_date",
+  "tax_date",
+  "tax_date_basis",
+  "rule_set",
+  "rule_issue",
   "party_type",
   "party",
   "party_tax_id",
@@ -76,6 +81,37 @@
    "fieldname": "posting_date",
    "fieldtype": "Date",
    "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_date",
+   "fieldtype": "Date",
+   "label": "Invoice Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_date",
+   "fieldtype": "Date",
+   "label": "Tax Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_date_basis",
+   "fieldtype": "Data",
+   "label": "Tax Date Basis",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rule_set",
+   "fieldtype": "Link",
+   "label": "Rule Set",
+   "options": "Saudi VAT Rule Set",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rule_issue",
+   "fieldtype": "Data",
+   "label": "Rule Issue",
    "read_only": 1
   },
   {

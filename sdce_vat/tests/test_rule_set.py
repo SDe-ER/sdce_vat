@@ -291,6 +291,15 @@ class TestRuleSet(VatSiteTestCase):
 			"version zero": {"version": 0},
 			"lower case code": {"rule_set_code": "test-ksa-vat"},
 			"normal with basis": {"correction_basis": "REF-1"},
+			"box of a non-rule treatment": {
+				"rules": [{**rule, "rule_key": "treatment_box:input_not_deductible", "value": "P07"}]
+			},
+			"box not a return field": {
+				"rules": [{**rule, "rule_key": "treatment_box:export", "value": "X1"}]
+			},
+			"unknown tax date basis": {
+				"rules": [{**rule, "rule_key": "tax_date_basis:sales_invoice", "value": "delivery_date"}]
+			},
 		}
 		for case, values in cases.items():
 			with self.subTest(case=case):

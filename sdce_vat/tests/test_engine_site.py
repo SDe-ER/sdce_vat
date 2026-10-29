@@ -132,6 +132,7 @@ class TestEngineOnSite(VatSiteTestCase):
 			output_accounts={self.vat_out: Decimal("15")},
 			input_accounts={self.vat_in: Decimal("15")},
 			category_treatments={category: Treatment.EXPORT},
+			rule_set_code=self.config.rule_set_code,  # rule books are required input since engine 0.2.0
 		)
 		line = next(x for x in compute(config, FROM, TO).lines if x.voucher_no == sale.name)
 		self.assertIn(category, line.zatca_categories)

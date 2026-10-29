@@ -37,6 +37,17 @@ class SaudiVATSettings(Document):
 				)
 			if account_type != "Tax":
 				frappe.throw(_("Row {0}: account {1} is not a Tax account").format(row.idx, row.account))
+		if self.rule_set_code and not frappe.db.exists(
+			"Saudi VAT Rule Set", {"rule_set_code": self.rule_set_code, "docstatus": 1}
+		):
+			# not blocking: settings may be saved before the rules are published; returns stay under review
+			frappe.msgprint(
+				_(
+					"No published rule set has the code {0} yet; returns stay under review until one is published"
+				).format(self.rule_set_code),
+				indicator="orange",
+				alert=True,
+			)
 		categories = [r.category for r in self.category_rules]
 		if len(categories) != len(set(categories)):
 			frappe.throw(_("A category is listed twice in the category rules"))
@@ -48,6 +59,7 @@ class SaudiVATSettings(Document):
 			non_deductible_placement=NON_DEDUCTIBLE_PLACEMENT.get(self.non_deductible_placement or ""),
 			tolerance=D(self.tolerance or "0.01"),
 			include_expense_claims=bool(self.include_expense_claims),
+			rule_set_code=self.rule_set_code or None,
 		)
 		for row in self.accounts:
 			# the rate is stored as a float field; str() keeps the typed value (15 -> "15.0")
