@@ -73,7 +73,7 @@ Status of each date and provision. A rule is used only after a qualified person 
 
 ### Effect on the app today
 - No rule in this file is used: every rule is Pending and the set has no Effective From.
-- The amendment check still uses a constant limit of 5,000 (`saudi_vat_amendment.py`, Issue #5). It sends a correction of 5,000–15,000 to a self-amendment instead of a later return.
+- The amendment check reads the verified `correction_limit` rule of the published set in force on the last day of the original period (Issue #5). This file ships no `correction_limit`, so until a verifier adds and verifies it, a correction in a later return is refused and only a self-amendment is possible.
 - Filed or approved returns are never changed by a rule set.
 
 ## Rules (all Pending)
