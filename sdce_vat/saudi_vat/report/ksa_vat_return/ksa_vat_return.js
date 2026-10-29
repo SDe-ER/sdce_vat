@@ -14,7 +14,9 @@ frappe.query_reports["KSA VAT Return"] = {
 		if (!data.line_count) {
 			return data.is_total ? `<b>${shown}</b>` : shown;
 		}
-		const params = new URLSearchParams(sdce_vat_detail_filters(frappe.query_report, data, data.box_id));
+		const params = new URLSearchParams(
+			sdce_vat_detail_filters(frappe.query_report, data, data.box_id)
+		);
 		const link = `<a href="/app/query-report/${encodeURIComponent(
 			"KSA VAT Return Detail"
 		)}?${params.toString()}">${shown}</a>`;
@@ -28,7 +30,11 @@ frappe.query_reports["KSA VAT Return"] = {
 				frappe.msgprint(__("Generate the report first."));
 				return;
 			}
-			frappe.set_route("query-report", "KSA VAT Return Detail", sdce_vat_detail_filters(report, first));
+			frappe.set_route(
+				"query-report",
+				"KSA VAT Return Detail",
+				sdce_vat_detail_filters(report, first)
+			);
 		});
 		report.page.add_inner_button(__("Save Snapshot"), () => {
 			frappe.confirm(
@@ -42,7 +48,11 @@ frappe.query_reports["KSA VAT Return"] = {
 							args: { filters: report.get_values() },
 							freeze: true,
 						})
-						.then((r) => r.message && frappe.set_route("Form", "Saudi VAT Return", r.message))
+						.then(
+							(r) =>
+								r.message &&
+								frappe.set_route("Form", "Saudi VAT Return", r.message)
+						)
 			);
 		});
 	},
