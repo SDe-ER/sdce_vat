@@ -1,0 +1,467 @@
+{
+ "baseline_file": "ksa_vat_2026_1",
+ "notice_en": "Reference data only, not tax advice. Every rule is imported as Pending. A qualified person other than the preparer verifies each rule against the official Arabic source before the set can be published.",
+ "notice_ar": "بيانات مرجعية فقط وليست استشارة ضريبية. تُستورد كل القواعد بحالة قيد التحقق، ويتحقق منها شخص مؤهل غير مُعدّها من المصدر العربي الرسمي قبل نشر المجموعة.",
+ "rule_set_code": "KSA-VAT",
+ "version": 1,
+ "version_type": "Normal",
+ "return_form_version": "eServices Manual 009 (AR 2026-08-06)",
+ "effective_from": "2024-11-19",
+ "description_en": "Saudi VAT baseline from the Implementing Regulations, 10th edition (April 2025, BoD resolution 01-06-24 of 19 Nov 2024). effective_from is the resolution date; the entry-into-force date was not found and must be confirmed. Periods before it need an earlier version.",
+ "description_ar": "قواعد أساسية لضريبة القيمة المضافة في السعودية من اللائحة التنفيذية - النسخة العاشرة (أبريل 2025، قرار مجلس الإدارة 01-06-24 بتاريخ 19 نوفمبر 2024). تاريخ البداية هو تاريخ القرار، ولم يُعثر على تاريخ النفاذ ويجب تأكيده. الفترات السابقة تحتاج إصدارًا سابقًا.",
+ "references": [
+  {
+   "ref_id": "LAW-AR-2-2",
+   "source_type": "Law",
+   "title": "نظام ضريبة القيمة المضافة (المرسوم الملكي م/113 والأمر الملكي أ/638) - النص العربي الرسمي",
+   "url": "https://zatca.gov.sa/ar/RulesRegulations/Taxes/Pages/VATLaw.aspx",
+   "section": "المادة الثانية، الفقرة 2",
+   "publication_date": null,
+   "effective_date": "2020-07-01",
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "IR-AR-79-10",
+   "source_type": "Implementing Regulation",
+   "title": "اللائحة التنفيذية لنظام ضريبة القيمة المضافة - النسخة العاشرة (شوال 1446هـ / أبريل 2025م) - النص العربي الرسمي",
+   "url": "https://zatca.gov.sa/ar/RulesRegulations/Taxes/Documents/Implmenting%20Regulations%20of%20the%20VAT%20Law.pdf",
+   "section": "المادة التاسعة والسبعون، الفقرة 10 (صفحة PDF 82-83)",
+   "publication_date": null,
+   "effective_date": "2020-07-01",
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "IR-AR-62-2",
+   "source_type": "Implementing Regulation",
+   "title": "اللائحة التنفيذية لنظام ضريبة القيمة المضافة - النسخة العاشرة (شوال 1446هـ / أبريل 2025م) - النص العربي الرسمي",
+   "url": "https://zatca.gov.sa/ar/RulesRegulations/Taxes/Documents/Implmenting%20Regulations%20of%20the%20VAT%20Law.pdf",
+   "section": "المادة الثانية والستون، الفقرة 2 (صفحة PDF 63)",
+   "publication_date": null,
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "IR-AR-49-8",
+   "source_type": "Implementing Regulation",
+   "title": "اللائحة التنفيذية لنظام ضريبة القيمة المضافة - النسخة العاشرة (شوال 1446هـ / أبريل 2025م) - النص العربي الرسمي",
+   "url": "https://zatca.gov.sa/ar/RulesRegulations/Taxes/Documents/Implmenting%20Regulations%20of%20the%20VAT%20Law.pdf",
+   "section": "المادة التاسعة والأربعون، الفقرتان 7 و8 (صفحة PDF 49)",
+   "publication_date": null,
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "IR-AR-40-10",
+   "source_type": "Implementing Regulation",
+   "title": "اللائحة التنفيذية لنظام ضريبة القيمة المضافة - النسخة العاشرة (شوال 1446هـ / أبريل 2025م) - النص العربي الرسمي",
+   "url": "https://zatca.gov.sa/ar/RulesRegulations/Taxes/Documents/Implmenting%20Regulations%20of%20the%20VAT%20Law.pdf",
+   "section": "المادة الأربعون، الفقرتان 10 و11 (صفحة PDF 39)",
+   "publication_date": null,
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "IR-AR-54",
+   "source_type": "Implementing Regulation",
+   "title": "اللائحة التنفيذية لنظام ضريبة القيمة المضافة - النسخة العاشرة (شوال 1446هـ / أبريل 2025م) - النص العربي الرسمي",
+   "url": "https://zatca.gov.sa/ar/RulesRegulations/Taxes/Documents/Implmenting%20Regulations%20of%20the%20VAT%20Law.pdf",
+   "section": "المادة الرابعة والخمسون، الفقرات 1-3 و6، والمادة الأربعون الفقرتان 4 و5 (صفحات PDF 37-38 و58-59)",
+   "publication_date": null,
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "IR-AR-63",
+   "source_type": "Implementing Regulation",
+   "title": "اللائحة التنفيذية لنظام ضريبة القيمة المضافة - النسخة العاشرة (شوال 1446هـ / أبريل 2025م) - النص العربي الرسمي",
+   "url": "https://zatca.gov.sa/ar/RulesRegulations/Taxes/Documents/Implmenting%20Regulations%20of%20the%20VAT%20Law.pdf",
+   "section": "المادة الثالثة والستون، الفقرات 1-4 (صفحات PDF 63-64)",
+   "publication_date": null,
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "IR-AR-50",
+   "source_type": "Implementing Regulation",
+   "title": "اللائحة التنفيذية لنظام ضريبة القيمة المضافة - النسخة العاشرة (شوال 1446هـ / أبريل 2025م) - النص العربي الرسمي",
+   "url": "https://zatca.gov.sa/ar/RulesRegulations/Taxes/Documents/Implmenting%20Regulations%20of%20the%20VAT%20Law.pdf",
+   "section": "المادة الخمسون، الفقرتان 1 و2 (صفحات PDF 50-51)",
+   "publication_date": null,
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "GUIDE-RETURN-AR",
+   "source_type": "Return Form",
+   "title": "دليل المستخدم - تقديم إقرار ضريبة القيمة المضافة (الخدمة الإلكترونية 009) - النسخة العربية 2026-08-06",
+   "url": "https://zatca.gov.sa/ar/eServices/Documents/eServices_Manual_009.pdf",
+   "section": "حقول الإقرار 1-16",
+   "publication_date": "2026-08-06",
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "GUIDE-ITD-AR",
+   "source_type": "Guideline",
+   "title": "الدليل الإرشادي لخصم ضريبة المدخلات وفق أحكام ضريبة القيمة المضافة - الإصدار الثالث (مايو 2026)",
+   "url": "https://zatca.gov.sa/ar/HelpCenter/guidelines/Documents/Guideline-on-Input-Tax-Deduction-under-VAT-Provisions.pdf",
+   "section": "صفحات PDF 27-28 و33-34",
+   "publication_date": null,
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  },
+  {
+   "ref_id": "GUIDE-AMEND-EN",
+   "source_type": "Guideline",
+   "title": "Guideline: Amendments to the Implementing Regulation of VAT (BoD resolution 01-06-24) - English, secondary",
+   "url": "https://zatca.gov.sa/en/HelpCenter/guidelines/Documents/Amendments-to-the-Implementing-Regulation-of-(VAT).PDF",
+   "section": "Articles 40, 50, 54, 63",
+   "publication_date": null,
+   "effective_date": null,
+   "accessed_on": "2026-10-29"
+  }
+ ],
+ "rules": [
+  {
+   "rule_key": "standard_rate",
+   "value": "15",
+   "reference": "LAW-AR-2-2",
+   "verification_status": "Pending",
+   "description_en": "Standard VAT rate in percent. Calculation: output or input VAT = taxable value x rate / 100. Cases: zero-rated and exempt supplies follow their own articles; transitional rules for invoices and contracts dated before 11 May 2020 (IR Art. 79(10), until 30 Jun 2021).",
+   "description_ar": "النسبة الأساسية للضريبة بالمئة. طريقة الحساب: ضريبة المخرجات أو المدخلات = القيمة الخاضعة للضريبة × النسبة ÷ 100. الحالات: التوريدات الخاضعة للنسبة الصفرية والمعفاة لها مواد خاصة بها، وأحكام انتقالية للفواتير والعقود المؤرخة قبل 11 مايو 2020 (المادة 79 الفقرة 10 من اللائحة، حتى 30 يونيو 2021).",
+   "notes": "Law Art. 2(2) as amended by Royal Order A/638 (1441H): the text layer of the official PDF is damaged; a layout extraction shows (%15). Effective 1 Jul 2020 per IR Art. 79(10) (added by resolution 2-3-20, 09 Jun 2020). The rate figure itself is not written in Art. 79(10); verify on the rendered Law PDF."
+  },
+  {
+   "rule_key": "treatment_box:standard_rated_sale",
+   "value": "S01",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Standard rated sales: return field 1. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "المبيعات الخاضعة للنسبة الأساسية: الحقل 1 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:government_bears",
+   "value": "S02",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Sales on which the government bears the VAT: return field 2. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "المبيعات التي تتحمل الدولة ضريبتها: الحقل 2 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:zero_rated_sale",
+   "value": "S03",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Zero rated domestic sales: return field 3. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "المبيعات المحلية الخاضعة للنسبة الصفرية: الحقل 3 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:export",
+   "value": "S04",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Exports: return field 4. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "الصادرات: الحقل 4 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:exempt_sale",
+   "value": "S05",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Exempt sales: return field 5. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "المبيعات المعفاة: الحقل 5 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:input_deductible",
+   "value": "P07",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Standard rated domestic purchases with deductible VAT: return field 7. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "المشتريات الخاضعة للنسبة الأساسية مع ضريبة قابلة للخصم: الحقل 7 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:import_customs",
+   "value": "P08",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Imports with VAT paid at customs: return field 8. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "الاستيرادات التي تدفع ضريبتها عند الاستيراد: الحقل 8 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:import_reverse_charge",
+   "value": "P09",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Imports under the reverse charge mechanism: return field 9. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "الاستيرادات الخاضعة لآلية الاحتساب العكسي: الحقل 9 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:zero_rated_purchase",
+   "value": "P10",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Zero rated purchases: return field 10. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "المشتريات الخاضعة للنسبة الصفرية: الحقل 10 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:exempt_purchase",
+   "value": "P11",
+   "reference": "GUIDE-RETURN-AR",
+   "verification_status": "Pending",
+   "description_en": "Exempt purchases: return field 11. Amount column = taxable value; returns, credit notes and negative corrections go to the adjustment column of the same field.",
+   "description_ar": "المشتريات المعفاة: الحقل 11 في الإقرار. عمود المبلغ = القيمة الخاضعة للضريبة؛ المرتجعات والإشعارات الدائنة والتصحيحات السالبة في عمود التعديلات للحقل نفسه.",
+   "notes": "Field mapping from the ZATCA VAT return user guide (AR 2026-08-06, EN 2026-07-29; field screenshots). IR Art. 62(2) lists what a return contains but has no separate item for exports or non-deductible input; fields 8 and 9 are described only in the guideline. Verify against the current e-service form."
+  },
+  {
+   "rule_key": "treatment_box:out_of_scope",
+   "value": "-",
+   "reference": "IR-AR-62-2",
+   "verification_status": "Pending",
+   "description_en": "Out-of-scope transactions are not reported in any return field.",
+   "description_ar": "المعاملات خارج نطاق الضريبة لا تُدرج في أي حقل من حقول الإقرار.",
+   "notes": "Proposed Not applicable (no field): IR Art. 62(2) lists no item for out-of-scope transactions. The verifier sets the status to Not applicable if confirmed."
+  },
+  {
+   "rule_key": "tax_date_basis:sales_invoice",
+   "value": "invoice_date",
+   "reference": "GUIDE-ITD-AR",
+   "verification_status": "Pending",
+   "description_en": "Date that decides the tax period of a sales invoice. The legal tax point is the earliest of the supply date, the tax invoice date and the payment date; the app can only use the document dates it has.",
+   "description_ar": "التاريخ الذي يحدد الفترة الضريبية لـفاتورة المبيعات. تاريخ الاستحقاق النظامي هو أسبق تاريخ بين تاريخ التوريد وتاريخ الفاتورة الضريبية وتاريخ السداد، والتطبيق يستخدم تواريخ المستندات المتاحة فقط.",
+   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only."
+  },
+  {
+   "rule_key": "tax_date_basis:purchase_invoice",
+   "value": "invoice_date",
+   "reference": "GUIDE-ITD-AR",
+   "verification_status": "Pending",
+   "description_en": "Date that decides the tax period of a purchase invoice. The legal tax point is the earliest of the supply date, the tax invoice date and the payment date; the app can only use the document dates it has.",
+   "description_ar": "التاريخ الذي يحدد الفترة الضريبية لـفاتورة المشتريات. تاريخ الاستحقاق النظامي هو أسبق تاريخ بين تاريخ التوريد وتاريخ الفاتورة الضريبية وتاريخ السداد، والتطبيق يستخدم تواريخ المستندات المتاحة فقط.",
+   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only."
+  },
+  {
+   "rule_key": "tax_date_basis:journal_entry",
+   "value": "posting_date",
+   "reference": "GUIDE-ITD-AR",
+   "verification_status": "Pending",
+   "description_en": "Date that decides the tax period of a journal entry. The legal tax point is the earliest of the supply date, the tax invoice date and the payment date; the app can only use the document dates it has.",
+   "description_ar": "التاريخ الذي يحدد الفترة الضريبية لـالقيد اليومي. تاريخ الاستحقاق النظامي هو أسبق تاريخ بين تاريخ التوريد وتاريخ الفاتورة الضريبية وتاريخ السداد، والتطبيق يستخدم تواريخ المستندات المتاحة فقط.",
+   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only."
+  },
+  {
+   "rule_key": "tax_date_basis:expense_claim",
+   "value": "posting_date",
+   "reference": "GUIDE-ITD-AR",
+   "verification_status": "Pending",
+   "description_en": "Date that decides the tax period of a expense claim. The legal tax point is the earliest of the supply date, the tax invoice date and the payment date; the app can only use the document dates it has.",
+   "description_ar": "التاريخ الذي يحدد الفترة الضريبية لـمطالبة المصروفات. تاريخ الاستحقاق النظامي هو أسبق تاريخ بين تاريخ التوريد وتاريخ الفاتورة الضريبية وتاريخ السداد، والتطبيق يستخدم تواريخ المستندات المتاحة فقط.",
+   "notes": "The general tax-point rule (earliest of supply, invoice, payment) is in the GCC Unified VAT Agreement (Art. 23), which is not in the reviewed sources; the input tax guideline (PDF p.33) cites it. IR special cases: Art. 20 (continuous supplies), Art. 43(3) (imports), Art. 47(1) (reverse charge). Supply date candidates are Issue #7. Value is a proposal only."
+  },
+  {
+   "rule_key": "late_claim_limit_years",
+   "value": "5",
+   "reference": "IR-AR-49-8",
+   "verification_status": "Pending",
+   "description_en": "Input VAT not deducted in the period of the supply may be deducted in a later period, but not after this number of years.",
+   "description_ar": "يجوز خصم ضريبة المدخلات التي لم تُخصم في فترة التوريد في فترة لاحقة، على ألا يتجاوز ذلك هذا العدد من السنوات.",
+   "notes": "IR Art. 49(8). Art. 49(7) requires the evidence (tax invoice or accepted alternatives). Original text, no amendment footnote. Deferred claims are Issue #10."
+  },
+  {
+   "rule_key": "late_claim_limit_basis",
+   "value": "end_of_calendar_year_of_supply",
+   "reference": "IR-AR-49-8",
+   "verification_status": "Pending",
+   "description_en": "The five years are counted from the calendar year in which the supply took place.",
+   "description_ar": "تحتسب السنوات الخمس من السنة التقويمية التي وقع فيها التوريد.",
+   "notes": "IR Art. 49(8) wording: after five years from the calendar year in which the supply occurred."
+  },
+  {
+   "rule_key": "unpaid_adjust_months",
+   "value": "12",
+   "reference": "IR-AR-40-10",
+   "verification_status": "Pending",
+   "description_en": "Deducted input VAT on a supply not fully paid after this many months must be reduced by the VAT on the unpaid part; it may be deducted again when paid (Art. 40(11)).",
+   "description_ar": "ضريبة المدخلات المخصومة عن توريد لم يُسدد كاملًا بعد هذا العدد من الأشهر يجب تعديلها بقدر ضريبة الجزء غير المسدد، ويجوز خصمها مجددًا عند السداد (المادة 40 الفقرة 11).",
+   "notes": "IR Art. 40(10)-(11). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. The 8th-edition English text counted from the supply date and had no financing exception. Issue #11."
+  },
+  {
+   "rule_key": "unpaid_adjust_start",
+   "value": "month_after_supply_month",
+   "reference": "IR-AR-40-10",
+   "verification_status": "Pending",
+   "description_en": "The twelve months start with the month after the month of supply; the adjustment goes in the return of the month in which they end.",
+   "description_ar": "تبدأ الأشهر الاثنا عشر من الشهر التالي لشهر التوريد، ويُدرج التعديل في إقرار الشهر الذي تنتهي فيه.",
+   "notes": "IR Art. 40(10). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. Guideline Example 19 (amendments guideline) should be checked for the month count."
+  },
+  {
+   "rule_key": "unpaid_financing_exception",
+   "value": "finance_lease_murabaha_lease_to_own",
+   "reference": "IR-AR-40-10",
+   "verification_status": "Pending",
+   "description_en": "Goods supplied under financing contracts (finance lease, murabaha, lease ending in ownership) by a licensed taxable supplier and paid in periodic instalments are excluded, if the contract is in force, not in dispute, the supplier declared the full VAT and the customer holds the supplier's written certificate.",
+   "description_ar": "يستثنى من التعديل توريد السلع بموجب عقود التمويل (الإيجار التمويلي والمرابحة والتأجير المنتهي بالتملك) من مورد خاضع للضريبة مرخص له، والمسددة على دفعات دورية، بشرط سريان العقد وعدم وجود نزاع قضائي وإقرار المورد بكامل الضريبة وحيازة العميل شهادة خطية من المورد.",
+   "notes": "IR Art. 40(10), last sentence. Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it."
+  },
+  {
+   "rule_key": "credit_note_period",
+   "value": "15_days_after_month_end",
+   "reference": "IR-AR-54",
+   "verification_status": "Pending",
+   "description_en": "A credit or debit note is issued within 15 days after the end of the month of the event. A decrease of output VAT is reported in the later of the event period and the note period (Art. 40(5)); an increase in the event period (Art. 40(4)); the customer adjusts input VAT (Art. 40(6)).",
+   "description_ar": "يصدر الإشعار الدائن أو المدين خلال 15 يومًا من نهاية شهر الحدث. يُقر بتخفيض ضريبة المخرجات في الفترة الأحدث بين فترة الحدث وفترة الإشعار (المادة 40 الفقرة 5)، وبالزيادة في فترة الحدث (المادة 40 الفقرة 4)، ويعدّل العميل ضريبة المدخلات (المادة 40 الفقرة 6).",
+   "notes": "IR Art. 54(1)-(3) and new 54(6). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. The Arabic wording of 54(6) is ambiguous (within 15 days of the following month); the English amendments guideline says 15 days after the end of the month of the event."
+  },
+  {
+   "rule_key": "correction_rules",
+   "value": "understatement_below_15000_current_return;notify_within_20_days_otherwise;overstatement_any_later_return_within_5_years",
+   "reference": "IR-AR-63",
+   "verification_status": "Pending",
+   "description_en": "Errors in a filed return: an understatement of net VAT below SAR 15,000 is added to the return of the period in which the error is found; otherwise ZATCA must be notified within 20 days through a corrected return. An overstatement may be deducted in any later return, within five years from the end of the calendar year.",
+   "description_ar": "تصحيح الأخطاء في إقرار مقدم: النقص في صافي الضريبة الذي يقل عن 15,000 ريال يُضاف إلى إقرار الفترة التي اكتُشف فيها الخطأ، وفي غير ذلك يجب إشعار الهيئة خلال عشرين يومًا بإقرار مصحح. الزيادة يجوز خصمها في أي إقرار لاحق خلال خمس سنوات من نهاية السنة التقويمية.",
+   "notes": "IR Art. 63(1)-(4). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. The threshold is SAR 15,000 in the 10th edition (the 8th-edition English text and the return field 14 label say 5,000). The app's limit is still a constant (Issue #5)."
+  },
+  {
+   "rule_key": "recoverability:entertainment",
+   "value": "not_deductible",
+   "reference": "IR-AR-50",
+   "verification_status": "Pending",
+   "description_en": "Input VAT on entertainment is not deductible.",
+   "description_ar": "ضريبة المدخلات على الترفيه غير قابلة للخصم.",
+   "notes": "IR Art. 50(1)-(2) and the input tax guideline (PDF p.27-28). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. Issue #9."
+  },
+  {
+   "rule_key": "recoverability:employee_catering_health_insurance",
+   "value": "not_deductible_unless_required_by_law",
+   "reference": "IR-AR-50",
+   "verification_status": "Pending",
+   "description_en": "Input VAT on employee catering and health insurance is not deductible unless a law requires the employer to provide them.",
+   "description_ar": "ضريبة المدخلات على إعاشة الموظفين وتأمينهم الصحي غير قابلة للخصم ما لم يُلزم النظام صاحب العمل بتوفيرها.",
+   "notes": "IR Art. 50(1)-(2) and the input tax guideline (PDF p.27-28). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. Issue #9."
+  },
+  {
+   "rule_key": "recoverability:restricted_vehicles",
+   "value": "not_deductible",
+   "reference": "IR-AR-50",
+   "verification_status": "Pending",
+   "description_en": "Input VAT on restricted vehicles (10 seats or fewer), their maintenance and fuel is not deductible; heavy equipment and vehicles used only for the business are excluded from the restriction.",
+   "description_ar": "ضريبة المدخلات على المركبات المقيدة (10 مقاعد أو أقل) وصيانتها ووقودها غير قابلة للخصم، ويستثنى من ذلك المعدات الثقيلة والمركبات المستخدمة حصريًا في النشاط.",
+   "notes": "IR Art. 50(1)-(2) and the input tax guideline (PDF p.27-28). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. Issue #9."
+  },
+  {
+   "rule_key": "recoverability:personal_use",
+   "value": "not_deductible",
+   "reference": "IR-AR-50",
+   "verification_status": "Pending",
+   "description_en": "Input VAT on goods and services for personal use is not deductible.",
+   "description_ar": "ضريبة المدخلات على السلع والخدمات للاستخدام الشخصي غير قابلة للخصم.",
+   "notes": "IR Art. 50(1)-(2) and the input tax guideline (PDF p.27-28). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. Issue #9."
+  }
+ ],
+ "field_labels": [
+  {
+   "field_id": "S01",
+   "label_en": "Standard Rated Sales",
+   "label_ar": "المبيعات الخاضعة للنسبة الأساسية",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "S02",
+   "label_en": "Sales on which the government bears the VAT",
+   "label_ar": "المبيعات التي تتحمل الدولة ضريبتها",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "S03",
+   "label_en": "Zero Rated Domestic Sales",
+   "label_ar": "المبيعات المحلية الخاضعة للنسبة الصفرية",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "S04",
+   "label_en": "Exports",
+   "label_ar": "الصادرات",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "S05",
+   "label_en": "Exempt Sales",
+   "label_ar": "المبيعات المعفاة",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "S06",
+   "label_en": "Total Sales",
+   "label_ar": "إجمالي المبيعات",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "P07",
+   "label_en": "Standard Rated Domestic Purchases",
+   "label_ar": "المشتريات الخاضعة للنسبة الأساسية",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "P08",
+   "label_en": "Imports subject to VAT paid on import",
+   "label_ar": "الاستيرادات الخاضعة لضريبة القيمة المضافة بالنسبة الأساسية والتي تدفع عند الاستيراد",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "P09",
+   "label_en": "Imports subject to VAT accounted for through the reverse charge mechanism",
+   "label_ar": "الاستيرادات الخاضعة لضريبة القيمة المضافة التي تطبق عليها آلية الاحتساب العكسي",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "P10",
+   "label_en": "Zero Rated Purchases",
+   "label_ar": "المشتريات الخاضعة للنسبة الصفرية",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "P11",
+   "label_en": "Exempt Purchases",
+   "label_ar": "المشتريات المعفاة",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "P12",
+   "label_en": "Total Purchases",
+   "label_ar": "إجمالي المشتريات",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "T13",
+   "label_en": "Total VAT due for current Period",
+   "label_ar": "إجمالي ضريبة القيمة المضافة المستحقة عن الفترة الضريبية الحالية",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "T14",
+   "label_en": "Corrections from previous period (between ± 5000)",
+   "label_ar": "تصحيحات من الفترات السابقة (بين ± 5000 ﷼)",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "T15",
+   "label_en": "VAT Credit from previous period(s)",
+   "label_ar": "ضريبة القيمة المضافة التي تم ترحيلها من الفترة / الفترات السابقة",
+   "reference": "GUIDE-RETURN-AR"
+  },
+  {
+   "field_id": "T16",
+   "label_en": "Net VAT",
+   "label_ar": "صافي الضريبة المستحقة (أو المستردة)",
+   "reference": "GUIDE-RETURN-AR"
+  }
+ ]
+}

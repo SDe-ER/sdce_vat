@@ -1,0 +1,71 @@
+# Baseline rule file (Saudi VAT)
+
+Status: reference data, **not tax advice**. Every rule ships and imports as **Pending**.
+
+## Use
+- File: `sdce_vat/rules/ksa_vat_2026_1.json`. The import creates the rule set `KSA-VAT` version 1.
+- **Import:** a VAT Rule Maintainer opens the *Saudi VAT Rule Set* list and selects **Import Baseline Rules**. The server equivalent is `sdce_vat.rules.baseline.import_baseline`, called with POST.
+- **Result:** a Draft rule set (`Rule Draft`) in which every rule is Pending. A status in the file is ignored.
+- **Verification and publication:** a second person checks each rule against the official Arabic source and marks it *Verified* or *Not applicable*. The existing workflow then verifies and publishes the set; this needs three different users.
+- **Never used while pending:** the engine reads only published sets, so a Pending rule never reaches an approvable return.
+- **Importing again changes nothing:** an existing set with the same code and version is returned as it is, in any state.
+- **Atomic:** a file error creates nothing.
+- **No effect on accounting data:** the import creates no invoices, journal entries or accounts, and changes no financial data.
+
+## Why a small import action instead of a standard tool
+```
+STANDARD_OPTION_CHECKED=YES
+STANDARD_OPTION_USED=NO
+REASON_FOR_CUSTOM=see below
+```
+- **Fixtures** (`hooks.py` `fixtures`) would sync the set on every migrate and on every site, and overwrite the verifier's work. A rule set must be created on purpose and then checked by people.
+- **Data Import** (Frappe) can create the document and its child tables, but:
+  - it keeps any *Verified* status written in the file;
+  - it has no check for "same code and version already exists" other than a duplicate-name error;
+  - the user must find and upload a file from the repository.
+
+  The action keeps the standard document, workflow and permissions. It only reads a shipped file, forces Pending, and is idempotent.
+
+## Sources
+The official Arabic texts are the legal reference. English texts are secondary (unofficial translation).
+| Ref ID | Source | Version / date | Link |
+|---|---|---|---|
+| LAW-AR-2-2 | VAT Law, Art. 2(2) (Royal Decree M/113, Royal Order A/638) | Arabic official text; 15 % from 1 Jul 2020 | https://zatca.gov.sa/ar/RulesRegulations/Taxes/Pages/VATLaw.aspx |
+| IR-AR-* | Implementing Regulations, 10th edition, Arabic official | Shawwal 1446H / Apr 2025; includes BoD resolution 01-06-24 (19 Nov 2024) | https://zatca.gov.sa/ar/RulesRegulations/Taxes/Documents/Implmenting%20Regulations%20of%20the%20VAT%20Law.pdf |
+| GUIDE-RETURN-AR | VAT return user guide (e-service 009) | AR 2026-08-06 (EN 2026-07-29) | https://zatca.gov.sa/ar/eServices/Documents/eServices_Manual_009.pdf |
+| GUIDE-ITD-AR | Input tax deduction guideline, 3rd edition | May 2026 | https://zatca.gov.sa/ar/HelpCenter/guidelines/Documents/Guideline-on-Input-Tax-Deduction-under-VAT-Provisions.pdf |
+| GUIDE-AMEND-EN | Guideline on the amendments (BoD 01-06-24), English | 2024 | https://zatca.gov.sa/en/HelpCenter/guidelines/Documents/Amendments-to-the-Implementing-Regulation-of-(VAT).PDF |
+
+The English Implementing Regulations (8th edition, 09 Nov 2021, unofficial) do **not** contain the 2024 amendments.
+
+## Rules (all Pending)
+| Rule key | Proposed value | Source | Effective | Notes |
+|---|---|---|---|---|
+| `standard_rate` | 15 | Law Art. 2(2); IR Art. 79(10) | 1 Jul 2020 | Transitional rules until 30 Jun 2021. The rate is unreadable in the PDF text layer; it is readable in a layout extraction. |
+| `treatment_box:*` (10 treatments) | S01–S05, P07–P11 | Return guide; IR Art. 62(2) | Form of 2026 | Art. 62(2) has no separate item for exports or non-deductible input. Fields 8 and 9 come from the guide only. |
+| `treatment_box:out_of_scope` | `-` (no field) | IR Art. 62(2) | — | The verifier should set it to *Not applicable*. |
+| `tax_date_basis:sales_invoice` / `purchase_invoice` | `invoice_date` | Input tax guideline p.33 (cites the GCC Agreement, Art. 23) | — | The general tax point is the earliest of supply, invoice and payment. Supply date is Issue #7. |
+| `tax_date_basis:journal_entry` / `expense_claim` | `posting_date` | same | — | Proposal only. |
+| `late_claim_limit_years` | 5 | IR Art. 49(7)–(8) | original text | Deferred claims: Issue #10. |
+| `late_claim_limit_basis` | end of the calendar year of supply | IR Art. 49(8) | original text | |
+| `unpaid_adjust_months` | 12 | IR Art. 40(10)–(11) | BoD 19 Nov 2024* | Re-deduction when paid: Art. 40(11). Issue #11. |
+| `unpaid_adjust_start` | month after the supply month | IR Art. 40(10) | BoD 19 Nov 2024* | The 8th edition counted from the supply date. |
+| `unpaid_financing_exception` | finance lease, murabaha, lease to own | IR Art. 40(10) | BoD 19 Nov 2024* | Conditions apply: contract in force, no dispute, VAT declared, supplier certificate. |
+| `credit_note_period` | 15 days after the end of the month of the event | IR Art. 54(1)–(3), 54(6); Art. 40(4)–(6) | BoD 19 Nov 2024* | The Arabic wording of 54(6) is ambiguous. |
+| `correction_rules` | under SAR 15,000 in the current return; otherwise notify within 20 days; overstatement within 5 years | IR Art. 63(1)–(4) | BoD 19 Nov 2024* | Threshold is **15,000**, not 5,000. |
+| `recoverability:entertainment`, `employee_catering_health_insurance`, `restricted_vehicles`, `personal_use` | not deductible (with exceptions) | IR Art. 50(1)–(2); input tax guideline pp.27–28 | BoD 19 Nov 2024* | Vehicles: 10 seats or fewer. Heavy equipment and business-only vehicles are excluded. Issue #9. |
+
+\* Date of the Board resolution. The date the amendments **came into force** was not found in the sources.
+
+The file has **no rule** for these: `rounding` (no provision found; the nearest is Art. 45(2), a tax-inclusive price formula) and `non_recoverable_placement` (not stated in Art. 62). They stay in Saudi VAT Settings until a source is found.
+
+All 16 return fields carry the ZATCA Arabic and English labels.
+
+## Points for the tax adviser
+1. The date the amendments of BoD resolution 01-06-24 came into force. It decides `effective_from` (now the resolution date, 2024-11-19) and whether an earlier version is needed for older periods.
+2. **Art. 63 threshold of SAR 15,000 against field 14.** The current return form labels field 14 "between ± 5000". Decide which applies to corrections reported in the return.
+3. **Art. 54(6):** exactly when a credit or debit note must be issued.
+4. **Tax point:** the GCC Agreement, Art. 23, is not among the reviewed sources. Confirm the rule and how the app should use document dates until supply dates exist (#7).
+5. **Fields 8 and 9 (imports):** the split between customs and reverse charge is taken from the guide only. Confirm it against the e-service form.
+6. **Excerpts to recheck:** Art. 20(3), 40(5), 40(10), 49(7), 54(6), 62(2) and 63(1) were rebuilt from a damaged text layer. Check them against the rendered PDF.
+7. **The 15 % figure:** check it in the rendered Law PDF, Art. 2(2), and the date of Royal Order A/638.
