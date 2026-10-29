@@ -17,6 +17,8 @@ from frappe.utils import add_days, getdate, now_datetime
 
 from sdce_vat.constants import (
 	AMOUNT_RULE_KEYS,
+	CORRECTION_LIMIT_BASES,
+	CORRECTION_LIMIT_MEASURES,
 	DECIMAL_RULE_KEYS,
 	RULE_KEY_PREFIXES,
 	RULE_KEYS,
@@ -520,6 +522,12 @@ def _check_value(row, key):
 			frappe.throw(
 				_("Row {0}: {1} must be one of: {2}").format(row.idx, key, ", ".join(TAX_DATE_BASES))
 			)
+		for choice_key, choices in (
+			("correction_limit_basis", CORRECTION_LIMIT_BASES),
+			("correction_limit_measure", CORRECTION_LIMIT_MEASURES),
+		):
+			if key == choice_key and value not in choices:
+				frappe.throw(_("Row {0}: {1} must be one of: {2}").format(row.idx, key, ", ".join(choices)))
 		# an amount stays open (any text) until verified, so a disputed threshold is never forced into a number
 		if key in AMOUNT_RULE_KEYS:
 			try:
