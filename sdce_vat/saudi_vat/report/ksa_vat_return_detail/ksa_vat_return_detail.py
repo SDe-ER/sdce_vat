@@ -56,7 +56,7 @@ def row(line):
 def column_label(column: Column | None) -> str | None:
 	if not column:
 		return None
-	return _("Adjustment") if column == Column.ADJUSTMENT else _("Amount")
+	return _("Adjustment (SAR)") if column == Column.ADJUSTMENT else _("Amount (SAR)")
 
 
 def columns():
