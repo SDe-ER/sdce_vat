@@ -155,3 +155,21 @@ msgstr "إقرار ضريبة القيمة المضافة {0} معتمد لهذ�
 
 msgid "{0} source lines are not placed in any field (missing or unverified rules, unknown tax dates or unclassified documents). Open the details to review them."
 msgstr "{0} من سطور المصدر لم تُدرج في أي خانة (قواعد ناقصة أو غير متحقق منها، أو تواريخ ضريبة غير معروفة، أو مستندات غير مصنفة). افتح التفاصيل لمراجعتها."
+
+msgid "Unknown baseline rule file {0}"
+msgstr "ملف القواعد الأساسية {0} غير معروف"
+
+msgid "Only a VAT Rule Maintainer can import a baseline rule file"
+msgstr "استيراد ملف القواعد الأساسية متاح لمسؤول قواعد ضريبة القيمة المضافة فقط"
+
+msgid "Rule set {0} already exists; it was not changed"
+msgstr "مجموعة القواعد {0} موجودة بالفعل ولم يتم تغييرها"
+
+msgid "Import Baseline Rules"
+msgstr "استيراد القواعد الأساسية"
+
+msgid "Baseline File"
+msgstr "ملف القواعد الأساسية"
+
+msgid "The rule set is created as a draft and every rule stays Pending until a verifier checks it against the official source."
+msgstr "تُنشأ مجموعة القواعد كمسودة، وتبقى كل قاعدة بحالة قيد التحقق حتى يتحقق منها مراجع من المصدر الرسمي."
