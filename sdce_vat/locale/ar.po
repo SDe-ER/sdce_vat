@@ -1,0 +1,157 @@
+# Arabic translations for sdce_vat.
+# Copyright (C) 2026 SDCE VAT Contributors
+# This file is distributed under the same license as the sdce_vat package.
+# Only strings of this app are listed here; strings that Frappe or ERPNext already translate are not repeated.
+msgid ""
+msgstr ""
+"Project-Id-Version: sdce_vat\n"
+"Report-Msgid-Bugs-To: https://github.com/SDe-ER/sdce_vat/issues\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+msgid "KSA VAT Return"
+msgstr "إقرار ضريبة القيمة المضافة - السعودية"
+
+msgid "KSA VAT Return Detail"
+msgstr "تفاصيل إقرار ضريبة القيمة المضافة - السعودية"
+
+msgid "Accrual"
+msgstr "الاستحقاق"
+
+msgid "Adjustment (SAR)"
+msgstr "التعديلات (ريال)"
+
+msgid "Amount (SAR)"
+msgstr "المبلغ (ريال)"
+
+msgid "VAT Amount (SAR)"
+msgstr "مبلغ الضريبة (ريال)"
+
+msgid "Choose a field or show the exceptions"
+msgstr "اختر خانة أو اعرض الاستثناءات"
+
+msgid "Corrections from Previous Periods (VAT)"
+msgstr "تصحيحات من الفترات السابقة (ضريبة القيمة المضافة)"
+
+msgid "VAT Credit from Previous Periods"
+msgstr "ضريبة القيمة المضافة المرحلة من الفترات السابقة"
+
+msgid "Exceptions Only"
+msgstr "الاستثناءات فقط"
+
+msgid "Field ID"
+msgstr "رمز الخانة"
+
+msgid "From Date must be on or before To Date"
+msgstr "يجب أن يكون «من تاريخ» في يوم «إلى تاريخ» أو قبله"
+
+msgid "Generate the report first."
+msgstr "أنشئ التقرير أولًا."
+
+msgid "Invalid filters"
+msgstr "عوامل التصفية غير صالحة"
+
+msgid "Invoice No."
+msgstr "رقم الفاتورة"
+
+msgid "Net VAT"
+msgstr "صافي الضريبة"
+
+msgid "No published rule set was used; set the rule-set code in Saudi VAT Settings."
+msgstr "لم تُستخدم أي مجموعة قواعد منشورة؛ حدّد رمز مجموعة القواعد في إعدادات ضريبة القيمة المضافة السعودية."
+
+msgid "Not approvable"
+msgstr "غير قابل للاعتماد"
+
+msgid "Not permitted for company {0}"
+msgstr "غير مسموح لك بالشركة {0}"
+
+msgid "Only a VAT Preparer can save a snapshot"
+msgstr "حفظ النسخة متاح لمُعد إقرار ضريبة القيمة المضافة فقط"
+
+msgid "Only the accrual basis is supported"
+msgstr "أساس الاستحقاق هو الأساس الوحيد المدعوم"
+
+msgid "Party VAT Number"
+msgstr "الرقم الضريبي للطرف"
+
+msgid "Period Type"
+msgstr "نوع الفترة"
+
+msgid "Quarter"
+msgstr "الربع"
+
+msgid "Ready for review"
+msgstr "جاهز للمراجعة"
+
+msgid "Reconciled with General Ledger"
+msgstr "مطابق لدفتر الأستاذ العام"
+
+msgid "Rule Set"
+msgstr "مجموعة القواعد"
+
+msgid "Save Snapshot"
+msgstr "حفظ نسخة"
+
+msgid "Save a copy of this return as a draft Saudi VAT Return? Saving is not approval and not filing."
+msgstr "حفظ نسخة من هذا الإقرار كمسودة إقرار ضريبة القيمة المضافة؟ الحفظ ليس اعتمادًا وليس تقديمًا."
+
+msgid "Set From Date and To Date for a custom period"
+msgstr "حدّد «من تاريخ» و«إلى تاريخ» للفترة المخصصة"
+
+msgid "Set a company"
+msgstr "حدّد الشركة"
+
+msgid "Set a month between 1 and 12"
+msgstr "حدّد شهرًا من 1 إلى 12"
+
+msgid "Set a quarter"
+msgstr "حدّد الربع"
+
+msgid "Set a valid year"
+msgstr "حدّد سنة صحيحة"
+
+msgid "Show Exceptions"
+msgstr "عرض الاستثناءات"
+
+msgid "Source Lines"
+msgstr "سطور المصدر"
+
+msgid "Sources Needing Review"
+msgstr "مصادر تحتاج إلى مراجعة"
+
+msgid "Sources with Warnings"
+msgstr "مصادر عليها تنبيهات"
+
+msgid "Tax Basis"
+msgstr "الأساس الضريبي"
+
+msgid "Tax Date"
+msgstr "تاريخ الضريبة"
+
+msgid "The VAT accounts do not reconcile with the general ledger."
+msgstr "حسابات ضريبة القيمة المضافة غير مطابقة لدفتر الأستاذ العام."
+
+msgid "Treatment"
+msgstr "المعالجة الضريبية"
+
+msgid "Unknown field {0}"
+msgstr "خانة غير معروفة {0}"
+
+msgid "Unknown period type {0}"
+msgstr "نوع فترة غير معروف {0}"
+
+msgid "VAT Account"
+msgstr "حساب ضريبة القيمة المضافة"
+
+msgid "VAT return {0} already covers part of this period"
+msgstr "إقرار ضريبة القيمة المضافة {0} يغطي جزءًا من هذه الفترة بالفعل"
+
+msgid "VAT return {0} is approved for this period; record a correction with a Saudi VAT Amendment instead"
+msgstr "إقرار ضريبة القيمة المضافة {0} معتمد لهذه الفترة؛ سجّل التصحيح بتعديل إقرار ضريبة القيمة المضافة بدلًا من ذلك"
+
+msgid "{0} source lines are not placed in any field (missing or unverified rules, unknown tax dates or unclassified documents). Open the details to review them."
+msgstr "{0} من سطور المصدر لم تُدرج في أي خانة (قواعد ناقصة أو غير متحقق منها، أو تواريخ ضريبة غير معروفة، أو مستندات غير مصنفة). افتح التفاصيل لمراجعتها."
