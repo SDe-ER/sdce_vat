@@ -76,8 +76,8 @@
    "fieldname": "effective_from",
    "fieldtype": "Date",
    "label": "Effective From",
-   "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "description": "Required before verification. Leave empty while the date the rules took effect is not confirmed."
   },
   {
    "fieldname": "effective_to",
@@ -243,7 +243,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-28 22:00:00.000000",
+ "modified": "2026-10-29 15:00:00.000000",
  "modified_by": "Administrator",
  "module": "Saudi VAT",
  "name": "Saudi VAT Rule Set",

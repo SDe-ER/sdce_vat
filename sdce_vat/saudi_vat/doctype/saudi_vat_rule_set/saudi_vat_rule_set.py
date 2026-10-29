@@ -137,6 +137,7 @@ class SaudiVATRuleSet(Document):
 				frappe.PermissionError,
 			)
 		self._require_rules_done()
+		self._require_confirmed_dates()
 		if not self.content_is_intact():
 			frappe.throw(_("The rule set content changed after verification; return it to draft"))
 		if self.version_type == CORRECTIVE:
@@ -208,6 +209,8 @@ class SaudiVATRuleSet(Document):
 			frappe.throw(_("Rule Set Code may contain only capital letters, digits, hyphens and underscores"))
 		if (self.version or 0) < 1:
 			frappe.throw(_("Version must be 1 or higher"))
+		if self.effective_to and not self.effective_from:
+			frappe.throw(_("Set Effective From before Effective To"))
 		if self.effective_to and getdate(self.effective_to) < getdate(self.effective_from):
 			frappe.throw(_("Effective To must be on or after Effective From"))
 		ref_ids = self._validate_references()
@@ -334,6 +337,7 @@ class SaudiVATRuleSet(Document):
 				_require_complete_reference(references[row.reference], row.idx)
 		if self.version_type == CORRECTIVE:
 			_require_complete_reference(references[self.correction_basis], None)
+		self._require_confirmed_dates()
 		now = now_datetime()
 		for row in self.rules:
 			row.verified_by, row.verified_on = user, now
@@ -352,6 +356,28 @@ class SaudiVATRuleSet(Document):
 		pending = [str(r.idx) for r in self.rules if r.verification_status not in DONE_STATUSES]
 		if pending:
 			frappe.throw(_("Rules in rows {0} are still pending verification").format(", ".join(pending)))
+
+	def _require_confirmed_dates(self):
+		"""A set is verified and published only with a confirmed start date, and no verified rule may take effect
+		after it. A rule's date is that of its reference (effective date, else publication date): rules of one set
+		may come from different dates, but all of them must already apply on the first day of the set."""
+		if not self.effective_from:
+			frappe.throw(
+				_("Effective From is not confirmed; enter the date the rules took effect before verification")
+			)
+		start = getdate(self.effective_from)
+		references = {r.ref_id: r for r in self.references}
+		for row in self.rules:
+			if row.verification_status != "Verified":
+				continue
+			reference = references[row.reference]
+			takes_effect = reference.effective_date or reference.publication_date
+			if takes_effect and getdate(takes_effect) > start:
+				frappe.throw(
+					_("Row {0}: rule {1} takes effect on {2}, after the rule set starts on {3}").format(
+						row.idx, row.rule_key, getdate(takes_effect), start
+					)
+				)
 
 	def _contributors(self) -> list:
 		return [u for u in (self.contributors or "").split("\n") if u]
