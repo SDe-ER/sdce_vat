@@ -185,3 +185,30 @@ msgstr "الصف {0}: القاعدة {1} تسري من {2}، أي بعد بدا�
 
 msgid "Required before verification. Leave empty while the date the rules took effect is not confirmed."
 msgstr "مطلوب قبل التحقق. اتركه فارغًا ما دام تاريخ نفاذ القواعد غير مؤكد."
+
+msgid "Row {0}: {1} must be an amount above 0"
+msgstr "الصف {0}: يجب أن تكون {1} مبلغًا أكبر من صفر"
+
+msgid "Correction in a later return not available"
+msgstr "التصحيح في إقرار لاحق غير متاح"
+
+msgid "{0} This does not mean that a self-amendment is required or suitable; check IR Art. 63 with your tax adviser."
+msgstr "{0} ولا يعني ذلك أن التعديل الذاتي للإقرار مطلوب أو مناسب؛ راجع المادة 63 من اللائحة التنفيذية مع مستشارك الضريبي."
+
+msgid "No single published rule set covers {0}."
+msgstr "لا توجد مجموعة قواعد منشورة واحدة تغطي تاريخ {0}."
+
+msgid "Choose the later return first: the limit depends on its period."
+msgstr "اختر الإقرار اللاحق أولًا، لأن الحد يعتمد على فترته."
+
+msgid "The VAT effect {0} is above the correction limit {1}."
+msgstr "الأثر الضريبي {0} يتجاوز حد التصحيح {1}."
+
+msgid "The date that decides the correction limit is not verified in the rule set."
+msgstr "التاريخ الذي يحدد حد التصحيح غير متحقق منه في مجموعة القواعد."
+
+msgid "How corrections are measured against the limit is not verified in the rule set."
+msgstr "طريقة قياس التصحيحات مقابل الحد غير متحقق منها في مجموعة القواعد."
+
+msgid "The correction limit is not verified in the rule set."
+msgstr "حد التصحيح غير متحقق منه في مجموعة القواعد."

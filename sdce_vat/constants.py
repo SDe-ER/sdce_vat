@@ -23,7 +23,14 @@ RULE_KEYS = (
 	"unpaid_adjust_start",
 	"unpaid_financing_exception",
 	"correction_rules",
+	"correction_limit",
+	"correction_limit_basis",
+	"correction_limit_measure",
 )
 RULE_KEY_PREFIXES = ("treatment_box", "recoverability", "tax_date_basis")
 DECIMAL_RULE_KEYS = ("standard_rate",)
 WHOLE_NUMBER_RULE_KEYS = ("late_claim_limit_years", "unpaid_adjust_months")
+AMOUNT_RULE_KEYS = ("correction_limit",)  # amounts in SAR
+# Candidate readings of IR Art. 63 the app can apply; the verifier chooses one per rule set.
+CORRECTION_LIMIT_BASES = ("original_period_end", "correcting_return_end")
+CORRECTION_LIMIT_MEASURES = ("net_total", "per_line", "absolute_total")

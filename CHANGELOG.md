@@ -3,6 +3,13 @@
 ## [Unreleased]
 
 ### Added
+- Correction limit from rules (#5): the 5,000 constant is removed. A Saudi VAT Amendment of kind "Correction in a
+  Later Return" is submitted only when the published rule sets give verified `correction_limit` (amount),
+  `correction_limit_basis` (which date selects the limit) and `correction_limit_measure` (net total, per line or
+  absolute total) rules and the lines are within the limit; until then it can be saved as a draft. Reasons are
+  readable messages in Arabic and English; the diagnostic code goes to the technical log.
+  - Impact: no correction in a later return is submitted until the three rules are verified; self-amendments are
+    not affected. Rollback: revert.
 - Baseline rule file `sdce_vat/rules/ksa_vat_2026_1.json` (#17): official ZATCA references (Arabic Implementing
   Regulations 10th edition, VAT Law, return guide, input tax guideline) for 27 rules and the 16 return field labels
   in Arabic and English. "Import Baseline Rules" (VAT Rule Maintainer) creates a Draft rule set with every rule

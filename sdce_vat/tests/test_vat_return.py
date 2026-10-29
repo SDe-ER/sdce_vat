@@ -260,6 +260,8 @@ class TestVatReturn(VatSiteTestCase):
 		self.assertRaises(frappe.ValidationError, filing.insert)
 
 	def test_amendment_limit_for_later_return(self):
+		# the parity rule set has no verified correction rules (IR Art. 63), so a later-return correction can be
+		# saved as a draft but not submitted; the rules themselves are covered in test_amendment_rules.py
 		doc = self._approved()
 		frappe.set_user(PREPARER)
 		amendment = frappe.get_doc(
@@ -270,10 +272,21 @@ class TestVatReturn(VatSiteTestCase):
 				"reason": "Late supplier invoice",
 				"lines": [{"box_id": "P07", "vat_effect": 6000}],
 			}
+		).insert()
+		frappe.set_user(APPROVER)
+		self.assertRaises(
+			frappe.ValidationError, frappe.get_doc("Saudi VAT Amendment", amendment.name).submit
 		)
-		self.assertRaises(frappe.ValidationError, amendment.insert)
-		amendment.kind = "Self-Amendment"
-		amendment.insert()
+		frappe.set_user(PREPARER)
+		amendment = frappe.get_doc(
+			{
+				"doctype": "Saudi VAT Amendment",
+				"original_return": doc.name,
+				"kind": "Self-Amendment",
+				"reason": "Late supplier invoice",
+				"lines": [{"box_id": "P07", "vat_effect": 6000}],
+			}
+		).insert()
 		self.assertEqual(amendment.total_vat_effect, 6000)
 
 	# ---- data -------------------------------------------------------------------------------------------------

@@ -73,7 +73,10 @@ Status of each date and provision. A rule is used only after a qualified person 
 
 ### Effect on the app today
 - No rule in this file is used: every rule is Pending and the set has no Effective From.
-- The amendment check still uses a constant limit of 5,000 (`saudi_vat_amendment.py`, Issue #5). It sends a correction of 5,000–15,000 to a self-amendment instead of a later return.
+- **Amendment check (Issue #5).** A correction in a later return is submitted only when the published rule sets give three verified rules. This file ships none of them, so until a verifier adds and verifies them, a later-return correction can be saved as a draft but not submitted. Whether a self-amendment is suitable is a separate decision.
+  - `correction_limit`: the amount.
+  - `correction_limit_basis`: the date that selects the limit. The app supports `original_period_end` and `correcting_return_end`; a discovery date is not stored yet.
+  - `correction_limit_measure`: `net_total`, `per_line` or `absolute_total`.
 - Filed or approved returns are never changed by a rule set.
 
 ## Rules (all Pending)
@@ -101,7 +104,9 @@ All 16 return fields carry the ZATCA Arabic and English labels.
 
 ## Points for the tax adviser
 1. **Entry into force of BoD resolution 01-06-24.** It is needed for Effective From (now empty) and for the effective dates of the amended references. Older periods need an earlier version.
-2. **Art. 63 threshold of SAR 15,000 against field 14.** The current return form labels field 14 "between ± 5000". Decide which applies to corrections reported in the return.
+2. **Art. 63 threshold of SAR 15,000 against field 14.** The current return form labels field 14 "between ± 5000". Decide which applies to corrections reported in the return, and also:
+   - **Which date selects the threshold:** the original period, the discovery or the correcting return.
+   - **How corrections are measured against it:** the net of all corrections, each error alone, or the total of absolute effects. Art. 63(3) speaks of an error whose "net value" is below the threshold, and Art. 63(2) treats overstatements separately.
 3. **Art. 54(6):** exactly when a credit or debit note must be issued.
 4. **Tax point:** the GCC Agreement, Art. 23, is not among the reviewed sources. Confirm the rule and how the app should use document dates until supply dates exist (#7).
 5. **Fields 8 and 9 (imports):** the split between customs and reverse charge is taken from the guide only. Confirm it against the e-service form.
