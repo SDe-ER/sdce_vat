@@ -96,7 +96,8 @@ class TestBaselineImport(IntegrationTestCase):
 		make_user(MAINTAINER, VAT_RULE_MAINTAINER)
 		make_user(REVIEWER, VAT_REVIEWER)
 		make_user(PREPARER, VAT_PREPARER)
-		cls.data = baseline.read_baseline(NAME)
+		# the shipped file under a code of its own, so a set already imported on the site does not interfere
+		cls.data = {**baseline.read_baseline(NAME), "rule_set_code": "TEST-BASELINE"}
 
 	def setUp(self):
 		frappe.db.savepoint("baseline_test")
@@ -105,9 +106,10 @@ class TestBaselineImport(IntegrationTestCase):
 		frappe.set_user("Administrator")
 		frappe.db.rollback(save_point="baseline_test")
 
-	def _import(self):
+	def _import(self, data=None):
 		frappe.set_user(MAINTAINER)
-		return baseline.import_baseline(NAME)
+		with patch.object(baseline, "read_baseline", return_value=data or self.data):
+			return baseline.import_baseline(NAME)
 
 	def test_import_creates_a_draft_with_every_rule_pending(self):
 		doc = frappe.get_doc("Saudi VAT Rule Set", self._import())
@@ -123,8 +125,7 @@ class TestBaselineImport(IntegrationTestCase):
 		data = json.loads(json.dumps(self.data))
 		for row in data["rules"]:
 			row["verification_status"] = "Verified"
-		with patch.object(baseline, "read_baseline", return_value=data):
-			name = self._import()
+		name = self._import(data)
 		self.assertEqual(
 			set(frappe.get_all("Saudi VAT Rule", {"parent": name}, pluck="verification_status")), {"Pending"}
 		)
@@ -187,8 +188,7 @@ class TestBaselineImport(IntegrationTestCase):
 		data["rules"].append(
 			{"rule_key": "not_a_rule", "value": "1", "reference": data["references"][0]["ref_id"]}
 		)
-		with patch.object(baseline, "read_baseline", return_value=data):
-			self.assertRaises(frappe.ValidationError, self._import)
+		self.assertRaises(frappe.ValidationError, self._import, data)
 		self.assertFalse(frappe.db.exists("Saudi VAT Rule Set", {"rule_set_code": data["rule_set_code"]}))
 
 	def test_import_touches_no_accounting_data(self):
