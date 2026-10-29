@@ -114,7 +114,7 @@ def message(result):
 
 
 @frappe.whitelist(methods=["POST"])
-def save_snapshot(filters) -> str:
+def save_snapshot(filters: str | dict) -> str:
 	"""Save the report of the filters as the draft Saudi VAT Return of that period and calculate it.
 
 	A draft of exactly this period is recalculated; any other return touching the period is left alone and
