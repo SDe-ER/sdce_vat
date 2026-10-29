@@ -195,6 +195,12 @@ class TestVatReport(VatSiteTestCase):
 		self.assertEqual(total(rows, "vat"), Decimal(0))
 		self.assertEqual(total(detail(field=boxes.PURCHASES_TOTAL), "vat"), Decimal(str(purchases["vat"])))
 
+	def test_filters_must_be_plain_values(self):
+		self.assertRaises(frappe.ValidationError, report, {**FILTERS, "company": ["!=", ""]})
+		rows = detail(field=boxes.SALES_STANDARD, exceptions_only="0")
+		self.assertTrue(rows)
+		self.assertTrue(all(row["box_no"] == 1 for row in rows))
+
 	def test_box_labels_follow_the_user_language(self):
 		box = boxes.BOX_BY_ID[boxes.NET_VAT]
 		frappe.local.lang = "ar"
@@ -297,3 +303,30 @@ class TestVatReport(VatSiteTestCase):
 		position = links.index(("Report", REPORT))
 		if ("Report", "Accounts Payable") in links:
 			self.assertEqual(links[position - 1], ("Report", "Accounts Payable"))
+
+	def test_sidebar_keeps_the_labels_of_site_items(self):
+		if not frappe.db.exists("DocType", "Custom Sidebar"):
+			self.skipTest("this Frappe has no site sidebar layers")
+		from frappe.desk.doctype.custom_sidebar.custom_sidebar import add_site_sidebar_item, get_customization
+
+		from sdce_vat.install import add_report_to_accounts_sidebar
+
+		layer = get_customization("Accounts", None)
+		if layer:
+			frappe.delete_doc("Custom Sidebar", layer.name, ignore_permissions=True, force=True)
+		add_site_sidebar_item(
+			"Accounts",
+			{
+				"type": "Link",
+				"link_type": "Report",
+				"link_to": "General Ledger",
+				"label": "Sales Invoice",
+				"child": 1,
+			},
+		)
+		frappe.local.lang = "ar"  # "Sales Invoice" has an Arabic translation; it must not be stored
+		frappe.clear_cache()
+		add_report_to_accounts_sidebar()
+		layer = frappe.get_doc("Custom Sidebar", get_customization("Accounts", None).name)
+		labels = [row.label for row in layer.sidebar_items if row.added and row.link_to == "General Ledger"]
+		self.assertEqual(labels, ["Sales Invoice"])

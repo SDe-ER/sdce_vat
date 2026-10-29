@@ -8,6 +8,7 @@ The lines come from the same engine run as the return, so the total of a field's
 
 import frappe
 from frappe import _
+from frappe.utils import cint
 
 from sdce_vat.engine import boxes
 from sdce_vat.engine.model import Column
@@ -17,12 +18,13 @@ from sdce_vat.saudi_vat.vat_report import CUSTOM, field_lines, run
 def execute(filters=None):
 	filters = frappe._dict(filters or {})
 	field = filters.get("field")
-	if not field and not filters.get("exceptions_only"):
+	exceptions_only = cint(filters.get("exceptions_only"))
+	if not field and not exceptions_only:
 		frappe.throw(_("Choose a field or show the exceptions"))
 	if field and field not in boxes.BOX_BY_ID:
 		frappe.throw(_("Unknown field {0}").format(field))
 	result, _start, _end = run(frappe._dict(filters, period_type=CUSTOM))
-	return columns(), [row(line) for line in lines(result, field, filters.get("exceptions_only"))]
+	return columns(), [row(line) for line in lines(result, field, exceptions_only)]
 
 
 def lines(result, field, exceptions_only):

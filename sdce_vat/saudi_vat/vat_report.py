@@ -65,7 +65,7 @@ def run(filters) -> tuple[VatResult, date, date]:
 	"""The engine result for the company and period of the filters. Read permission is checked here and in
 	`compute` (general ledger, company, rule sets)."""
 	company = filters.get("company")
-	if not company:
+	if not company or not isinstance(company, str):
 		frappe.throw(_("Set a company"))
 	if (filters.get("tax_basis") or ACCRUAL) != ACCRUAL:
 		frappe.throw(_("Only the accrual basis is supported"))

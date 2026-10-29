@@ -12,6 +12,7 @@ from frappe.utils import escape_html, flt, getdate
 
 from sdce_vat.constants import VAT_PREPARER
 from sdce_vat.engine import boxes
+from sdce_vat.saudi_vat.doctype.saudi_vat_settings.saudi_vat_settings import get_settings
 from sdce_vat.saudi_vat.vat_report import ACCRUAL, box_label, field_lines, period, run
 
 
@@ -132,6 +133,10 @@ def save_snapshot(filters) -> str:
 	if not frappe.has_permission("Company", "read", doc=filters.company):
 		frappe.throw(_("Not permitted for company {0}").format(filters.company), frappe.PermissionError)
 	start, end = period(filters)
+	settings = get_settings(filters.company)
+	# one save per company at a time: the settings row is locked until the transaction ends, so two saves for
+	# the same period cannot both find no return and both insert one
+	frappe.db.get_value("Saudi VAT Settings", settings.name, "name", for_update=True)
 	inputs = {
 		"corrections": flt(filters.get("corrections")),
 		"credit_carried": flt(filters.get("credit_carried")),

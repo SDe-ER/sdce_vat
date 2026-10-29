@@ -39,8 +39,19 @@ def add_report_to_accounts_sidebar():
 	resolved, hidden = layers.resolve_arrangement(
 		layers.base_items(SIDEBAR_MODULE), layers.get_layers(SIDEBAR_MODULE, None)
 	)
+	# resolved added rows carry their label translated for this session; save the stored label instead, so
+	# re-saving the layer does not freeze another language into the site's own items
+	stored_labels = {layers.item_key(row): row.label for row in rows if row.added}
 	arrangement = [
-		{**item, "hidden": int(hidden.get(layers.item_key(item)) or 0)}
+		{
+			**item,
+			"hidden": int(hidden.get(layers.item_key(item)) or 0),
+			**(
+				{"label": stored_labels.get(layers.item_key(item), item.get("label"))}
+				if item.get("added")
+				else {}
+			),
+		}
 		for item in resolved
 		if not _is_entry(item)
 	]
