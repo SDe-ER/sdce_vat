@@ -10,14 +10,7 @@ import frappe
 from frappe import _
 
 from sdce_vat.engine import boxes
-from sdce_vat.saudi_vat.vat_report import CUSTOM, run
-
-# the line fields whose lines make up each field of the return; corrections and credit carried have none
-MEMBERS = {box_id: (box_id,) for box_id in boxes.LINE_BOXES}
-MEMBERS[boxes.SALES_TOTAL] = boxes.SALES_LINE_BOXES
-MEMBERS[boxes.PURCHASES_TOTAL] = boxes.PURCHASE_LINE_BOXES
-MEMBERS[boxes.VAT_DUE] = boxes.LINE_BOXES
-MEMBERS[boxes.NET_VAT] = boxes.LINE_BOXES
+from sdce_vat.saudi_vat.vat_report import CUSTOM, field_lines, run
 
 
 def execute(filters=None):
@@ -32,9 +25,7 @@ def execute(filters=None):
 
 
 def lines(result, field, exceptions_only):
-	if exceptions_only:
-		return result.review_lines
-	return [line for line in result.lines if line.box in MEMBERS.get(field, ())]
+	return result.review_lines if exceptions_only else field_lines(result, field)
 
 
 def row(line):

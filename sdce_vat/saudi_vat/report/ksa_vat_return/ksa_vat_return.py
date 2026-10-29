@@ -12,7 +12,7 @@ from frappe.utils import escape_html, flt, getdate
 
 from sdce_vat.constants import VAT_PREPARER
 from sdce_vat.engine import boxes
-from sdce_vat.saudi_vat.vat_report import ACCRUAL, box_label, period, run
+from sdce_vat.saudi_vat.vat_report import ACCRUAL, box_label, field_lines, period, run
 
 
 def execute(filters=None):
@@ -26,7 +26,7 @@ def execute(filters=None):
 			"amount": result.boxes[box.id].amount,
 			"adjustment": result.boxes[box.id].adjustment,
 			"vat": result.boxes[box.id].vat,
-			"line_count": len(result.boxes[box.id].lines),
+			"line_count": len(field_lines(result, box.id)),
 			"is_total": int(box.is_total),
 			"bold": int(box.is_total),
 			# the resolved period, so the links to the details need no date logic in the browser

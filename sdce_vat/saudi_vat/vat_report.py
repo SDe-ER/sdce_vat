@@ -23,6 +23,13 @@ MONTHLY, QUARTERLY, CUSTOM = "Monthly", "Quarterly", "Custom"
 QUARTERS = ("Q1", "Q2", "Q3", "Q4")
 ACCRUAL = "Accrual"  # the only tax basis supported for now
 
+# the line fields whose lines make up each field of the return; corrections and credit carried have none
+MEMBERS = {box_id: (box_id,) for box_id in boxes.LINE_BOXES}
+MEMBERS[boxes.SALES_TOTAL] = boxes.SALES_LINE_BOXES
+MEMBERS[boxes.PURCHASES_TOTAL] = boxes.PURCHASE_LINE_BOXES
+MEMBERS[boxes.VAT_DUE] = boxes.LINE_BOXES
+MEMBERS[boxes.NET_VAT] = boxes.LINE_BOXES
+
 
 def period(filters) -> tuple[date, date]:
 	"""First and last day of the period chosen in the filters."""
@@ -79,3 +86,8 @@ def box_label(box: boxes.Box) -> str:
 	"""The ZATCA wording of a field in the user's language. Both texts are the official labels of the form
 	(see `engine.boxes`), not translations, so they are taken as they are."""
 	return box.label_ar if (frappe.local.lang or "").startswith("ar") else box.label_en
+
+
+def field_lines(result: VatResult, field: str) -> list:
+	"""The placed source lines that make up one field of the return."""
+	return [line for line in result.lines if line.box in MEMBERS.get(field, ())]
