@@ -154,7 +154,7 @@ class TestVatReport(VatSiteTestCase):
 		exceptions = detail(exceptions_only=1)
 		self.assertIn(self.pi_no_vat.name, {row["voucher_no"] for row in exceptions})
 		self.assertTrue(all(row["box_no"] is None for row in exceptions))
-		self.pi_no_vat.cancel()
+		frappe.get_doc("Purchase Invoice", self.pi_no_vat.name).cancel()
 		_fields, message, summary = report()
 		self.assertIsNone(message)
 		self.assertEqual(summary["Status"], "Ready for review")
@@ -251,7 +251,9 @@ class TestVatReport(VatSiteTestCase):
 		self.assertFalse(saved.check_drift()["unchanged"])
 
 	def test_approved_period_is_refused(self):
-		self.pi_no_vat.cancel()  # approval needs a period without unresolved sources
+		frappe.get_doc(
+			"Purchase Invoice", self.pi_no_vat.name
+		).cancel()  # approval needs a period without unresolved sources
 		frappe.set_user(PREPARER)
 		name = ksa_vat_return.save_snapshot(FILTERS)
 		for user, action in (
