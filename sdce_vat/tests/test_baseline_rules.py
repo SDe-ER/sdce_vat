@@ -79,6 +79,18 @@ class TestBaselineFile(unittest.TestCase):
 		for field_id, row in labels.items():
 			self.assertTrue(row["label_en"] and row["label_ar"], field_id)
 
+	def test_unconfirmed_dates_are_not_filled_in(self):
+		self.assertIsNone(
+			self.data["effective_from"]
+		)  # the resolution date is not the date the rules took effect
+		self.assertEqual(self.data["resolution_date"], "2024-11-19")
+		rules = {row["rule_key"]: row for row in self.data["rules"]}
+		self.assertTrue(rules["correction_rules"]["value"].startswith("threshold_unresolved"))
+		references = {row["ref_id"]: row for row in self.data["references"]}
+		self.assertEqual(references[rules["standard_rate"]["reference"]]["effective_date"], "2020-07-01")
+		for ref_id in ("IR-AR-40-10", "IR-AR-54", "IR-AR-63", "IR-AR-50"):
+			self.assertIsNone(references[ref_id]["effective_date"], ref_id)
+
 	def test_rule_set_header_has_both_languages(self):
 		for field in ("description_en", "description_ar", "notice_en", "notice_ar"):
 			self.assertTrue(self.data.get(field), field)
@@ -154,6 +166,56 @@ class TestBaselineImport(IntegrationTestCase):
 		self.assertEqual(frappe.db.get_value("Saudi VAT Rule Set", name, "workflow_state"), "Rule Published")
 		self.assertEqual(
 			set(frappe.get_all("Saudi VAT Rule", {"parent": name}, pluck="verification_status")), {"Verified"}
+		)
+
+	# ---- dates -------------------------------------------------------------------------------------------
+	def _marked_verified(self, start=None, reference_date="2020-07-01"):
+		"""The baseline with every reference dated and every rule marked by the maintainer, ready to verify."""
+		data = json.loads(json.dumps(self.data))
+		data["effective_from"] = start
+		for row in data["references"]:
+			row["effective_date"] = reference_date
+		name = self._import(data)
+		doc = frappe.get_doc("Saudi VAT Rule Set", name)
+		for row in doc.rules:
+			row.verification_status = "Not applicable" if row.value == "-" else "Verified"
+		doc.save()
+		return name
+
+	def _verify(self, name):
+		frappe.set_user(REVIEWER)
+		return apply_workflow(frappe.get_doc("Saudi VAT Rule Set", name), "Verify Rule Set")
+
+	def test_imported_set_has_no_start_date(self):
+		self.assertIsNone(frappe.db.get_value("Saudi VAT Rule Set", self._import(), "effective_from"))
+
+	def test_set_without_confirmed_start_cannot_be_verified(self):
+		name = self._marked_verified(start=None)
+		with self.assertRaisesRegex(frappe.ValidationError, "Effective From is not confirmed"):
+			self._verify(name)
+		self.assertEqual(frappe.db.get_value("Saudi VAT Rule Set", name, "workflow_state"), "Rule Draft")
+
+	def test_rule_taking_effect_after_the_set_start_blocks_verification(self):
+		name = self._marked_verified(start="2025-01-01", reference_date="2025-06-01")
+		with self.assertRaisesRegex(frappe.ValidationError, "takes effect on 2025-06-01"):
+			self._verify(name)
+
+	def test_rules_of_different_dates_verify_when_all_apply_at_the_start(self):
+		data = json.loads(json.dumps(self.data))
+		data["effective_from"] = "2025-01-01"
+		for row in data["references"]:
+			row["effective_date"] = (
+				"2020-07-01" if row["ref_id"] in ("LAW-AR-2-2", "IR-AR-79-10") else "2024-12-01"
+			)
+		name = self._import(data)
+		doc = frappe.get_doc("Saudi VAT Rule Set", name)
+		for row in doc.rules:
+			row.verification_status = "Not applicable" if row.value == "-" else "Verified"
+		doc.save()
+		self.assertEqual(self._verify(name).workflow_state, "Rule Verified")
+		self.assertEqual(frappe.db.get_value("Saudi VAT Rule Set", name, "docstatus"), 0)  # not published
+		self.assertEqual(
+			load_rule_book(data["rule_set_code"], "2025-01-01", "2025-03-31").for_date("2025-02-01")[0], None
 		)
 
 	def test_pending_rules_cannot_be_verified(self):

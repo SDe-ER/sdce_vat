@@ -173,3 +173,15 @@ msgstr "ملف القواعد الأساسية"
 
 msgid "The rule set is created as a draft and every rule stays Pending until a verifier checks it against the official source."
 msgstr "تُنشأ مجموعة القواعد كمسودة، وتبقى كل قاعدة بحالة قيد التحقق حتى يتحقق منها مراجع من المصدر الرسمي."
+
+msgid "Set Effective From before Effective To"
+msgstr "حدّد «تاريخ البداية» قبل «تاريخ النهاية»"
+
+msgid "Effective From is not confirmed; enter the date the rules took effect before verification"
+msgstr "تاريخ البداية غير مؤكد؛ أدخل تاريخ نفاذ القواعد قبل التحقق"
+
+msgid "Row {0}: rule {1} takes effect on {2}, after the rule set starts on {3}"
+msgstr "الصف {0}: القاعدة {1} تسري من {2}، أي بعد بداية مجموعة القواعد في {3}"
+
+msgid "Required before verification. Leave empty while the date the rules took effect is not confirmed."
+msgstr "مطلوب قبل التحقق. اتركه فارغًا ما دام تاريخ نفاذ القواعد غير مؤكد."

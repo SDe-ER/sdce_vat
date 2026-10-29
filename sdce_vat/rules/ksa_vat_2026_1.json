@@ -6,9 +6,10 @@
  "version": 1,
  "version_type": "Normal",
  "return_form_version": "eServices Manual 009 (AR 2026-08-06)",
- "effective_from": "2024-11-19",
- "description_en": "Saudi VAT baseline from the Implementing Regulations, 10th edition (April 2025, BoD resolution 01-06-24 of 19 Nov 2024). effective_from is the resolution date; the entry-into-force date was not found and must be confirmed. Periods before it need an earlier version.",
- "description_ar": "قواعد أساسية لضريبة القيمة المضافة في السعودية من اللائحة التنفيذية - النسخة العاشرة (أبريل 2025، قرار مجلس الإدارة 01-06-24 بتاريخ 19 نوفمبر 2024). تاريخ البداية هو تاريخ القرار، ولم يُعثر على تاريخ النفاذ ويجب تأكيده. الفترات السابقة تحتاج إصدارًا سابقًا.",
+ "effective_from": null,
+ "resolution_date": "2024-11-19",
+ "description_en": "Saudi VAT baseline from the Implementing Regulations, 10th edition (April 2025). Effective From is UNVERIFIED and left empty: 19 Nov 2024 is only the date of BoD resolution 01-06-24, and the date its amendments took effect was not found. The set cannot be verified or published until a verifier enters the confirmed date. Rules keep their own dates in their references (for example the 15 % rate from 1 Jul 2020); every verified rule must already apply on the set's first day.",
+ "description_ar": "قواعد أساسية لضريبة القيمة المضافة في السعودية من اللائحة التنفيذية - النسخة العاشرة (أبريل 2025). تاريخ البداية غير متحقق منه ومتروك فارغًا: 19 نوفمبر 2024 هو تاريخ قرار مجلس الإدارة 01-06-24 فقط، ولم يُعثر على تاريخ نفاذ تعديلاته. لا يمكن التحقق من المجموعة أو نشرها حتى يدخل المراجع التاريخ المؤكد. لكل قاعدة تاريخها في مرجعها (مثل النسبة 15% من 1 يوليو 2020)، ويجب أن تكون كل قاعدة متحقق منها سارية في أول يوم للمجموعة.",
  "references": [
   {
    "ref_id": "LAW-AR-2-2",
@@ -322,12 +323,12 @@
   },
   {
    "rule_key": "correction_rules",
-   "value": "understatement_below_15000_current_return;notify_within_20_days_otherwise;overstatement_any_later_return_within_5_years",
+   "value": "threshold_unresolved:ir_art_63_3_says_15000;return_field_14_label_says_5000",
    "reference": "IR-AR-63",
    "verification_status": "Pending",
-   "description_en": "Errors in a filed return: an understatement of net VAT below SAR 15,000 is added to the return of the period in which the error is found; otherwise ZATCA must be notified within 20 days through a corrected return. An overstatement may be deducted in any later return, within five years from the end of the calendar year.",
-   "description_ar": "تصحيح الأخطاء في إقرار مقدم: النقص في صافي الضريبة الذي يقل عن 15,000 ريال يُضاف إلى إقرار الفترة التي اكتُشف فيها الخطأ، وفي غير ذلك يجب إشعار الهيئة خلال عشرين يومًا بإقرار مصحح. الزيادة يجوز خصمها في أي إقرار لاحق خلال خمس سنوات من نهاية السنة التقويمية.",
-   "notes": "IR Art. 63(1)-(4). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. The threshold is SAR 15,000 in the 10th edition (the 8th-edition English text and the return field 14 label say 5,000). The app's limit is still a constant (Issue #5)."
+   "description_en": "Errors in a filed return: an understatement of net VAT below a threshold is added to the return of the period in which the error is found; otherwise ZATCA must be notified within 20 days through a corrected return. An overstatement may be deducted in any later return, within five years from the end of the calendar year. The threshold is NOT decided here (see the note).",
+   "description_ar": "تصحيح الأخطاء في إقرار مقدم: النقص في صافي الضريبة الذي يقل عن حد معين يُضاف إلى إقرار الفترة التي اكتُشف فيها الخطأ، وفي غير ذلك يجب إشعار الهيئة خلال عشرين يومًا بإقرار مصحح. الزيادة يجوز خصمها في أي إقرار لاحق خلال خمس سنوات من نهاية السنة التقويمية. الحد غير محسوم هنا (انظر الملاحظة).",
+   "notes": "IR Art. 63(1)-(4). Paragraph amended by ZATCA Board resolution 01-06-24 dated 19 Nov 2024 (17 Jumada I 1446H). Entry-into-force date of that resolution: NOT FOUND in the sources; the verifier must confirm it. CONFLICT for the tax adviser: Art. 63(3) of the 10th edition says SAR 15,000; the return field 14 label and the 8th-edition English text say 5,000. Neither figure is adopted here; the app's limit stays a constant until Issue #5."
   },
   {
    "rule_key": "recoverability:entertainment",

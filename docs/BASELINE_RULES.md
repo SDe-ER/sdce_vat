@@ -4,6 +4,14 @@ Status: reference data, **not tax advice**. Every rule ships and imports as **Pe
 
 ## Use
 - File: `sdce_vat/rules/ksa_vat_2026_1.json`. The import creates the rule set `KSA-VAT` version 1.
+- **Effective From is UNVERIFIED and left empty.** 19 Nov 2024 is the date of BoD resolution 01-06-24 (a decision
+  date, stored only as `resolution_date` in the file). The date its amendments took effect was not found.
+  - Without a confirmed Effective From, the set cannot be verified or published, so it can never be used in a return.
+  - Each rule keeps its own date in its reference: the effective date, or else the publication date. The 15 % rate, for
+    example, applies from 1 Jul 2020.
+  - Verification is refused when a verified rule takes effect after the set's first day.
+  - A rule set is one dated snapshot of the law, so it can mix rules of different dates as long as all of them
+    already apply on its first day. A period before a later amendment needs an earlier version with its own start.
 - **Import:** a VAT Rule Maintainer opens the *Saudi VAT Rule Set* list and selects **Import Baseline Rules**. The server equivalent is `sdce_vat.rules.baseline.import_baseline`, called with POST.
 - **Result:** a Draft rule set (`Rule Draft`) in which every rule is Pending. A status in the file is ignored.
 - **Verification and publication:** a second person checks each rule against the official Arabic source and marks it *Verified* or *Not applicable*. The existing workflow then verifies and publishes the set; this needs three different users.
@@ -54,17 +62,17 @@ The Implementing Regulations references have no publication or effective date, b
 | `unpaid_adjust_start` | month after the supply month | IR Art. 40(10) | BoD 19 Nov 2024* | The 8th edition counted from the supply date. |
 | `unpaid_financing_exception` | finance lease, murabaha, lease to own | IR Art. 40(10) | BoD 19 Nov 2024* | Conditions apply: contract in force, no dispute, VAT declared, supplier certificate. |
 | `credit_note_period` | 15 days after the end of the month of the event | IR Art. 54(1)–(3), 54(6); Art. 40(4)–(6) | BoD 19 Nov 2024* | The Arabic wording of 54(6) is ambiguous. |
-| `correction_rules` | under SAR 15,000 in the current return; otherwise notify within 20 days; overstatement within 5 years | IR Art. 63(1)–(4) | BoD 19 Nov 2024* | Threshold is **15,000**, not 5,000. |
+| `correction_rules` | `threshold_unresolved` (procedure: below the threshold in the current return; otherwise notify within 20 days; overstatement within 5 years) | IR Art. 63(1)–(4) | BoD 19 Nov 2024* | **Threshold not decided.** Art. 63(3) says 15,000, but the field 14 label says 5,000. |
 | `recoverability:entertainment`, `employee_catering_health_insurance`, `restricted_vehicles`, `personal_use` | not deductible (with exceptions) | IR Art. 50(1)–(2); input tax guideline pp.27–28 | BoD 19 Nov 2024* | Vehicles: 10 seats or fewer. Heavy equipment and business-only vehicles are excluded. Issue #9. |
 
-\* Date of the Board resolution. The date the amendments **came into force** was not found in the sources.
+\* Date of the Board resolution only. The date the amendments **took effect** was not found, so these references carry no effective date and the verifier must enter it.
 
 The file has **no rule** for these: `rounding` (no provision found; the nearest is Art. 45(2), a tax-inclusive price formula) and `non_recoverable_placement` (not stated in Art. 62). They stay in Saudi VAT Settings until a source is found.
 
 All 16 return fields carry the ZATCA Arabic and English labels.
 
 ## Points for the tax adviser
-1. The date the amendments of BoD resolution 01-06-24 came into force. It decides `effective_from` (now the resolution date, 2024-11-19) and whether an earlier version is needed for older periods.
+1. **Entry into force of BoD resolution 01-06-24.** It is needed for Effective From (now empty) and for the effective dates of the amended references. Older periods need an earlier version.
 2. **Art. 63 threshold of SAR 15,000 against field 14.** The current return form labels field 14 "between ± 5000". Decide which applies to corrections reported in the return.
 3. **Art. 54(6):** exactly when a credit or debit note must be issued.
 4. **Tax point:** the GCC Agreement, Art. 23, is not among the reviewed sources. Confirm the rule and how the app should use document dates until supply dates exist (#7).
